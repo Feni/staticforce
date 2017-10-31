@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Dash Form </title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <nav class="Navbar Navbar--compact">
+        <div class="Navbar--primary ui menu">
+            <div class="item">Dashform</div>
+        </div>
+    </nav>
+    
+    <header class="DashHeader">
+        <h1>
+            Hello World
+        </h1>
+
+        <div class="Navbar--toolbar ui menu">
+            <div class="item">+ Value</div>
+            <div class="item">+ List</div>
+            <div class="item">+ Table</div>
+            <div class="item">+ Dictionary</div>
+        </div>
+    </header>
+
+    <div class="BodyWrapper HeaderOffset">
+    <div class="main ui container DataContainer">
+        <div class="ui stackable grid">
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Field 1</label>
+                </div>
+                <div class="eight wide column">
+                    <input type="text" value="$990.0" class="DataInput"/>
+
+                    <div class="ui icon top left pointing dropdown button" tabindex="0">
+        <i class="wrench icon"></i>
+        <div class="menu transition hidden" tabindex="-1">
+          <div class="item">Add Constraint</div>
+          <div class="ui divider"></div>
+          <div class="item">Delete</div>
+        </div>
+      </div>
+                </div>
+
+                <div class="four wide column">
+                    <p>Some comments here. Which may even span many many lines of content. </p>
+                </div>
+            </div>
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Average of fields</label>
+                </div>
+                <div class="eight wide column">
+                    <input type="text" value="hello" class="DataInput"/>
+                </div>
+
+
+            </div>
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Grooveshark</label>
+                </div>
+                <div class="eight wide column">
+                    <input type="text" value="23158" class="DataInput"/>
+                </div>
+            </div>
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Sub Table</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue">
+                        <table class="ui celled table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Status</th>
+                              <th>Notes</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td><input/></td>
+                                  <td><input/></td>
+                                  <td><input/></td>
+                              </tr>
+                            <tr class="disabled">
+                              <td>Jamie</td>
+                              <td>Approved</td>
+                              <td>Requires call</td>
+                            </tr>
+                            <tr>
+                              <td>John</td>
+                              <td>Selected</td>
+                              <td>None</td>
+                            </tr>
+                            <tr>
+                              <td>Jamie</td>
+                              <td>Approved</td>
+                              <td>Requires call</td>
+                            </tr>
+                            <tr>
+                              <td class="disabled">Jill</td>
+                              <td>Approved</td>
+                              <td>None</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Simple list</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue">
+                        <div class="ui celled list">
+                          <div class="item">
+                              An excellent companion
+                          </div>
+                          <div class="item">
+                            A poodle, its pretty basic
+                          </div>
+                          <div class="item">
+                              He's also a dog
+                          </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+
+
+             <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Dictionary</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue DataValue--dictionary">
+                        <div class="ui celled list">
+                          <div class="item">
+                            <div class="content">
+                              <div class="key">Snickerdoodle</div>
+                              <span class="value">An excellent companion</span>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="content">
+                                <div class="key">Poodle</div>
+                                <span class="value">A poodle, its pretty basic</span>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="content">
+                              <div class="key">Paulo</div>
+                              <span class="value">He's also a dog</span>
+                            </div>
+                          </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    </div> <!-- Body wrapper-->
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+      crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+
+    <script src="dashform.js"></script>
+    
+</body>
+</html>
