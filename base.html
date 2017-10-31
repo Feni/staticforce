@@ -16,11 +16,9 @@
         </div>
     </nav>
     
+    <div id="app">
+    
     <header class="DashHeader">
-        <h1>
-            Hello World
-        </h1>
-
         <div class="Navbar--toolbar ui menu">
             <div class="item">+ Value</div>
             <div class="item">+ List</div>
@@ -33,28 +31,11 @@
     <div class="main ui container DataContainer">
         <div class="ui stackable grid">
 
-            <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Field 1</label>
-                </div>
-                <div class="eight wide column">
-                    <input type="text" value="$990.0" class="DataInput"/>
-
-                    <div class="ui icon top left pointing dropdown button" tabindex="0">
-        <i class="wrench icon"></i>
-        <div class="menu transition hidden" tabindex="-1">
-          <div class="item">Add Constraint</div>
-          <div class="ui divider"></div>
-          <div class="item">Delete</div>
-        </div>
-      </div>
-                </div>
-
-                <div class="four wide column">
-                    <p>Some comments here. Which may even span many many lines of content. </p>
-                </div>
-            </div>
-
+                <statement-row v-for="statement in statements"
+                               v-bind:expression="statement.expression"
+                               v-bind:comment="statement.comment"
+                               v-bind:name="statement.name"></statement-row>
+            
             <div class="row DataRow">
                 <div class="four wide column">
                     <label class="DataLabel">Average of fields</label>
@@ -182,13 +163,21 @@
     </div>
 
     </div> <!-- Body wrapper-->
-
+        
+        </div>
+    
+    
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
       crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    
+    <!-- Note: Development version -->
+    <script src="vue.js"></script>
+    
+    <script src="jsep.js"></script>
 
     <script src="dashform.js"></script>
     
