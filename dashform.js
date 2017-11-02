@@ -65,9 +65,7 @@ Vue.component('statement-row', {
             } else {
                 return this.expression;
             }
-            
-            
-            
+
         }
     }
 })
