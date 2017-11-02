@@ -8,6 +8,12 @@ var namespace = {
     'field3': {name: 'Average', expression: '= 1 + 1', 'comment': 'Average of the two values'},
 }
 
+function castNumber(value) {
+    var num = Number(value);
+    if(num === NaN) {return value}
+    return num;
+}
+
 function evaluateExpression(expression){
     if(expression[0] == "="){
         // Evaluate expression
@@ -33,7 +39,7 @@ function evaluateExpression(expression){
             } else if(node.type === "Literal") {
                 // console.log("literal ")
                 // console.log(node)
-                return node.value;
+                return castNumber(node.value);
             } else {
                 // Node.type == Identifier
                 // Name lookup
@@ -51,7 +57,7 @@ function evaluateExpression(expression){
         };
         return do_eval(jsep(expression.substring(1)));
     } else {
-        return expression;
+        return castNumber(expression);
     }    
 }
 
