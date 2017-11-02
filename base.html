@@ -32,6 +32,7 @@
         <div class="ui stackable grid">
 
                 <statement-row v-for="statement in statements"
+                               v-bind:statement="statement"
                                v-bind:expression="statement.expression"
                                v-bind:comment="statement.comment"
                                v-bind:name="statement.name"></statement-row>

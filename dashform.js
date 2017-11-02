@@ -1,6 +1,61 @@
 $('.ui.dropdown').dropdown();
 
 
+
+var namespace = {
+    'field1': {name: 'field1', expression: '$999', 'comment': 'First value'},
+    'field2': {name: 'field2', expression: '50', 'comment': 'Second value'},
+    'field3': {name: 'Average', expression: '= 1 + 1', 'comment': 'Average of the two values'},
+}
+
+function evaluateExpression(expression){
+    if(expression[0] == "="){
+        // Evaluate expression
+
+        // Source : https://github.com/soney/jsep/blob/master/test/tests.js 
+        var binops = {
+            "+" : function(a, b) { return a + b; },
+            "-" : function(a, b) { return a - b; },
+            "*" : function(a, b) { return a * b; },
+            "/" : function(a, b) { return a / b; },
+            "%" : function(a, b) { return a % b; }
+        };
+        var unops = {
+            "-" : function(a) { return -a; },
+            "+" : function(a) { return -a; }
+        };
+
+        var do_eval = function(node) {
+            if(node.type === "BinaryExpression") {
+                return binops[node.operator](do_eval(node.left), do_eval(node.right));
+            } else if(node.type === "UnaryExpression") {
+                return unops[node.operator](do_eval(node.argument));
+            } else if(node.type === "Literal") {
+                // console.log("literal ")
+                // console.log(node)
+                return node.value;
+            } else {
+                // Node.type == Identifier
+                // Name lookup
+                if(node.name in namespace){
+                    // console.log("name found " + node.name)
+                    // TODO: Cycle detection and termination
+                    return evaluateExpression(namespace[node.name].expression)
+                } else {
+                    // console.log("unknown token ")
+                    // console.log(node.name)
+                }
+                // console.log("else ")
+                // console.log(node)
+            }
+        };
+        return do_eval(jsep(expression.substring(1)));
+    } else {
+        return expression;
+    }    
+}
+
+
 Vue.component('statement-row', {
     template: `
     <div class="row DataRow">
@@ -9,7 +64,7 @@ Vue.component('statement-row', {
         </div>
         
         <div class="eight wide column">
-            <input type="text" v-model="expression" class="DataInput"/>
+            <input type="text" v-model="statement.expression" class="DataInput"/>
 
             <div class="ui icon top left pointing dropdown button DataOptions" tabindex="0">
                 <i class="wrench icon"></i>
@@ -24,48 +79,15 @@ Vue.component('statement-row', {
             <p>{{ value }}</p>
         </div>
 
-        
-
         <div class="four wide column">
             <p>{{ comment }}</p>
         </div>
     </div>
 `,
-    props: ['name', 'expression', 'comment'],
+    props: ['statement', 'name', 'expression', 'comment'],
     computed: {
         value: function() {
-            
-            if(this.expression[0] == "="){
-                // Evaluate expression
-                
-                // Source : https://github.com/soney/jsep/blob/master/test/tests.js 
-                var binops = {
-                    "+" : function(a, b) { return a + b; },
-                    "-" : function(a, b) { return a - b; },
-                    "*" : function(a, b) { return a * b; },
-                    "/" : function(a, b) { return a / b; },
-                    "%" : function(a, b) { return a % b; }
-                };
-                var unops = {
-                    "-" : function(a) { return -a; },
-                    "+" : function(a) { return -a; }
-                };
-
-                var do_eval = function(node) {
-                    if(node.type === "BinaryExpression") {
-                        return binops[node.operator](do_eval(node.left), do_eval(node.right));
-                    } else if(node.type === "UnaryExpression") {
-                        return unops[node.operator](do_eval(node.argument));
-                    } else if(node.type === "Literal") {
-                        return node.value;
-                    }
-                };
-                return do_eval(jsep(this.expression.substring(1)));
-                
-            } else {
-                return this.expression;
-            }
-
+            return evaluateExpression(this.statement.expression)
         }
     }
 })
@@ -74,11 +96,7 @@ Vue.component('statement-row', {
 var app = new Vue({
     el: '#app',
     data: {
-    message: 'Hello Vue!',
-      statements: [
-          {name: 'field1', expression: '$999', 'comment': 'First value'},
-          {name: 'field2', expression: '50', 'comment': 'Second value'},
-          {name: 'Average', expression: '= 1 + 1', 'comment': 'Average of the two values'},
-      ]
+      message: 'Hello Vue!',
+      statements: namespace
   }
 })
