@@ -1,0 +1,119 @@
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Average of fields</label>
+                </div>
+                <div class="eight wide column">
+                    <input type="text" value="hello" class="DataInput"/>
+                </div>
+
+
+            </div>
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Grooveshark</label>
+                </div>
+                <div class="eight wide column">
+                    <input type="text" value="23158" class="DataInput"/>
+                </div>
+            </div>
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Sub Table</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue">
+                        <table class="ui celled table">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Status</th>
+                              <th>Notes</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td><input/></td>
+                                  <td><input/></td>
+                                  <td><input/></td>
+                              </tr>
+                            <tr class="disabled">
+                              <td>Jamie</td>
+                              <td>Approved</td>
+                              <td>Requires call</td>
+                            </tr>
+                            <tr>
+                              <td>John</td>
+                              <td>Selected</td>
+                              <td>None</td>
+                            </tr>
+                            <tr>
+                              <td>Jamie</td>
+                              <td>Approved</td>
+                              <td>Requires call</td>
+                            </tr>
+                            <tr>
+                              <td class="disabled">Jill</td>
+                              <td>Approved</td>
+                              <td>None</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Simple list</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue">
+                        <div class="ui celled list">
+                          <div class="item">
+                              An excellent companion
+                          </div>
+                          <div class="item">
+                            A poodle, its pretty basic
+                          </div>
+                          <div class="item">
+                              He's also a dog
+                          </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+
+
+             <div class="row DataRow">
+                <div class="four wide column">
+                    <label class="DataLabel">Dictionary</label>
+                </div>
+                <div class="eight wide column">
+                    <span class="DataValue DataValue--dictionary">
+                        <div class="ui celled list">
+                          <div class="item">
+                            <div class="content">
+                              <div class="key">Snickerdoodle</div>
+                              <span class="value">An excellent companion</span>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="content">
+                                <div class="key">Poodle</div>
+                                <span class="value">A poodle, its pretty basic</span>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="content">
+                              <div class="key">Paulo</div>
+                              <span class="value">He's also a dog</span>
+                            </div>
+                          </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
