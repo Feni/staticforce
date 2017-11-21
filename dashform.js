@@ -1,17 +1,12 @@
-$('.ui.dropdown').dropdown();
-
-
 var globalStatements = [
     {name: 'field1', expression: '999', 'comment': 'First value'},
     {name: 'field2', expression: '50', 'comment': 'Second value'},
     {name: 'Average', expression: '= field1 + field2 + 3', 'comment': 'Average of the two values'},
 ]
 
-var namespace = {
-    'field1': globalStatements[0],
-    'field2': globalStatements[1],
-    'field3': globalStatements[2],
-}
+var namespace = {}
+
+for(var i = 0; i < )
 
 
 function castNumber(value) {

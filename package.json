@@ -1,0 +1,28 @@
+{
+  "name": "staticform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dashform.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Feni@bitbucket.org/Feni/staticforce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Feni/staticforce#readme",
+  "dependencies": {
+    "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.7",
+    "ts-loader": "^3.1.1",
+    "typescript": "^2.6.1",
+    "vue-loader": "^13.5.0",
+    "vue-template-compiler": "^2.2.1",
+    "webpack": "^3.8.1"
+  }
+}
