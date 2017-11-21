@@ -64,11 +64,16 @@ let v = new Vue({
     el: "#app",
     store,
     computed: {
-          ...mapState([
-              'statements'
-          ])
+        ...mapState([
+          'statements'
+        ])
     },
     components: {
         Statement
+    },
+    methods: {
+        addValue () {
+            return store.dispatch('newStatement')
+        }
     }
 });
