@@ -17,11 +17,12 @@ export default Vue.extend({
         }
     },
     methods: {
-        increment() { this.enthusiasm++; },
+        increment() { this.enthusiasm++; this.$store.commit('increment'); },
         decrement() {
             if (this.enthusiasm > 1) {
                 this.enthusiasm--;
             }
+            this.$store.commit('decrement')
         },
     },
     computed: {

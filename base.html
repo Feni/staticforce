@@ -21,24 +21,25 @@
     
     <div id="app">
     
+        <!-- 
     <header class="DashHeader">
         <div class="Navbar--toolbar ui menu">
-            <button class="item" v-on:click="addStatement">+ Value</button>
+            <button class="item">+ Value</button>
             <div class="item">+ List</div>
             <div class="item">+ Table</div>
             <div class="item">+ Dictionary</div>
         </div>
     </header>
+-->
 
     <div class="BodyWrapper HeaderOffset">
     <div class="main ui container DataContainer">
         <div class="ui stackable grid">
-
-                <statement-row v-for="statement in statements" :key="statement.name"
+                <Statement v-for="statement in statements" :key="statement.name"
                                v-bind:statement="statement"
                                v-bind:expression="statement.expression"
                                v-bind:comment="statement.comment"
-                               v-bind:name="statement.name"></statement-row>
+                               v-bind:name="statement.name"></Statement>
             
         </div>
     </div>

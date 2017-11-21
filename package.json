@@ -15,7 +15,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/Feni/staticforce#readme",
   "dependencies": {
-    "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867"
+    "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
