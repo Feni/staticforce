@@ -32,13 +32,13 @@
 
 
     <div class="BodyWrapper HeaderOffset">
-    <div class="main ui container DataContainer">
+    <div class="main ui container DataContainer DashForm">
         <div class="ui stackable grid">
-                <Statement v-for="statement in statements" :key="statement.name"
-                               v-bind:statement="statement"
-                               v-bind:expression="statement.expression"
-                               v-bind:comment="statement.comment"
-                               v-bind:name="statement.name"></Statement>
+                <Statement v-for="statement in statements" :key="statement.id"
+                               v-bind:id="statement.id"
+                               v-bind:meta="statement.meta"
+                               v-bind:datatype="statement.datatype"
+                               v-bind:data="statement.data"></Statement>
             
         </div>
     </div>

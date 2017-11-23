@@ -95,7 +95,6 @@ p {
 }
 
 .BodyWrapper {
-    background-color: #f4f4f4;
     height: 100%;
 }
 
@@ -125,4 +124,15 @@ p {
     top: 0px;
     left: 0px;
     right: ipx;
+}
+
+
+.DashForm input {
+    border: 0px;
+    padding: 5px;
+}
+
+.DashForm input:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 4px;
 }

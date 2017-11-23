@@ -10,15 +10,15 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         statements: [
-            {name: 'field1', expression: '999', 'comment': 'First value'},
-            {name: 'field2', expression: '50', 'comment': 'Second value'},
-            {name: 'Average', expression: '= field1 + field2 + 3', 'comment': 'Average of the two values'},            
+            {id: 1, datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}},
+            {id: 2, datatype: 'number', meta: {name: 'field2'}, data: {value: '50'}},
+            {id: 3, datatype: 'equation', meta:{name: 'Average'}, data: {value: '', expression: '= field1 + field2 + 3'}}
         ],
     },
     getters: {
         namespace: (state) => {
             return state.statements.reduce(function(map, obj){
-                map[obj.name] = obj;
+                map[obj.meta.name] = obj;
                 return map;
             }, {});
         },
@@ -33,6 +33,9 @@ const store = new Vuex.Store({
                 }
             }
             return ""
+        },
+        nextId: (state, getters) => {
+            return state.statements.length;
         }
     },
     mutations: {
@@ -47,9 +50,12 @@ const store = new Vuex.Store({
             let field_name = context.getters.nextName;
             console.log("next name " + field_name);
             let new_field = {
-                name: field_name, 
-                expression: '',
-                comment: ''
+                id: context.getters.nextId,
+                datatype: 'number', 
+                meta: {
+                    name: field_name,
+                },
+                data: {value: 0}
             }
             context.commit('addStatement', new_field);
         }

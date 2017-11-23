@@ -1,26 +1,14 @@
 <template>
     <div class="row DataRow">
         <div class="four wide column">
-            <label class="DataLabel">{{ name }}</label>
+            <label class="DataLabel">{{ meta.name }}</label>
         </div>
         
         <div class="eight wide column">
-            <input type="text" v-model="statement.expression" class="DataInput"/>
-
-            <div class="ui icon top left pointing dropdown button DataOptions" tabindex="0">
-                <i class="wrench icon"></i>
-                <div class="menu transition hidden" tabindex="-1">
-                  <div class="item">Add Constraint</div>
-                  <div class="ui divider"></div>
-                  <div class="item">Delete</div>
-                </div>
-            </div>
-
-            <p>{{ value }}</p>
-        </div>
-
-        <div class="four wide column">
-            <p>{{ comment }}</p>
+            <input type="text" v-model="data.value" class="DataInput"/>
+            
+            
+            <p v-if="datatype == 'equation'">{{ value }}</p>
         </div>
     </div>
 </template>
@@ -29,11 +17,15 @@
 import Vue from "vue";
 
 export default Vue.extend({
-    props: ['statement', 'name', 'expression', 'comment'],
+    props: ['id', 'meta', 'datatype', 'data'],
     computed: {
         value: function() {
-            // return evaluateExpression(this.statement.expression)
-            return this.statement.expression;
+            // The view should not have to worry about the data evaluation. 
+            // That should be taken care of at the vuex layer.
+            if(this.datatype == "equation"){
+                return this.data.expression;
+            }
+            return this.data.value;
         }
     }
 });
