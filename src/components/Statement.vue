@@ -20,12 +20,7 @@ export default Vue.extend({
     props: ['id', 'meta', 'datatype', 'data'],
     computed: {
         value: function() {
-            // The view should not have to worry about the data evaluation. 
-            // That should be taken care of at the vuex layer.
-            if(this.datatype == "equation"){
-                return this.data.expression;
-            }
-            return this.data.value;
+            return this.$store.getters.getValue(this.id)
         }
     }
 });
