@@ -11,6 +11,11 @@ function castNumber(value: string) {
     return num;
 }
 
+function castBoolean(value: string) {
+    if(value === 'true') return true;
+    return false;
+}
+
 // Need to be able to store type hints like numbers - could show as a visual icon next to the interpreted version - string (abc) or number (123)
 
 function evaluateEquation(state object, getters: object, expression: string){
@@ -73,9 +78,12 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         statements: [
-            {id: 1, datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}},
-            {id: 2, datatype: 'number', meta: {name: 'field2'}, data: {value: '50'}},
-            {id: 3, datatype: 'equation', meta:{name: 'Average'}, data: {value: '= field1 + field2 + 3'}}
+            {id: 0, datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}},
+            {id: 1, datatype: 'number', meta: {name: 'field2'}, data: {value: '50'}},
+            {id: 2, datatype: 'equation', meta:{name: 'Average'}, data: {value: '= field1 + field2 + 3'}},
+            
+            {id: 3, datatype: 'boolean', meta:{name: 'field4'}, data: {value: 'true'}},
+            {id: 4, datatype: 'boolean', meta:{name: 'field5'}, data: {value: 'false'}}
         ],
     },
     getters: {
@@ -89,7 +97,7 @@ const store = new Vuex.Store({
             // Find the first unique name. 
             // Construct incrementally and skip any that exists.
             let length: number = state.statements.length;
-            for(let i = length; i < length * 2; i++){
+            for(let i = length + 1; i < length * 2; i++){
                 let name = "field" + i;
                 if(!(name in getters.namespace)){
                     return name;
@@ -105,12 +113,19 @@ const store = new Vuex.Store({
             return state.statements.find(stmt => stmt.id === id)
         },
         getValue: (state, getters) => (id: number) => {
+            console.log("get value of " + id);
             var statement = getters.getById(id);
             if(statement.datatype === "number"){
                 return castNumber(statement.data.value);
-            } else if (statement.datatype === "equation") {
-                return evaluateEquation(state, getters, statement.data.value)
             }
+            else if (statement.datatype === "boolean") {
+                return castBoolean(statement.data.value);
+            }
+            else if (statement.datatype === "equation") {
+                return evaluateEquation(state, getters, statement.data.value)
+            } 
+            console.log("value not found")
+            return -1;  // TODO
         }
     },
     mutations: {
