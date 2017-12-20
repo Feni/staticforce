@@ -1,5 +1,5 @@
 html, body {
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .box {
@@ -25,7 +25,7 @@ html, body {
     color: #333;
     
     width: 100%;
-    text-align: right;
+    text-align: left;
     padding-right: 5px;
     vertical-align: top;
 }
@@ -33,6 +33,7 @@ html, body {
 .ui .grid .row.DataRow {
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
+    border-bottom: 1px solid #bdc3c7;
 }
 
 
