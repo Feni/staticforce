@@ -94,7 +94,9 @@ const store = new Vuex.Store({
                     {id: 8, datatype: 'text', meta: {name: 'First Name'}, data: {value: 'Feni'}},
                     {id: 9, datatype: 'number', meta: {name: 'Age'}, data: {value: '50'}}
                 ]                                
-            }}
+            }},
+            {id: 10, datatype: 'number', meta: {name: 'random number'}, data: {value: '4654685'}},
+
         ],
     },
     getters: {
