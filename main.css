@@ -1,5 +1,6 @@
 html, body {
-    font-size: 16px;
+    font-size: 11px;
+    font-family: "Open Sans", "Arial";
 }
 
 .box {
@@ -25,7 +26,7 @@ html, body {
     color: #333;
     
     width: 100%;
-    text-align: right;
+    text-align: left;
     padding-right: 5px;
     vertical-align: top;
 }
@@ -33,6 +34,11 @@ html, body {
 .ui .grid .row.DataRow {
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
+    border-bottom: 1px solid #bdc3c7;
+}
+
+.ui .grid .row.DataRow:last-child {
+    border-bottom: none;
 }
 
 
@@ -135,4 +141,13 @@ p {
 .DashForm input:hover {
     border: 1px solid rgba(0, 0, 0, 0.3);
     padding: 4px;
+}
+
+.SubObject {
+    padding: 10px 30px !important;
+    font-size: 0.88em;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #bdc3c7;
 }

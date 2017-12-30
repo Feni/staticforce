@@ -73,7 +73,20 @@ const store = new Vuex.Store({
             {id: 2, datatype: 'equation', meta:{name: 'Average'}, data: {value: '= field1 + field2 + 3'}},
             
             {id: 3, datatype: 'boolean', meta:{name: 'field4'}, data: {value: 'true'}},
-            {id: 4, datatype: 'boolean', meta:{name: 'field5'}, data: {value: 'false'}}
+            {id: 4, datatype: 'boolean', meta:{name: 'field5'}, data: {value: 'false'}},
+            
+            {id: 5, datatype: 'text', meta:{name: 'Short Text'}, data: {value: 'Hello World'}},
+            
+            {id: 6, datatype: 'text', meta:{name: 'Long Text'}, data: {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}},
+            
+            {id: 7, datatype: 'object', meta:{name: 'Complex object'}, data: {
+                value: [
+                    {id: 8, datatype: 'text', meta: {name: 'First Name'}, data: {value: 'Feni'}},
+                    {id: 9, datatype: 'number', meta: {name: 'Age'}, data: {value: '50'}}
+                ]                                
+            }},
+            {id: 10, datatype: 'number', meta: {name: 'random number'}, data: {value: '4654685'}},
+
         ],
     },
     getters: {
@@ -146,7 +159,7 @@ const store = new Vuex.Store({
 
 import Statement from "./components/Statement.vue";
 
-let v = new Vue({
+window.dashform = new Vue({
     el: "#app",
     store,
     computed: {
