@@ -3,18 +3,8 @@
 import Vue from "vue";
 import Vuex from 'vuex'
 import { mapState } from 'vuex'
+import {castNumber, castBoolean} from './utils'
 
-
-function castNumber(value: string) {
-    var num = Number(value);
-    if(num === NaN) {return value}
-    return num;
-}
-
-function castBoolean(value: string) {
-    if(value === 'true') return true;
-    return false;
-}
 
 // Need to be able to store type hints like numbers - could show as a visual icon next to the interpreted version - string (abc) or number (123)
 
