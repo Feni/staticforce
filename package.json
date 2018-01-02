@@ -15,12 +15,14 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/Feni/staticforce#readme",
   "dependencies": {
+    "@types/jest": "^22.0.0",
     "jasmine": "^2.8.0",
     "jsep": "^0.3.3",
     "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.8.3",
     "css-loader": "^0.28.7",
     "jasmine-core": "^2.8.0",
     "jest": "^22.0.4",

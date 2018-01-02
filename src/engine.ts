@@ -1,24 +1,21 @@
 import {castNumber, castBoolean, generate_random_id} from './utils'
 var jsep = require("jsep")
 
-class Environment {
+export class Environment {
     // Name -> Cell map
-    variables: object
+    variables: {
+        [index: string]: Cell
+    } = {};
     outer: Environment
 
     constructor(outer?: Environment) {
         if(outer){
             this.outer = outer;
         }
+        this.variables = {}
     }
 
-    // TODO: Test cases for this
-    // Test getting a variable in direct environment
-    // Test getting in parent environment
-    // Testing getting in several layers deep
-    // Test variable not found. 
-    // Test variable found in multiple environments & proper one returned.
-    find(name: string) {        
+    findEnv(name: string) {        
         var layer: Environment = this;
         while(layer !== undefined){
             if(name in layer.variables){
@@ -26,6 +23,22 @@ class Environment {
             } else {
                 layer = layer.outer;
             }
+        }
+        return undefined;
+    }
+
+    set(name: string, value: Cell){
+        this.variables[name] = value
+    }
+
+    get(name: string){
+        return this.variables[name]
+    }
+
+    findValue(name: string){
+        let env = this.findEnv(name);
+        if(env != undefined){
+            return env.get(name)
         }
         return undefined;
     }
@@ -118,7 +131,7 @@ function getEvalOrder(cells: Cell[]){
     return eval_order;
 }
 
-class Cell {
+export class Cell {
     id: string
     type: string
     value: object   // TODO: How to handle string, int, etc?
@@ -186,9 +199,4 @@ class FunctionCell extends Cell {
         // TODO: Seems hacky. 
         return result;
     }
-}
-
-
-export function sum(a, b) {
-    return a + b;
 }
