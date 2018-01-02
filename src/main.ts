@@ -4,6 +4,7 @@ import Vue from "vue";
 import Vuex from 'vuex'
 import { mapState } from 'vuex'
 import {castNumber, castBoolean} from './utils'
+import {sum} from './engine'
 
 
 // Need to be able to store type hints like numbers - could show as a visual icon next to the interpreted version - string (abc) or number (123)

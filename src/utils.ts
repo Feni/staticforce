@@ -1,15 +1,17 @@
-function castNumber(value: string) {
+// src/utils.ts
+
+export function castNumber(value: string) {
     var num = Number(value);
     if(num === NaN) {return value}
     return num;
 }
 
-function castBoolean(value: string) {
+export function castBoolean(value: string) {
     if(value === 'true') return true;
     return false;
 }
 
-function generate_random_id(){
+export function generate_random_id(){
     // Source: S/O 105034 - Broofa
     // TODO: Replace with a more rigorous UID
     return 'xxxxxxxxxxxxxxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

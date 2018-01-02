@@ -4,7 +4,7 @@
   "description": "",
   "main": "dashform.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "webpack"
   },
   "repository": {
@@ -15,15 +15,37 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/Feni/staticforce#readme",
   "dependencies": {
+    "jasmine": "^2.8.0",
+    "jsep": "^0.3.3",
     "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
+    "jasmine-core": "^2.8.0",
+    "jest": "^22.0.4",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "ts-jest": "^22.0.0",
     "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
     "vue-loader": "^13.5.0",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^3.8.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

@@ -1,4 +1,5 @@
 import {castNumber, castBoolean, generate_random_id} from './utils'
+var jsep = require("jsep")
 
 class Environment {
     // Name -> Cell map
@@ -28,7 +29,6 @@ class Environment {
         }
         return undefined;
     }
-
 }
 
 // Cell ID -> Cell Map
@@ -118,8 +118,6 @@ function getEvalOrder(cells: Cell[]){
     return eval_order;
 }
 
-
-
 class Cell {
     id: string
     type: string
@@ -188,4 +186,9 @@ class FunctionCell extends Cell {
         // TODO: Seems hacky. 
         return result;
     }
+}
+
+
+export function sum(a, b) {
+    return a + b;
 }
