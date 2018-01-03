@@ -1,12 +1,14 @@
 // src/utils.ts
 
 export function castNumber(value: string) {
+    // TODO: Make this more strict for cases like "20 ducks"
     var num = Number(value);
     if(num === NaN) {return value}
     return num;
 }
 
 export function castBoolean(value: string) {
+    // TODO: Case sensitivity?
     if(value === 'true') return true;
     return false;
 }

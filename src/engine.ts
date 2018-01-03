@@ -44,11 +44,6 @@ export class Environment {
     }
 }
 
-// Cell ID -> Cell Map
-let CELL_STORE:{
-    [index: string]: Cell
-} = {};
-
 // Evaluate expression
 var BINARY_OPS = {
     "+" : (a: number, b: number) => { return a + b; },
@@ -80,8 +75,26 @@ var _do_eval = function(node, env: Environment) {
     }
 };
 
+class CellError extends Error {
+    message: string
+    cells: Cell[]
+    
+    constructor(message: string){
+        super(message);
+        this.name = "CellError"
+    }
 
-function getEvalOrder(cells: Cell[]){
+    setErrorContext(cells: Cell[]){
+        this.cells = cells;
+    }
+
+    toString(){
+        return this.message + "[" + this.cells.length + "]"
+    }
+}
+
+
+export function getEvalOrder(cells: Cell[]){
     /*
     Perform a topological sort of the node dependencies to get the evaluation order.
     */
@@ -123,12 +136,15 @@ function getEvalOrder(cells: Cell[]){
         }
     }
     let unmet_dependencies = Object.keys(depend_count)
-    console.log('unmet deps ' + unmet_dependencies)
-    if(unmet_dependencies != []){
-        console.error("Cycle detected");
+    if(unmet_dependencies.length > 0){
+        let engine = Engine.getInstance();
+        let unmet_cells: Cell[] = unmet_dependencies.map((cell_id) => engine.getCell(cell_id));
+        let err: CellError = new CellError("Cycle detected");
+        err.cells = unmet_cells;
+        throw err
+    } else {
+        return eval_order;
     }
-    console.log("Eval order " + eval_order);
-    return eval_order;
 }
 
 export class Cell {
@@ -139,6 +155,7 @@ export class Cell {
     used_by: Cell[]
     env: Environment
 
+    // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(value: object, type: string, env: Environment){
         this.value = value;
         this.type = type;
@@ -146,7 +163,7 @@ export class Cell {
         this.depends_on = []
         this.used_by = []
         this.id = generate_random_id()
-        CELL_STORE[this.id] = this;
+        Engine.getInstance().setCell(this.id, this);
     }
 
     addDependency(other: Cell){
@@ -199,4 +216,39 @@ class FunctionCell extends Cell {
         // TODO: Seems hacky. 
         return result;
     }
+}
+
+class Engine { 
+    private static _instance:Engine = new Engine();
+    // Cell ID -> Cell Map
+    CELL_STORE:{
+        [index: string]: Cell
+    } = {};
+
+    globalEnv: Environment
+    
+    constructor() {
+        if(Engine._instance){
+            throw new Error("Singleton Error: Use getInstance() instead.");
+        }
+        Engine._instance = this;
+        this.globalEnv = new Environment()
+    }
+
+    public static getInstance() {
+        return Engine._instance;
+    }
+
+    public getAllCells(){
+        return this.CELL_STORE;
+    }
+
+    public getCell(id: string){
+        return this.CELL_STORE[id]
+    }
+
+    public setCell(id: string, cell: Cell){
+        return this.CELL_STORE[id] = cell;
+    }
+    
 }
