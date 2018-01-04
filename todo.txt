@@ -1,0 +1,9 @@
+In eval: Need to be able to store type hints like numbers - could show as a visual icon next to the interpreted version - string (abc) or number (123)
+
+Complex object:
+            {id: 7, datatype: 'object', meta:{name: 'Complex object'}, data: {
+                value: [
+                    {id: 8, datatype: 'text', meta: {name: 'First Name'}, data: {value: 'Feni'}},
+                    {id: 9, datatype: 'number', meta: {name: 'Age'}, data: {value: '50'}}
+                ]                                
+            }},

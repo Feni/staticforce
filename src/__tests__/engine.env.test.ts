@@ -6,7 +6,7 @@ import {} from 'jest';
 // Test getting a variable in direct environment
 test('find variable in direct environment', () => {
   let e = new Environment()
-  let c = new Cell(42, "number", e);
+  let c = new Cell("number", 42, e);
   e.set("a", c)
   expect(e.findEnv("a")).toBe(e);  // Get correct env
   expect(e.findEnv("a").get("a")).toBe(c); // get correct cell
@@ -18,7 +18,7 @@ test('find variable in direct environment', () => {
 test('find variable in parent environment', () => {
   let parentEnv = new Environment();
   let childEnv = new Environment(parentEnv);
-  let c = new Cell(42, "number", parentEnv);
+  let c = new Cell("number", 42, parentEnv);
   parentEnv.set("a", c);
 
   expect(childEnv.findEnv("a")).toBe(parentEnv);  // Get correct env
@@ -40,7 +40,7 @@ test('find variable in deep environment', () => {
   let e4 = new Environment(e3);
   let e5 = new Environment(e4);
   let e6 = new Environment(e5);
-  let c = new Cell(42, "number", e2);
+  let c = new Cell("number", 42, e2);
   e2.set("a", c);
 
   expect(e5.findEnv("a")).toBe(e2);  // Get correct env
@@ -53,7 +53,7 @@ test('find variable in deep environment', () => {
 // Test variable not found.
 test('find variable not found', () => {
   let e = new Environment()
-  let c = new Cell(42, "number", e);
+  let c = new Cell("number", 42, e);
   e.set("a", c)
 
   // TODO: This should probably raise an error instead.
@@ -70,10 +70,10 @@ test('find variable in multiple scopes', () => {
   let e5 = new Environment(e4);
   let e6 = new Environment(e5);
   
-  let c1 = new Cell(42, "number", e2);
+  let c1 = new Cell("number", 42, e2);
   e2.set("a", c1);
 
-  let c2 = new Cell(42, "number", e4);
+  let c2 = new Cell("number", 42, e4);
   e4.set("a", c2);
 
 

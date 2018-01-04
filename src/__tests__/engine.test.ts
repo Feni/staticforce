@@ -4,12 +4,12 @@ import {} from 'jest';
 // Test variable not found.
 test('dependency order maintained', () => {
     let env = new Environment()
-    let a = new Cell("A", "number", env);
-    let b = new Cell("B", "number", env);
-    let c = new Cell("C", "number", env);
-    let d = new Cell("D", "number", env);
-    let e = new Cell("E", "number", env);
-    let f = new Cell("F", "number", env);
+    let a = new Cell("number", "A", env);
+    let b = new Cell("number", "B", env);
+    let c = new Cell("number", "C", env);
+    let d = new Cell("number", "D", env);
+    let e = new Cell("number", "E", env);
+    let f = new Cell("number", "F", env);
     
     // #       a 
     // #    b    c
@@ -43,12 +43,12 @@ test('dependency order maintained', () => {
 
   test('throws an error on cycles', () => {
     let env = new Environment()
-    let a = new Cell("A", "number", env);
-    let b = new Cell("B", "number", env);
-    let c = new Cell("C", "number", env);
-    let d = new Cell("D", "number", env);
-    let e = new Cell("E", "number", env);
-    let f = new Cell("F", "number", env);
+    let a = new Cell("number", "A", env);
+    let b = new Cell("number", "B", env);
+    let c = new Cell("number", "C", env);
+    let d = new Cell("number", "D", env);
+    let e = new Cell("number", "E", env);
+    let f = new Cell("number", "F", env);
     
     // #       a 
     // #    b    c

@@ -2,23 +2,35 @@ import {castNumber, castBoolean, generate_random_id} from './utils'
 var jsep = require("jsep")
 
 export class Environment {
+
+    outer: Environment
+
     // Name -> Cell map
-    variables: {
+    name_cell_map: {
         [index: string]: Cell
     } = {};
-    outer: Environment
+
+    // Cell ID -> Cell Map
+    id_cell_map:{
+        [index: string]: Cell
+    } = {};
+
+    // List of all cells in environment (even without names). 
+    // Maintains order of appearance in view.
+    all_cells: Cell[] = []
 
     constructor(outer?: Environment) {
         if(outer){
             this.outer = outer;
         }
-        this.variables = {}
+        // TODO: Is this needed?
+        this.name_cell_map = {}
     }
 
     findEnv(name: string) {        
         var layer: Environment = this;
         while(layer !== undefined){
-            if(name in layer.variables){
+            if(name in layer.name_cell_map){
                 return layer
             } else {
                 layer = layer.outer;
@@ -27,21 +39,49 @@ export class Environment {
         return undefined;
     }
 
-    set(name: string, value: Cell){
-        this.variables[name] = value
+    bind(name: string, value: Cell){
+        this.name_cell_map[name] = value
     }
 
-    get(name: string){
-        return this.variables[name]
+    // TODO: Should these operate on names or ids?
+    lookup(name: string){
+        return this.name_cell_map[name]
     }
 
     findValue(name: string){
         let env = this.findEnv(name);
         if(env != undefined){
-            return env.get(name)
+            return env.lookup(name)
         }
         return undefined;
     }
+
+    getAllCells(){
+        return this.all_cells;
+    }
+
+    // datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}
+    newCell(type: string, value: object, name: string) {
+        // TODO: Validate type?
+        let c = new Cell(type, value, this, name);
+        this.bind(name, c);
+        this.id_cell_map[c.id] = c;
+        this.all_cells.append(c)
+        return c;
+    }
+
+    generateName(){
+        let length: number = this.all_cells.length;
+        for(let i = length + 1; i < (length * 2) + 2; i++){
+            let name = "field" + i;
+            if(!(name in this.name_cell_map)){
+                return name;
+            }
+        }
+        return ""
+    }
+
+
 }
 
 // Evaluate expression
@@ -71,7 +111,7 @@ var _do_eval = function(node, env: Environment) {
         // Name lookup
         // TODO: Handle name errors better.
         // TODO: Support [bracket name] syntax for spaces.
-        return env.find(node.name)[node.name].evaluate();
+        return env.lookup(node.name).evaluate();
     }
 };
 
@@ -154,16 +194,17 @@ export class Cell {
     depends_on: Cell[]
     used_by: Cell[]
     env: Environment
+    name: string
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
-    constructor(value: object, type: string, env: Environment){
+    constructor(type: string, value: object, env: Environment, name:? string){
         this.value = value;
         this.type = type;
         this.env = env;
         this.depends_on = []
         this.used_by = []
         this.id = generate_random_id()
-        Engine.getInstance().setCell(this.id, this);
+        this.name = name ? name : "";
     }
 
     addDependency(other: Cell){
@@ -175,7 +216,7 @@ export class Cell {
         if(this.type == "formula") {
             // Evaluate formula. Value = jsep(expression). 
             // or value = String
-            return _do_eval(jsep(this.value), env);
+            return _do_eval(jsep(this.value), this.env);
         } else if(this.type == "call") {
             // Call function. Reset cache? 
             // TODO: There's gotta be a better way to do this.
@@ -190,8 +231,9 @@ export class Cell {
 class FunctionCell extends Cell {
     args: string[]
     body: Cell[]
+
     constructor(args: string[], body: Cell[], env: Environment) { 
-        super({}, "function", env);
+        super("function", {},  env);
         this.args = args;
         this.body = body;
         // TODO: This is hacky. Fix this. Re-bind env for all children.
@@ -218,12 +260,8 @@ class FunctionCell extends Cell {
     }
 }
 
-class Engine { 
+export class Engine { 
     private static _instance:Engine = new Engine();
-    // Cell ID -> Cell Map
-    CELL_STORE:{
-        [index: string]: Cell
-    } = {};
 
     globalEnv: Environment
     
@@ -238,17 +276,4 @@ class Engine {
     public static getInstance() {
         return Engine._instance;
     }
-
-    public getAllCells(){
-        return this.CELL_STORE;
-    }
-
-    public getCell(id: string){
-        return this.CELL_STORE[id]
-    }
-
-    public setCell(id: string, cell: Cell){
-        return this.CELL_STORE[id] = cell;
-    }
-    
 }
