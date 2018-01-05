@@ -1,12 +1,12 @@
-import {Environment, Engine} from '../engine'
+import {Engine} from '../engine'
 import {} from 'jest';
 // import {test, expect, toBe} from 'jest'
 
 /* Environment tests */
 // Test getting a variable in direct environment
 test('find variable in direct environment', () => {
-  let engine = Engine.getInstance();
-  let env = engine.globalEnv;
+  let engine = new Engine()
+  let env = engine.rootEnv;
   let c = env.createCell("number", 42, "a")
   expect(env.findEnv("a")).toBe(env);  // Get correct env
   expect(env.findEnv("a").findValue("a")).toBe(c); // get correct cell
@@ -17,8 +17,8 @@ test('find variable in direct environment', () => {
 
 // Test getting in parent environment
 test('find variable in parent environment', () => {
-  let engine = Engine.getInstance();
-  let parentEnv = engine.globalEnv;
+  let engine = new Engine();
+  let parentEnv = engine.rootEnv;
   let childEnv = parentEnv.createChildEnv();
   
   let c = parentEnv.createCell("number", 42, "a");
@@ -36,8 +36,8 @@ test('find variable in parent environment', () => {
 
 // Testing getting in several layers deep
 test('find variable in deep environment', () => {
-  let engine = Engine.getInstance();
-  let e1 = engine.globalEnv;
+  let engine = new Engine()
+  let e1 = engine.rootEnv;
   let e2 = e1.createChildEnv()
   let e3 = e2.createChildEnv()
   let e4 = e3.createChildEnv()
@@ -53,30 +53,34 @@ test('find variable in deep environment', () => {
 
 // Test variable not found.
 test('find variable not found', () => {
-  let e = new Environment()
-  let c = new Cell("number", 42, e);
-  e.set("a", c)
+  let engine = new Engine()
+  let e = engine.rootEnv;
+  let c = e.createCell("number", 42, "a");
 
-  // TODO: This should probably raise an error instead.
   expect(e.findEnv("b")).toBe(undefined);
   expect(e.findValue("b")).toBe(undefined);
+
+  try {
+    expect(e.lookup("b")).toThrow()
+  } catch(err){
+      expect(err.name).toEqual("EnvError")
+      expect(err.env).toEqual(e)
+  }
+  
 });
 
 // Test variable found in multiple environments & proper one returned.
 test('find variable in multiple scopes', () => {
-  let e1 = new Environment();
-  let e2 = new Environment(e1);
-  let e3 = new Environment(e2);
-  let e4 = new Environment(e3);
-  let e5 = new Environment(e4);
-  let e6 = new Environment(e5);
+  let engine = new Engine()
+  let e1 = engine.rootEnv;
+  let e2 = e1.createChildEnv()
+  let e3 = e2.createChildEnv()
+  let e4 = e3.createChildEnv()
+  let e5 = e4.createChildEnv()
+  let e6 = e5.createChildEnv()
   
-  let c1 = new Cell("number", 42, e2);
-  e2.set("a", c1);
-
-  let c2 = new Cell("number", 42, e4);
-  e4.set("a", c2);
-
+  let c1 = e2.createCell("number", 42, "a");
+  let c2 = e4.createCell("number", 32, "a");
 
   expect(e1.findEnv("a")).toBe(undefined);
   expect(e1.findValue("a")).toBe(undefined);

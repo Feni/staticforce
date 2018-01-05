@@ -1,15 +1,17 @@
-import {getEvalOrder, Environment, Cell, CellError} from '../engine'
+import {getEvalOrder, Engine, CellError} from '../engine'
 import {} from 'jest';
 
 // Test variable not found.
 test('dependency order maintained', () => {
-    let env = new Environment()
-    let a = new Cell("number", "A", env);
-    let b = new Cell("number", "B", env);
-    let c = new Cell("number", "C", env);
-    let d = new Cell("number", "D", env);
-    let e = new Cell("number", "E", env);
-    let f = new Cell("number", "F", env);
+    let engine = new Engine()
+    let env = engine.rootEnv;
+
+    let a = env.createCell("number", "A");
+    let b = env.createCell("number", "B");
+    let c = env.createCell("number", "C");
+    let d = env.createCell("number", "D");
+    let e = env.createCell("number", "E");
+    let f = env.createCell("number", "F");
     
     // #       a 
     // #    b    c
@@ -42,13 +44,16 @@ test('dependency order maintained', () => {
   });
 
   test('throws an error on cycles', () => {
-    let env = new Environment()
-    let a = new Cell("number", "A", env);
-    let b = new Cell("number", "B", env);
-    let c = new Cell("number", "C", env);
-    let d = new Cell("number", "D", env);
-    let e = new Cell("number", "E", env);
-    let f = new Cell("number", "F", env);
+    let engine = new Engine()
+    let env = engine.rootEnv;
+
+    
+    let a = env.createCell("number", "A");
+    let b = env.createCell("number", "B");
+    let c = env.createCell("number", "C");
+    let d = env.createCell("number", "D");
+    let e = env.createCell("number", "E");
+    let f = env.createCell("number", "F");
     
     // #       a 
     // #    b    c
@@ -64,7 +69,7 @@ test('dependency order maintained', () => {
     d.addDependency(f)
     f.addDependency(d)
   
-    let cells: Cell[] = [a, b, c, d, e, f];
+    let cells = [a, b, c, d, e, f];
     // Expect a return value
     try {
         expect(getEvalOrder(cells)).toThrow()

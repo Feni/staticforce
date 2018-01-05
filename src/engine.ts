@@ -24,8 +24,6 @@ export class Environment {
         if(outer){
             this.outer = outer;
         }
-        // TODO: Is this needed?
-        this.name_cell_map = {}
     }
 
     findEnv(name: string) {
@@ -69,14 +67,27 @@ export class Environment {
         return this.all_cells;
     }
 
+    isValidName(name?: string){
+        return name !== null && name !== undefined && name != "" && name.length < 20
+        // TODO: Valid character set
+    }
+
     // datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}
-    createCell(type: string, value: object, name: string) {
+    createCell(type: string, value: object, name?: string) {
+        if(!this.isValidName(name)){
+            name = this.generateName();
+        }
+        if(name == null){
+            // Appease type checker. Should never happen
+            throw Error("Unexpected invalid error")
+        }
         // TODO: Validate type?
         let c = new Cell(type, value, this, name);
         this.bind(name, c);
         this.id_cell_map[c.id] = c;
         this.all_cells.push(c)
         return c;
+        
     }
 
     generateName(){
@@ -200,8 +211,15 @@ export function getEvalOrder(cells: Cell[]){
     }
     let unmet_dependencies = Object.keys(depend_count)
     if(unmet_dependencies.length > 0){
-        let engine = Engine.getInstance();
-        let unmet_cells: Cell[] = unmet_dependencies.map((cell_id) => engine.getCell(cell_id));
+        let cell_id_map: {
+            [index: string]: Cell
+        } = {};
+
+        cells.forEach((cell) => {
+            cell_id_map[cell.id] = cell;
+        });
+        
+        let unmet_cells: Cell[] = unmet_dependencies.map((cell_id) => cell_id_map[cell_id]);
         let err: CellError = new CellError("Cycle detected");
         err.cells = unmet_cells;
         throw err
@@ -220,7 +238,7 @@ export class Cell {
     name: string
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
-    constructor(type: string, value: object, env: Environment, name:? string){
+    constructor(type: string, value: object, env: Environment, name?: string){
         this.value = value;
         this.type = type;
         this.env = env;
@@ -269,7 +287,7 @@ class FunctionCell extends Cell {
         // Bind parameter values in function environment
         // TODO: Should it be a different environment per invocation?
         this.args.map(function(arg: string, i) {
-            func.env.variables[arg] = parameters[i];
+            func.env.bind(arg, parameters[i]);
         });
         let eval_order: Cell[] = getEvalOrder(this.body)
         let result = null;
@@ -284,23 +302,9 @@ class FunctionCell extends Cell {
 }
 
 export class Engine { 
-    private static _instance:Engine = new Engine();
-
-    globalEnv: Environment
+    rootEnv: Environment
     
     constructor() {
-        if(Engine._instance){
-            throw new Error("Singleton Error: Use getInstance() instead.");
-        }
-        Engine._instance = this;
-        this.globalEnv = new Environment()
-    }
-
-    public static getInstance() {
-        return Engine._instance;
-    }
-
-    public static resetInstance(){
-        // Used for tests.
+        this.rootEnv = new Environment()
     }
 }
