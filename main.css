@@ -24,28 +24,44 @@ html, body {
     display: inline-block;
     font-weight: bold;
     color: #333;
-    
-    width: 100%;
+    width: 20%;
     text-align: left;
     padding-right: 5px;
     vertical-align: top;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.ui .grid .row.DataRow {
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
+.ui.grid.DataRow {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid #bdc3c7;
 }
 
-.ui .grid .row.DataRow:last-child {
+.ui.grid.DataRow:last-child {
     border-bottom: none;
 }
 
+
+
+.DataRow--large {
+
+}
+
+.DataContainer {
+    max-width: 600px !important;
+    margin: 0 auto;
+}
+
+/* Todo align right on input */
 
 .input.box input, .DataInput {
     padding: 3px 5px;
     width: calc(100% - 100px);
 }
+
 
 .full.width {
     width: 100%;

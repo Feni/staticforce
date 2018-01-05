@@ -59,8 +59,11 @@ import {Engine} from './engine'
 //     data: object;
 // }
 
+let long_text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
 let ENGINE = new Engine();
 ENGINE.rootEnv.createCell("number", 2, "Hello")
+ENGINE.rootEnv.createCell("text", long_text, "Exposition")
 
 Vue.use(Vuex)
 
@@ -127,8 +130,8 @@ const store = new Vuex.Store({
             // Based on mode, may need to clear state.
             // state.selectedCells.push(payload); // Vue doesn't pick this up.
             // Ideally, state.selected = a set, not an array.
-            Vue.set(state.selected, state.selected.length, payload.id)
-            
+            // Vue.set(state.selected, state.selected.length, payload.id)
+            state.selected.push(payload.id);
         }
     },
     /* Asyncronous actions */

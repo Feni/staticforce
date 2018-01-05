@@ -51,7 +51,6 @@ export class Environment {
             err.env = this;
             throw err
         }
-        
     }
 
     findValue(name: string){

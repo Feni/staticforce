@@ -2,6 +2,8 @@
 <html>
 <head>
     <title> Dash Form </title>
+    <meta lang="en_US">
+    <meta name="google" value="notranslate"> <!-- Disable lorem ipsum translate -->
     <meta charset="utf-8">
     <meta name="description" content="">
 
@@ -32,12 +34,15 @@
 
 
     <div class="BodyWrapper HeaderOffset">
-    <div class="main ui container DataContainer DashForm">
+        <div class="DataContainer DashForm">
+        <div class="main ui container">
             <Statement v-for="statement in engine.rootEnv.getAllCells()" :key="statement.id"
                        v-bind:cell="statement"
-                       v-bind:selected="selected"></Statement>
-                    
-    </div>
+                       v-bind:selected="selected"
+                       class="DataRow ui flexible grid"
+                       ></Statement>
+        </div>
+        </div>
 
     </div> <!-- Body wrapper-->
         

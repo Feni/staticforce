@@ -1,42 +1,29 @@
 <template>
-    <div class="ui flexible grid">
-    <div class="row DataRow" v-on:click="select">
-        <template v-if="isLargeItem">
-            <div class="eleven wide column">
-                <label class="DataLabel">{{ cell.name }}</label>
-                
-                <div v-if="cell.type == 'object'" class="ui stackable grid SubObject">
-
-                    <Statement v-for="statement in cell.value" :key="statement.id"
-                           v-bind:cell="statement.cell"></Statement>
-
-
-                    </div>
-                    <div v-else>
-                        {{ cell.value }}
-                    </div>
-            </div>
-        </template>
-        <template v-else>
-            <div class="three wide column">
-                <label class="DataLabel">{{ cell.name }}</label>
-            </div>
-
-            <div class="eight wide column">
-                <!-- TODO: Align right on numbers. Dynamic input type -->
-                <div class="edit" v-if="isEdit">
+    <div v-bind:class="classObject" v-on:click="select">
+            <label class="DataLabel">{{ cell.name }}</label>
+            
+            <span class="DataValue">
+                <template v-if="isEdit">
+                    
                     <input type="text" v-model="cell.value" class="DataInput"/>
                     <p v-if="cell.type == 'equation'">{{ value }}</p>
-                </div>
-                <div class="view" v-else>
-                    {{ cell.value }}
-                </div>
-            </div>
-        </template>
-    </div>
 
-    </div>
+                </template>
+                <template v-else>
 
+                    <template v-if="cell.type == 'object'" class="ui stackable grid SubObject">
+
+                        <Statement v-for="statement in cell.value" :key="statement.id"
+                                v-bind:cell="statement.cell"></Statement>
+                    </template>
+                    <div v-else>
+                        <!-- Auto-reflow to next line due to div -->
+                        {{ cell.value }}
+                    </div>
+                </template>
+
+            </span>
+    </div>
 </template>
 
 <script lang="ts">
@@ -65,6 +52,14 @@ export default Vue.extend({
         },
         isEdit: function(){
             return this.selected.indexOf(this.cell.id) !== -1;
+        },
+        classObject: function() {
+            var typeClass = "DataType--" + this.cell.type;
+            return {
+                "DataRow--large": this.isLargeItem,
+                "edit": this.isEdit,
+                typeClass: true
+            }
         }
     },
     methods: {
