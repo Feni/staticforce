@@ -68,7 +68,9 @@ export default Vue.extend({
         }
     },
     methods: {
-        select: function(event) {
+        select: function(event: Event) {
+            console.log("Selecting item")
+            console.log(event);
             /*
             console.log("Clicked on row");
             console.log(this.id)

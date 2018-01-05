@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 import {Engine} from '../engine'
-=======
-import {Environment, Cell} from '../engine'
->>>>>>> 01baafb08253e7d9a53f6c78674b7f3c34798203
+
 import {} from 'jest';
 // import {test, expect, toBe} from 'jest'
 
 /* Environment tests */
 // Test getting a variable in direct environment
 test('find variable in direct environment', () => {
-<<<<<<< HEAD
   let engine = new Engine()
   let env = engine.rootEnv;
   let c = env.createCell("number", 42, "a")
@@ -18,55 +14,30 @@ test('find variable in direct environment', () => {
   expect(env.findEnv("a").lookup("a")).toBe(c); // Verify direct access
   expect(env.findValue("a")).toBe(c); // find + get
   expect(env.findEnv("a").findValue("a").value).toBe(42);  // Verify value
-=======
-  let e = new Environment()
-  let c = new Cell(42, "number", e);
-  e.set("a", c)
-  expect(e.findEnv("a")).toBe(e);  // Get correct env
-  expect(e.findEnv("a").get("a")).toBe(c); // get correct cell
-  expect(e.findValue("a")).toBe(c); // find + get
-  expect(e.findEnv("a").get("a").value).toBe(42);  // Verify value
->>>>>>> 01baafb08253e7d9a53f6c78674b7f3c34798203
 });
 
 // Test getting in parent environment
 test('find variable in parent environment', () => {
-<<<<<<< HEAD
   let engine = new Engine();
   let parentEnv = engine.rootEnv;
   let childEnv = parentEnv.createChildEnv();
   
   let c = parentEnv.createCell("number", 42, "a");
-=======
-  let parentEnv = new Environment();
-  let childEnv = new Environment(parentEnv);
-  let c = new Cell(42, "number", parentEnv);
-  parentEnv.set("a", c);
->>>>>>> 01baafb08253e7d9a53f6c78674b7f3c34798203
 
   expect(childEnv.findEnv("a")).toBe(parentEnv);  // Get correct env
   expect(parentEnv.findEnv("a")).toBe(parentEnv);  // Get correct env
 
-<<<<<<< HEAD
   expect(childEnv.findEnv("a").findValue("a")).toBe(c); // get correct cell
   expect(parentEnv.findEnv("a").findValue("a")).toBe(c); // get correct cell
 
   expect(childEnv.findValue("a")).toBe(c); // find + get
 
   expect(childEnv.findEnv("a").findValue("a").value).toBe(42);  // Verify value
-=======
-  expect(childEnv.findEnv("a").get("a")).toBe(c); // get correct cell
-  expect(parentEnv.findEnv("a").get("a")).toBe(c); // get correct cell
 
-  expect(childEnv.findValue("a")).toBe(c); // find + get
-
-  expect(childEnv.findEnv("a").get("a").value).toBe(42);  // Verify value
->>>>>>> 01baafb08253e7d9a53f6c78674b7f3c34798203
 });
 
 // Testing getting in several layers deep
 test('find variable in deep environment', () => {
-<<<<<<< HEAD
   let engine = new Engine()
   let e1 = engine.rootEnv;
   let e2 = e1.createChildEnv()
@@ -78,20 +49,6 @@ test('find variable in deep environment', () => {
 
   expect(e5.findEnv("a")).toBe(e2);  // Get correct env
   expect(e1.findEnv("a")).toBe(undefined);  // Or namespace error in future
-=======
-  let e1 = new Environment();
-  let e2 = new Environment(e1);
-  let e3 = new Environment(e2);
-  let e4 = new Environment(e3);
-  let e5 = new Environment(e4);
-  let e6 = new Environment(e5);
-  let c = new Cell(42, "number", e2);
-  e2.set("a", c);
-
-  expect(e5.findEnv("a")).toBe(e2);  // Get correct env
-  expect(e1.findEnv("a")).toBe(undefined);  // Or namespace error in future
-
->>>>>>> 01baafb08253e7d9a53f6c78674b7f3c34798203
   expect(e6.findValue("a")).toBe(c); // find + get
 
 });
