@@ -1,21 +1,19 @@
 <template>
     <div class="ui flexible grid">
     <div class="row DataRow" v-on:click="select">
-
         <template v-if="isLargeItem">
             <div class="eleven wide column">
-                <label class="DataLabel">{{ meta.name }}</label>
-                
+                <label class="DataLabel">{{ cell.name }}</label>
                 
                 <div v-if="cell.type == 'object'" class="ui stackable grid SubObject">
 
-                    <Statement v-for="statement in data.value" :key="statement.id"
+                    <Statement v-for="statement in cell.value" :key="statement.id"
                            v-bind:cell="statement.cell"></Statement>
 
 
                     </div>
                     <div v-else>
-                        {{ data.value }}
+                        {{ cell.value }}
                     </div>
             </div>
         </template>
@@ -26,8 +24,7 @@
 
             <div class="eight wide column">
                 <!-- TODO: Align right on numbers. Dynamic input type -->
-                <div class="edit" v-if="edit">
-
+                <div class="edit" v-if="isEdit">
                     <input type="text" v-model="cell.value" class="DataInput"/>
                     <p v-if="cell.type == 'equation'">{{ value }}</p>
                 </div>
@@ -47,7 +44,7 @@ import Vue from "vue";
 
 export default Vue.extend({
     name: 'Statement',
-    props: ['cell'],
+    props: ['cell', 'selected'],
     data: function() {
         return {
             edit: false
@@ -65,12 +62,18 @@ export default Vue.extend({
                 return true;
             }
             return false;
+        },
+        isEdit: function(){
+            return this.selected.indexOf(this.cell.id) !== -1;
         }
     },
     methods: {
         select: function(event: Event) {
             console.log("Selecting item")
             console.log(event);
+
+            this.$store.commit('select', this.cell);
+
             /*
             console.log("Clicked on row");
             console.log(this.id)

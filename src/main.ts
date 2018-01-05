@@ -79,7 +79,8 @@ const store = new Vuex.Store({
         //     {id: 6, datatype: 'text', meta:{name: 'Long Text'}, data: {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}},
         //     {id: 10, datatype: 'number', meta: {name: 'random number'}, data: {value: '4654685'}},
         // ],
-        engine: ENGINE
+        engine: ENGINE,
+        selected: []
     },
     getters: {
         namespace: (state) => {
@@ -120,6 +121,14 @@ const store = new Vuex.Store({
             // state.statements.push(payload);
             console.log("Adding statement " + payload);
             state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
+        },
+        select(state, payload){
+            console.log("Store selecting");
+            // Based on mode, may need to clear state.
+            // state.selectedCells.push(payload); // Vue doesn't pick this up.
+            // Ideally, state.selected = a set, not an array.
+            Vue.set(state.selected, state.selected.length, payload.id)
+            
         }
     },
     /* Asyncronous actions */
@@ -135,6 +144,7 @@ const store = new Vuex.Store({
             }
             context.commit('addStatement', new_field);
         }
+
     }
 })
 
@@ -147,7 +157,8 @@ window.dashform = new Vue({
     computed: {
         ...mapState([
           // 'statements'
-          'engine'
+          'engine',
+          'selected'
         ])
     },
     components: {

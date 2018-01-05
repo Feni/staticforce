@@ -34,7 +34,8 @@
     <div class="BodyWrapper HeaderOffset">
     <div class="main ui container DataContainer DashForm">
             <Statement v-for="statement in engine.rootEnv.getAllCells()" :key="statement.id"
-                       v-bind:cell="statement"></Statement>
+                       v-bind:cell="statement"
+                       v-bind:selected="selected"></Statement>
                     
     </div>
 
