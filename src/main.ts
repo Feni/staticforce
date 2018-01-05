@@ -59,6 +59,8 @@ import {Engine} from './engine'
 //     data: object;
 // }
 
+let ENGINE = new Engine();
+ENGINE.rootEnv.createCell("number", 2, "Hello")
 
 Vue.use(Vuex)
 
@@ -77,22 +79,22 @@ const store = new Vuex.Store({
         //     {id: 6, datatype: 'text', meta:{name: 'Long Text'}, data: {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}},
         //     {id: 10, datatype: 'number', meta: {name: 'random number'}, data: {value: '4654685'}},
         // ],
-        engine: Engine.getInstance()
+        engine: ENGINE
     },
     getters: {
         namespace: (state) => {
             // TODO: Remove method?
-            return state.engine.globalEnv.name_cell_map;
+            return state.engine.rootEnv.name_cell_map;
         },
         nextName: (state, getters) => {
-            return state.engine.globalEnv.generateName()
+            return state.engine.rootEnv.generateName()
         },
         // nextId: (state, getters) => {
         //     return state.statements.length;
         // },
         getById: (state, getters) => (id: string) => {
             // Return a function to evaluate a particular statement. 
-            return state.engine.globalEnv.id_cell_map[id]
+            return state.engine.rootEnv.id_cell_map[id]
         },
         getValue: (state, getters) => (id: string) => {
             console.log("get value of " + id);
@@ -117,7 +119,7 @@ const store = new Vuex.Store({
             // TODO
             // state.statements.push(payload);
             console.log("Adding statement " + payload);
-            state.engine.globalEnv.newCell(payload["type"], payload["value"], payload["name"])
+            state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
         }
     },
     /* Asyncronous actions */

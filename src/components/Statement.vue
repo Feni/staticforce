@@ -6,13 +6,10 @@
                 <label class="DataLabel">{{ meta.name }}</label>
                 
                 
-                <div v-if="datatype == 'object'" class="ui stackable grid SubObject">
+                <div v-if="cell.type == 'object'" class="ui stackable grid SubObject">
 
                     <Statement v-for="statement in data.value" :key="statement.id"
-                           v-bind:id="statement.id"
-                           v-bind:meta="statement.meta"
-                           v-bind:datatype="statement.datatype"
-                           v-bind:data="statement.data"></Statement>
+                           v-bind:cell="statement.cell"></Statement>
 
 
                     </div>
@@ -23,18 +20,18 @@
         </template>
         <template v-else>
             <div class="three wide column">
-                <label class="DataLabel">{{ meta.name }}</label>
+                <label class="DataLabel">{{ cell.name }}</label>
             </div>
 
             <div class="eight wide column">
                 <!-- TODO: Align right on numbers. Dynamic input type -->
                 <div class="edit" v-if="edit">
 
-                    <input type="text" v-model="data.value" class="DataInput"/>
-                    <p v-if="datatype == 'equation'">{{ value }}</p>
+                    <input type="text" v-model="cell.value" class="DataInput"/>
+                    <p v-if="cell.type == 'equation'">{{ value }}</p>
                 </div>
                 <div class="view" v-else>
-                    {{ data.value }}
+                    {{ cell.value }}
                 </div>
             </div>
         </template>
@@ -46,7 +43,7 @@ import Vue from "vue";
 
 export default Vue.extend({
     name: 'Statement',
-    props: ['id', 'meta', 'datatype', 'data'],
+    props: ['cell'],
     data: function() {
         return {
             edit: false
@@ -54,13 +51,13 @@ export default Vue.extend({
     },
     computed: {
         value: function() {
-            return this.$store.getters.getValue(this.id)
+            return this.$store.getters.getValue(this.cell.id)
         }, 
         isLargeItem: function() {
             // TODO: Check if text is long or not
-            if(this.datatype === "object"){
+            if(this.cell.type === "object"){
                 return true;
-            } else if(this.datatype === "text" && this.data.value.length > 100){
+            } else if(this.cell.type === "text" && this.cell.value.length > 100){
                 return true;
             }
             return false;

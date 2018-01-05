@@ -61,7 +61,6 @@ test('dependency order maintained', () => {
     // #       e   f
     //             d
 
-
     a.addDependency(b)
     a.addDependency(c)
     c.addDependency(d)
@@ -83,6 +82,4 @@ test('dependency order maintained', () => {
         expect(err.cells).toContainEqual(f);
         expect(err.cells.length).toEqual(4);
     }
-    
-
   });
