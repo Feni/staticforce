@@ -1,4 +1,5 @@
 import {castNumber, castBoolean, generate_random_id} from './utils'
+import { escape } from 'querystring';
 var jsep = require("jsep")
 
 export class Environment {
@@ -27,7 +28,7 @@ export class Environment {
         this.name_cell_map = {}
     }
 
-    findEnv(name: string) {        
+    findEnv(name: string) {
         var layer: Environment = this;
         while(layer !== undefined){
             if(name in layer.name_cell_map){
@@ -45,10 +46,18 @@ export class Environment {
 
     // TODO: Should these operate on names or ids?
     lookup(name: string){
-        return this.name_cell_map[name]
+        if(name in this.name_cell_map){
+            return this.name_cell_map[name]
+        } else {
+            let err: EnvError = new EnvError("Name lookup failure " + escape(name));
+            err.env = this;
+            throw err
+        }
+        
     }
 
     findValue(name: string){
+        // Find + get
         let env = this.findEnv(name);
         if(env != undefined){
             return env.lookup(name)
@@ -61,12 +70,12 @@ export class Environment {
     }
 
     // datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}
-    newCell(type: string, value: object, name: string) {
+    createCell(type: string, value: object, name: string) {
         // TODO: Validate type?
         let c = new Cell(type, value, this, name);
         this.bind(name, c);
         this.id_cell_map[c.id] = c;
-        this.all_cells.append(c)
+        this.all_cells.push(c)
         return c;
     }
 
@@ -79,6 +88,10 @@ export class Environment {
             }
         }
         return ""
+    }
+
+    createChildEnv() {
+        return new Environment(this);
     }
 
 
@@ -115,7 +128,7 @@ var _do_eval = function(node, env: Environment) {
     }
 };
 
-class CellError extends Error {
+export class CellError extends Error {
     message: string
     cells: Cell[]
     
@@ -124,12 +137,22 @@ class CellError extends Error {
         this.name = "CellError"
     }
 
-    setErrorContext(cells: Cell[]){
-        this.cells = cells;
-    }
-
     toString(){
         return this.message + "[" + this.cells.length + "]"
+    }
+}
+
+export class EnvError extends Error {
+    message: string
+    env: Environment
+
+    constructor(message: string){
+        super(message)
+        this.name = "EnvError"
+    }
+
+    toString() {
+        return this.message + "@Env[" + this.env + "]"
     }
 }
 
@@ -275,5 +298,9 @@ export class Engine {
 
     public static getInstance() {
         return Engine._instance;
+    }
+
+    public static resetInstance(){
+        // Used for tests.
     }
 }
