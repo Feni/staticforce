@@ -1,6 +1,7 @@
 <template>
+    <div class="ui flexible grid">
     <div class="row DataRow" v-on:click="select">
-        
+
         <template v-if="isLargeItem">
             <div class="eleven wide column">
                 <label class="DataLabel">{{ meta.name }}</label>
@@ -36,6 +37,9 @@
             </div>
         </template>
     </div>
+
+    </div>
+
 </template>
 
 <script lang="ts">
