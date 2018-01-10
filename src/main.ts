@@ -141,7 +141,7 @@ const store = new Vuex.Store({
             let field_name = context.getters.nextName;
             console.log("next name " + field_name);
             let new_field = {
-                type: 'number', 
+                type: 'auto',
                 name: field_name,
                 data: 0
             }

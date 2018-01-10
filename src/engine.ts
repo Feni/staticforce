@@ -166,7 +166,6 @@ export class EnvError extends Error {
     }
 }
 
-
 export function getEvalOrder(cells: Cell[]){
     /*
     Perform a topological sort of the node dependencies to get the evaluation order.
@@ -252,6 +251,14 @@ export class Cell {
         other.used_by.push(this)
     }
 
+    recomputeDependencies(){
+        
+    }
+
+    parse() {
+
+    }
+
     evaluate() {
         if(this.type == "formula") {
             // Evaluate formula. Value = jsep(expression). 
@@ -264,7 +271,12 @@ export class Cell {
             let args = this.value["args"]
             return function.invoke(args)
         }
+        
+        if(this.value && this.value[0] == "="){
+            return _do_eval(jsep(this.value.substring(1)), this.env);
+        }
         return this.value;
+
     }
 }
 

@@ -4,15 +4,12 @@
             
             <span class="DataValue">
                 <template v-if="isEdit">
-                    
                     <input type="text" v-model="cell.value" class="DataInput"/>
-                    <p v-if="cell.type == 'equation'">{{ value }}</p>
+                    <p>{{ value }}</p>
 
                 </template>
                 <template v-else>
-
                     <template v-if="cell.type == 'object'" class="ui stackable grid SubObject">
-
                         <Statement v-for="statement in cell.value" :key="statement.id"
                                 v-bind:cell="statement.cell"></Statement>
                     </template>
