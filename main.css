@@ -59,7 +59,11 @@ html, body {
 
 .input.box input, .DataInput {
     padding: 3px 5px;
-    width: calc(100% - 100px);
+    width: 100%;
+}
+
+.DataValue {
+    min-width: 80%;
 }
 
 
