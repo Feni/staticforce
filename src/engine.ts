@@ -1,6 +1,8 @@
 import {castNumber, castBoolean, generate_random_id} from './utils'
 import { escape } from 'querystring';
+import { Big } from 'big.js';
 var jsep = require("jsep")
+// var Big = require('big.js');
 
 export class Environment {
 
@@ -109,15 +111,16 @@ export class Environment {
 
 // Evaluate expression
 var BINARY_OPS = {
-    "+" : (a: number, b: number) => { return a + b; },
-    "-" : (a: number, b: number) => { return a - b; },
-    "*" : (a: number, b: number) => { return a * b; },
-    "/" : (a: number, b: number) => { return a / b; },
-    "%" : (a: number, b: number) => { return a % b; }
+    "+" : (a: Big, b: Big) => { return a.plus(b); },
+    "-" : (a: Big, b: Big) => { return a.minus(b); },
+    "*" : (a: Big, b: Big) => { return a.times(b); },
+    "/" : (a: Big, b: Big) => { return a.div(b); },
+    "%" : (a: Big, b: Big) => { return a.mod(b); }
+    // TODO: And, or, etc
 };
 
 var UNARY_OPS = {
-    "-" : function(a: number) { return -a; },
+    "-" : function(a: Big) { return a.times(-1); },
     // "+" : function(a: number) { return -a; }
 };
 
@@ -137,6 +140,24 @@ var _do_eval = function(node, env: Environment) {
         return env.lookup(node.name).evaluate();
     }
 };
+
+var _get_dependencies = function(node) {
+    let dependencies = [];
+    if(node.type === "BinaryExpression") {
+        return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
+    } else if(node.type === "UnaryExpression") {
+        return UNARY_OPS[node.operator](_do_eval(node.argument, env));
+    } else if(node.type === "Literal") {
+        return castNumber(node.value);
+    } else {
+        // Node.type == Identifier
+        // Name lookup
+        // TODO: Handle name errors better.
+        // TODO: Support [bracket name] syntax for spaces.
+        return env.lookup(node.name).evaluate();
+    }
+
+}
 
 export class CellError extends Error {
     message: string
@@ -256,7 +277,15 @@ export class Cell {
     }
 
     parse() {
+        // Return a parsed version of the current expression.
+    }
 
+    isFormula(){
+        if(this.value !== null && this.value !== undefined){
+            if(this.value[0] == "="){
+                return true;
+            }
+        }
     }
 
     evaluate() {
@@ -271,12 +300,18 @@ export class Cell {
             let args = this.value["args"]
             return function.invoke(args)
         }
-        
-        if(this.value && this.value[0] == "="){
-            return _do_eval(jsep(this.value.substring(1)), this.env);
-        }
-        return this.value;
 
+        if(this.value !== null && this.value !== undefined){
+            if(this.value[0] == "="){
+                let result = _do_eval(jsep(this.value.substring(1)), this.env);
+                return result
+            }
+        }
+        
+        /* if(this.value && this.value[0] == "="){
+            return _do_eval(jsep(this.value.substring(1)), this.env);
+        } */
+        return this.value;
     }
 }
 

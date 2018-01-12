@@ -36,7 +36,7 @@ export default Vue.extend({
     },
     computed: {
         value: function() {
-            return this.$store.getters.getValue(this.cell.id)
+            return this.$store.getters.getValue(this.cell.id);
         }, 
         isLargeItem: function() {
             // TODO: Check if text is long or not

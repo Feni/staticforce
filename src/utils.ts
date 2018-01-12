@@ -1,10 +1,19 @@
 // src/utils.ts
+import { Big } from 'big.js';
 
 export function castNumber(value: string) {
     // TODO: Make this more strict for cases like "20 ducks"
-    var num = Number(value);
-    if(num === NaN) {return value}
-    return num;
+    // isNaN(+a) ? a : +a;
+    // var num = Number(value);
+    // if(num === NaN) {return value}
+    // return num;
+    try {
+        return Big(value)
+    } catch(err){
+        console.log("Cast error");
+        console.log(err);
+        // Error: [big.js] Invalid number
+    }
 }
 
 export function castBoolean(value: string) {

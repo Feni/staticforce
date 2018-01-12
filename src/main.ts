@@ -6,6 +6,9 @@ import { mapState } from 'vuex'
 import {castNumber, castBoolean} from './utils'
 import {Engine} from './engine'
 
+var Gun = require('gun');
+
+var gun = Gun();
 
 // function evaluateEquation(state object, getters: object, expression: string){
 //     var namespace = getters.namespace;
@@ -50,7 +53,6 @@ import {Engine} from './engine'
 //     };
 //     return do_eval(jsep(expression.substring(1)));
 // }
-
 
 // class StatementType {
 //     id: number;
@@ -103,7 +105,12 @@ const store = new Vuex.Store({
         getValue: (state, getters) => (id: string) => {
             console.log("get value of " + id);
             var cell = getters.getById(id);
-            return cell.evaluate()
+            var result = cell.evaluate();
+            if(result.constructor.name == "Big"){
+                console.log("is a big number");
+                return result.toString().replace('"', "")
+            }
+            return result
 
             // if(statement.datatype === "number"){
             //     return castNumber(statement.data.value);
