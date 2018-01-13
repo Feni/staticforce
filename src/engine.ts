@@ -105,8 +105,28 @@ export class Environment {
     createChildEnv() {
         return new Environment(this);
     }
+}
 
+function fudge(result: Big) {
+    // Fudge the result of a computation for rounding errors
+    // i.e (1/3) * 3 = 1
+    // 0.33333333333333333333 = 20 decimals
+    let decimal = result.mod(Big(1));
+    let p = ".00000000000000000001"
+    let precision = Big(p)   // 20 decimals
 
+    let max = Big(1).minus(precision);
+    if(decimal.gt(Big(0))){
+        // 0.99999999... - 0.99999 < 0.000001
+        if(decimal.minus(max).lte(precision)){
+            // If the difference in decimal places and the max is less than the precision we care about, fudge it.
+            return result.round()
+        } else if(decimal.minus(precision).lte(precision)){
+            // 0.00000001 - 0.000001 < precision
+            return result.round()
+        }
+    }
+    return result;
 }
 
 // Evaluate expression
@@ -114,8 +134,8 @@ var BINARY_OPS = {
     "+" : (a: Big, b: Big) => { return a.plus(b); },
     "-" : (a: Big, b: Big) => { return a.minus(b); },
     "*" : (a: Big, b: Big) => { return a.times(b); },
-    "/" : (a: Big, b: Big) => { return a.div(b); },
-    "%" : (a: Big, b: Big) => { return a.mod(b); }
+    "/" : (a: Big, b: Big) => { return fudge(a.div(b)); },
+    "%" : (a: Big, b: Big) => { return fudge(a.mod(b)); }
     // TODO: And, or, etc
 };
 
