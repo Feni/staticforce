@@ -17,9 +17,9 @@ export function castNumber(value: string) {
 }
 
 export function castBoolean(value: string) {
-    let cleaned = value.trim().toLowerCase();
-    if(value === 'true') return true;
-    else if(value === 'false') return false;
+    let cleaned = value.trim().toUpperCase();
+    if(value === 'TRUE') return true;
+    else if(value === 'FALSE') return false;
     return undefined;   // TODO
 }
 
@@ -38,12 +38,12 @@ export function isBoolean(value: string){
 
 export function castLiteral(value: string){
     if(value != null && value != undefined){
-        let cleaned = value.toString().trim().toLowerCase();
+        let cleaned = value.toString().trim().toUpperCase();
         console.log("cleaned is " + cleaned + 'version fo ' + value);
-        if(cleaned == "true"){
+        if(cleaned == "TRUE"){
             console.log("is true")
             return true;
-        } else if(cleaned == "false"){
+        } else if(cleaned == "FALSE"){
             console.log("is false")
             return false;
         } else {

@@ -163,13 +163,13 @@ jsep.addUnaryOp("not"); //  TODO - guess
 
 var UNARY_OPS = {
     "-" : function(a: Big) { return a.times(-1); },
-    "not" : function(a: boolean) { return !a; },
+    "not" : function(a: boolean) { return !a; },    // Verify is boolean, else typos lead to true.
     // "+" : function(a: number) { return -a; }
 };
 
 // TODO: Test cases to verify operator precedence
 export var _do_eval = function(node, env: Environment) {
-    console.log("do eval node type " + node.type + " value " + node.value);
+    console.log("do eval node type " + node.type + " name " + node.name + " value " + node.value);
     if(node.type === "BinaryExpression") {
         return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
     } else if(node.type === "UnaryExpression") {
@@ -178,8 +178,22 @@ export var _do_eval = function(node, env: Environment) {
         return castLiteral(node.value);
     } else if(node.type === "Identifier") {
         // return castBoolean(node.value);
-        return node.value // boolean
+        // return node.value // boolean
+        let upperName = node.name.toUpperCase();
+        // Usually boolean's are literals if typed as 'true', but identifiers
+        // if case is different.
+        if(upperName == "TRUE"){
+            return true;
+        } else if(upperName == "FALSE"){
+            return false;
+        }
+
+        return env.lookup(node.name).evaluate();
+
     } else {
+        console.log("UNHANDLED eval CASE")
+        console.log(node);
+
         // Node.type == Identifier
         // Name lookup
         // TODO: Handle name errors better.
