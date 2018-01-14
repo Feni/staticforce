@@ -64,8 +64,9 @@ var gun = Gun();
 let long_text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
 let ENGINE = new Engine();
-ENGINE.rootEnv.createCell("number", 2, "Hello")
+ENGINE.rootEnv.createCell("expression", "2 + 2", "Hello")
 ENGINE.rootEnv.createCell("text", long_text, "Exposition")
+ENGINE.rootEnv.createCell("expression", "true or false", "three")
 
 Vue.use(Vuex)
 
@@ -106,7 +107,7 @@ const store = new Vuex.Store({
             console.log("get value of " + id);
             var cell = getters.getById(id);
             var result = cell.evaluate();
-            if(result.constructor.name == "Big"){
+            if(result !== undefined && result.constructor.name == "Big"){
                 console.log("is a big number");
                 return result.toString().replace('"', "")
             }

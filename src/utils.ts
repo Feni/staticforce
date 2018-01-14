@@ -17,9 +17,10 @@ export function castNumber(value: string) {
 }
 
 export function castBoolean(value: string) {
-    // TODO: Case sensitivity?
+    let cleaned = value.trim().toLowerCase();
     if(value === 'true') return true;
-    return false;
+    else if(value === 'false') return false;
+    return undefined;   // TODO
 }
 
 export function generate_random_id(){
@@ -29,4 +30,25 @@ export function generate_random_id(){
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+export function isBoolean(value: string){
+    
+}
+
+export function castLiteral(value: string){
+    if(value != null && value != undefined){
+        let cleaned = value.toString().trim().toLowerCase();
+        console.log("cleaned is " + cleaned + 'version fo ' + value);
+        if(cleaned == "true"){
+            console.log("is true")
+            return true;
+        } else if(cleaned == "false"){
+            console.log("is false")
+            return false;
+        } else {
+            return castNumber(value);
+        }
+    }
+    return value;
 }

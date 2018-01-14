@@ -1,4 +1,4 @@
-import {castNumber, castBoolean, generate_random_id} from './utils'
+import {castLiteral, castNumber, castBoolean, generate_random_id} from './utils'
 import { escape } from 'querystring';
 import { Big } from 'big.js';
 var jsep = require("jsep")
@@ -143,23 +143,42 @@ var BINARY_OPS = {
     "-" : (a: Big, b: Big) => { return a.minus(b); },
     "*" : (a: Big, b: Big) => { return fudge(a.times(b)); },
     "/" : (a: Big, b: Big) => { return fudge(a.div(b)); },
-    "%" : (a: Big, b: Big) => { return a.mod(b); }
-    // TODO: And, or, etc
+    "%" : (a: Big, b: Big) => { return a.mod(b); },
+
+    "=" : (a: Big, b: Big) => { return a.eq(b);},//
+    ">" : (a: Big, b: Big) => { return a.gt(b); },
+    ">=" : (a: Big, b: Big) => { return a.gte(b); },    // TODO
+    "<" : (a: Big, b: Big) => { return a.lt(b); },
+    "<=" : (a: Big, b: Big) => { return a.lte(b); },
+  
+    // TODO: Case insensitive AND, OR, NOT
+    "and" : (a: boolean, b: boolean) => { return a && b; },
+    "or" : (a: boolean, b: boolean) => { return a || b; },
 };
+
+jsep.addBinaryOp("=", 6);
+jsep.addBinaryOp("or", 1);
+jsep.addBinaryOp("and", 2);
+jsep.addUnaryOp("not"); //  TODO - guess
 
 var UNARY_OPS = {
     "-" : function(a: Big) { return a.times(-1); },
+    "not" : function(a: boolean) { return !a; },
     // "+" : function(a: number) { return -a; }
 };
 
 // TODO: Test cases to verify operator precedence
 export var _do_eval = function(node, env: Environment) {
+    console.log("do eval node type " + node.type + " value " + node.value);
     if(node.type === "BinaryExpression") {
         return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
     } else if(node.type === "UnaryExpression") {
         return UNARY_OPS[node.operator](_do_eval(node.argument, env));
     } else if(node.type === "Literal") {
-        return castNumber(node.value);
+        return castLiteral(node.value);
+    } else if(node.type === "Identifier") {
+        // return castBoolean(node.value);
+        return node.value // boolean
     } else {
         // Node.type == Identifier
         // Name lookup
@@ -169,6 +188,7 @@ export var _do_eval = function(node, env: Environment) {
     }
 };
 
+// TODO!!!
 var _get_dependencies = function(node) {
     let dependencies = [];
     if(node.type === "BinaryExpression") {
@@ -330,10 +350,15 @@ export class Cell {
         }
 
         if(this.value !== null && this.value !== undefined){
-            if(this.value[0] == "="){
-                let result = _do_eval(jsep(this.value.substring(1)), this.env);
-                return result
-            }
+            //if(this.value[0] == "="){
+                try {
+                    let result = _do_eval(jsep(this.value), this.env);
+                    return result
+                } catch (err) {
+                    console.log("Evaluation failed for " + this.value);
+                    console.log(err)
+                }
+            //}
         }
         
         /* if(this.value && this.value[0] == "="){
