@@ -1,6 +1,7 @@
-import {castLiteral, castNumber, castBoolean, generate_random_id} from './utils'
+import * as util from './utils';
 import { escape } from 'querystring';
 import { Big } from 'big.js';
+
 var jsep = require("jsep")
 // var Big = require('big.js');
 
@@ -152,8 +153,24 @@ var BINARY_OPS = {
     "<=" : (a: Big, b: Big) => { return a.lte(b); },
   
     // TODO: Case insensitive AND, OR, NOT
-    "and" : (a: boolean, b: boolean) => { return a && b; },
-    "or" : (a: boolean, b: boolean) => { return a || b; },
+    "and" : (a: boolean, b: boolean) => { 
+        if(util.isFalse(a) || util.isFalse(b)){
+            // Return true regardless of type is one is known to be false.
+            return false;
+        } else if(util.isBoolean(a) && util.isBoolean(b)){
+            // Else only evaluate in case of valid boolean values.
+            return a && b; 
+        } 
+        return undefined;   // TODO: Undefined or null?
+    },
+    "or" : (a: boolean, b: boolean) => { 
+        if(util.isTrue(a) || util.isTrue(b)){
+            return true;
+        } else if(util.isBoolean(a) && util.isBoolean(b)){
+            return a || b; 
+        }
+        return undefined;
+    },
 };
 
 jsep.addBinaryOp("=", 6);
@@ -175,7 +192,7 @@ export var _do_eval = function(node, env: Environment) {
     } else if(node.type === "UnaryExpression") {
         return UNARY_OPS[node.operator](_do_eval(node.argument, env));
     } else if(node.type === "Literal") {
-        return castLiteral(node.value);
+        return util.castLiteral(node.value);
     } else if(node.type === "Identifier") {
         // return castBoolean(node.value);
         // return node.value // boolean
@@ -188,7 +205,13 @@ export var _do_eval = function(node, env: Environment) {
             return false;
         }
 
-        return env.lookup(node.name).evaluate();
+        let idEnv = env.findEnv(node.name);
+        // Found the name in an environment
+        if(idEnv !== null && idEnv !== undefined){
+            return idEnv.lookup(node.name).evaluate()
+        }
+        // TODO: Return as string literal in this case?
+        return node.name
 
     } else {
         console.log("UNHANDLED eval CASE")
@@ -203,23 +226,23 @@ export var _do_eval = function(node, env: Environment) {
 };
 
 // TODO!!!
-var _get_dependencies = function(node) {
-    let dependencies = [];
-    if(node.type === "BinaryExpression") {
-        return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
-    } else if(node.type === "UnaryExpression") {
-        return UNARY_OPS[node.operator](_do_eval(node.argument, env));
-    } else if(node.type === "Literal") {
-        return castNumber(node.value);
-    } else {
-        // Node.type == Identifier
-        // Name lookup
-        // TODO: Handle name errors better.
-        // TODO: Support [bracket name] syntax for spaces.
-        return env.lookup(node.name).evaluate();
-    }
+// var _get_dependencies = function(node) {
+//     let dependencies = [];
+//     if(node.type === "BinaryExpression") {
+//         return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
+//     } else if(node.type === "UnaryExpression") {
+//         return UNARY_OPS[node.operator](_do_eval(node.argument, env));
+//     } else if(node.type === "Literal") {
+//         return castNumber(node.value);
+//     } else {
+//         // Node.type == Identifier
+//         // Name lookup
+//         // TODO: Handle name errors better.
+//         // TODO: Support [bracket name] syntax for spaces.
+//         return env.lookup(node.name).evaluate();
+//     }
 
-}
+// }
 
 export class CellError extends Error {
     message: string
@@ -325,7 +348,7 @@ export class Cell {
         this.env = env;
         this.depends_on = []
         this.used_by = []
-        this.id = generate_random_id()
+        this.id = util.generate_random_id()
         this.name = name ? name : "";
     }
 

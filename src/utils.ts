@@ -33,7 +33,25 @@ export function generate_random_id(){
 }
 
 export function isBoolean(value: string){
-    
+    // Raw boolean values
+    if(u === true || u === false){
+        return true;
+    }
+
+    let u = value.toString().toUpperCase();
+    if(u === 'TRUE' || u === 'FALSE'){
+        return true;
+    }
+    return false;
+}
+
+export function isTrue(value: string) {
+    // Checks is true or 
+    return value === true ||  value.toString().trim().toUpperCase() === "TRUE";
+}
+
+export function isFalse(value: string){
+    return value === false ||  value.toString().trim().toUpperCase() === "FALSE";
 }
 
 export function castLiteral(value: string){
