@@ -57,12 +57,9 @@ export function isFalse(value: string){
 export function castLiteral(value: string){
     if(value != null && value != undefined){
         let cleaned = value.toString().trim().toUpperCase();
-        console.log("cleaned is " + cleaned + 'version fo ' + value);
         if(cleaned == "TRUE"){
-            console.log("is true")
             return true;
         } else if(cleaned == "FALSE"){
-            console.log("is false")
             return false;
         } else {
             return castNumber(value);

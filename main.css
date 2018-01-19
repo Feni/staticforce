@@ -3,6 +3,11 @@ html, body {
     font-family: "Open Sans", "Arial";
 }
 
+#app {
+    background-color: #F8FAFF;
+    min-height: 100%;
+}
+
 .box {
     display: inline-block;
     position: relative;
@@ -51,8 +56,10 @@ html, body {
 }
 
 .DataContainer {
-    max-width: 600px !important;
+    max-width: 680px !important;
     margin: 0 auto;
+    background-color: #fff;
+    padding: 15px;
 }
 
 /* Todo align right on input */

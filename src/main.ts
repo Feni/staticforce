@@ -93,6 +93,9 @@ const store = new Vuex.Store({
             // TODO: Remove method?
             return state.engine.rootEnv.name_cell_map;
         },
+        engine: (state) => {
+            return state.engine;
+        },
         nextName: (state, getters) => {
             return state.engine.rootEnv.generateName()
         },
@@ -104,11 +107,9 @@ const store = new Vuex.Store({
             return state.engine.rootEnv.id_cell_map[id]
         },
         getValue: (state, getters) => (id: string) => {
-            console.log("get value of " + id);
             var cell = getters.getById(id);
             var result = cell.evaluate();
             if(result !== undefined && result.constructor.name == "Big"){
-                console.log("is a big number");
                 return result.toString().replace('"', "")
             }
             return result
@@ -133,13 +134,17 @@ const store = new Vuex.Store({
             console.log("Adding statement " + payload);
             state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
         },
+        addRef(state, payload) {
+            console.log('adding ereference ' + payload);
+        },
         select(state, payload){
             console.log("Store selecting");
             // Based on mode, may need to clear state.
             // state.selectedCells.push(payload); // Vue doesn't pick this up.
             // Ideally, state.selected = a set, not an array.
             // Vue.set(state.selected, state.selected.length, payload.id)
-            state.selected.push(payload.id);
+            // state.selected.push(payload.id);
+            state.selected = [payload.id]
         }
     },
     /* Asyncronous actions */
@@ -154,6 +159,16 @@ const store = new Vuex.Store({
                 data: 0
             }
             context.commit('addStatement', new_field);
+        }, 
+        newRef(context, payload){
+            var refname = prompt("Reference name", "Hello");
+            var value = context.getters.engine.rootEnv.findValue(refname);
+            console.log("value " + value + " refname " + refname);
+            if(value !== undefined){
+                let id = value.id;
+                console.log("adding ref to " + id);
+                context.commit('addRef', id);
+            }
         }
 
     }
@@ -178,6 +193,9 @@ window.dashform = new Vue({
     methods: {
         addValue () {
             return store.dispatch('newStatement')
+        },
+        addRef() {
+            return store.dispatch('newRef')
         }
     }
 });

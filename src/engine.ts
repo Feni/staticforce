@@ -48,6 +48,12 @@ export class Environment {
         this.name_cell_map[name] = value
     }
 
+    rename(name: string, newName: string){
+        let cell = this.name_cell_map[name];
+        delete this.name_cell_map[name]
+        this.name_cell_map[newName] = cell;
+    }
+
     // TODO: Should these operate on names or ids?
     lookup(name: string){
         if(name in this.name_cell_map){
@@ -129,7 +135,6 @@ function fudge(result: Big) {
         // 0.00000001 - 0.000001 < precision
         let upper = decimal.minus(max);
         let lower = decimal.minus(precision);
-        console.log("Lower " + lower + " Upper " + upper);
         if( (lower.gte(ZERO) && lower.lte(precision)) || (upper.gte(ZERO) && upper.lte(precision)) ){
             return result.round()            
         }            
@@ -186,7 +191,6 @@ var UNARY_OPS = {
 
 // TODO: Test cases to verify operator precedence
 export var _do_eval = function(node, env: Environment) {
-    console.log("do eval node type " + node.type + " name " + node.name + " value " + node.value);
     if(node.type === "BinaryExpression") {
         return BINARY_OPS[node.operator](_do_eval(node.left, env), _do_eval(node.right, env));
     } else if(node.type === "UnaryExpression") {
@@ -363,6 +367,12 @@ export class Cell {
 
     parse() {
         // Return a parsed version of the current expression.
+    }
+
+    rename(newName: string){
+        console.log("Renaming " + this.name + " to " + newName);
+        this.env.rename(this.name, newName)
+        this.name = newName;
     }
 
     isFormula(){
