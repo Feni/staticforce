@@ -1,7 +1,9 @@
 <template>
     <div v-bind:class="classObject" v-on:click="select">    
         <template v-if="isEdit">
-            <input class="DataLabel" v-model="name"/>
+            <span class="DataLabel">
+                <input v-model="name"/>
+            </span>
             <span class="DataValue">
                 <input type="text" v-model="expression" class="DataInput" autofocus/>
                 <p>{{ value }}</p>

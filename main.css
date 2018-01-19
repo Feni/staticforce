@@ -161,14 +161,20 @@ p {
 
 
 .DashForm input {
-    border: 0px;
-    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.3);;
+    padding: 4px;
+    max-height: 30.5px;
+    max-width: 100%;
+    margin: 4px 0;
 }
 
-.DashForm input:hover {
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    padding: 4px;
+.DataLabel input {
+    border-color: transparent;
 }
+
+.DataLabel input:hover, .DataLabel input:active, .DataLabel input:focus {
+    border-color: rgba(0, 0, 0, 0.3);    
+} 
 
 .SubObject {
     padding: 10px 30px !important;
