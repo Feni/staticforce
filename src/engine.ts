@@ -18,6 +18,8 @@ export class Cell {
     env: Environment
     name: string
 
+    class_name = "cell"
+
     // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(type: string, value: object, env: Environment, name?: string){
         this.value = value;
@@ -47,7 +49,6 @@ export class Cell {
             // or value = String
             try {
                 let expr = this.value.substring(1);
-                console.log(expr)
                 let result = _do_eval(jsep(expr), this.env);
                 return result
             } catch (err) {
@@ -66,6 +67,10 @@ export class Cell {
         // }
     }
 }
+
+export class CellGroup extends Cell {
+    class_name = "cellgroup"
+} 
 
 export class Environment {
 
@@ -145,7 +150,7 @@ export class Environment {
     // datatype: 'number', meta: {name: 'field1'}, data: {value: '999'}
     createCell(type: string, value: object, name?: string) {
         if(!this.isValidName(name)){
-            name = this.generateName();
+            name = "";
         }
         if(name == null){
             // Appease type checker. Should never happen
@@ -153,11 +158,19 @@ export class Environment {
         }
         // TODO: Validate type?
         let c = new Cell(type, value, this, name);
-        this.bind(name, c);
+        if(name !== ""){
+            this.bind(name, c);
+        }
         this.id_cell_map[c.id] = c;
         this.all_cells.push(c)
         return c;
-        
+    }
+
+    createGroup() {
+        let c = new CellGroup("group", [], this, "");
+        this.id_cell_map[c.id] = c;
+        this.all_cells.push(c)
+        return c;
     }
 
     generateName(){

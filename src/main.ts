@@ -20,7 +20,9 @@ ENGINE.rootEnv.createCell("text", long_text, "Exposition")
 ENGINE.rootEnv.createCell("expression", "=true or false", "three")
 ENGINE.rootEnv.createCell("expression", "true", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
-ENGINE.rootEnv.createCell("text", "Hello world", "greeting")
+ENGINE.rootEnv.createCell("text", "Hello world", "")
+
+// ENGINE.rootEnv.createGroup()
 
 Vue.use(Vuex)
 
@@ -49,7 +51,7 @@ const store = new Vuex.Store({
             var cell = getters.getById(id);
             var result = cell.evaluate();
             if(result !== undefined){
-                console.log("result is " + result);
+                // console.log("result is " + result);
                 if(result.constructor.name == "Big"){
                     return result.toString().replace('"', "")
                 } else if(result === true || result === false) {
@@ -64,20 +66,26 @@ const store = new Vuex.Store({
         addStatement(state, payload) {
             // TODO
             // state.statements.push(payload);
-            console.log("Adding statement " + payload);
+            state.selecting.push(false);
+            state.selected.push(false);
             state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
+            
         },
         addRef(state, payload) {
             console.log('adding ereference ' + payload);
         },
+        addGroup(state, payload) {
+            state.engine.rootEnv.createGroup();
+        },
         select(state, payload){
-            // console.log("Store select");
-            // console.log(payload);
+            console.log("Store select");
+            console.log(payload);
             // Based on mode, may need to clear state.
             // state.selectedCells.push(payload); // Vue doesn't pick this up.
             // Ideally, state.selected = a set, not an array.
             // Vue.set(state.selected, state.selected.length, payload.id)
             // state.selected.push(payload.id);
+            
             state.selected = payload // [payload.id]
         }, 
         selecting(state, payload){
@@ -95,7 +103,7 @@ const store = new Vuex.Store({
             let new_field = {
                 type: 'auto',
                 name: field_name,
-                data: 0
+                value: "test"
             }
             context.commit('addStatement', new_field);
         }, 
@@ -109,7 +117,6 @@ const store = new Vuex.Store({
                 context.commit('addRef', id);
             }
         }
-
     }
 })
 
@@ -140,7 +147,7 @@ window.dashform = new Vue({
         },
         addGroup() {
             console.log("Adding grouping around " + store.selected);
-            
+            store.commit('addGroup');
         },
         selectedGetter() { return store.selected; },
         selectedSetter(v) { store.commit('select', v); },

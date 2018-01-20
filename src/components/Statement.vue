@@ -16,17 +16,16 @@
         </template>
         <template v-else>
 
-            <label class="DataLabel">{{ cell.name }}</label>
+            <label class="DataLabel">{{ cell.name }}&nbsp;</label>
 
             <span class="DataValue">
-
                 <template v-if="cell.type == 'object'" class="ui stackable grid SubObject">
                     <Statement v-for="statement in cell.value" :key="statement.id"
                             v-bind:cell="statement.cell"></Statement>
                 </template>
                 <div v-else>
                     <!-- Auto-reflow to next line due to div -->
-                    {{ value }}
+                    {{ value }} &nbsp;
                 </div>
             </span>
         </template>
@@ -93,7 +92,7 @@ export default Vue.extend({
                 return true;
             }
             // return false;
-            return this.cell.value.length > 50;
+            return this.cell.value.toString().length > 50;
         },
         isEdit: function(){
             // Not in edit mode when multiple items are selected.
@@ -102,24 +101,25 @@ export default Vue.extend({
         },
         classObject: function() {
             var typeClass = "DataType--" + this.cell.type;
-            return {
+            var cellClass = "CellType--" + this.cell.class_name;
+            let classes = {
                 "DataRow--large": this.isLargeItem,
-                "edit": this.isEdit,
-                typeClass: true
+                "edit": this.isEdit
             }
+            classes[typeClass] = true;
+            classes[cellClass] = true;
+            return classes;
         }
     },
     methods: {
         select: function(event: Event) {
-            console.log("Statement select")
-            if(this.isEdit){
-                console.log(event);
+            // console.log("Statement select")
+            if(this.isEdit) {
+                // Hide this mousedown event from selector so our input boxes can be edited.
                 event.stopPropagation();
             }
             
-
             // this.$store.commit('select', this.cell);
-
             /*
             console.log("Clicked on row");
             console.log(this.id)

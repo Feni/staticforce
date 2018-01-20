@@ -45,6 +45,10 @@ html, body {
     border-bottom: 1px solid #bdc3c7;
 }
 
+.DataRow {
+    background-color: white;
+}
+
 .ui.grid.DataRow:last-child {
     border-bottom: none;
 }
@@ -56,10 +60,12 @@ html, body {
 .DataContainer {
     max-width: 680px !important;
     margin: 0 auto;
-    background-color: #fff;
     padding: 15px;
+    /* 
+    background-color: #fff;
     box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
     border-radius: 5px;
+    */
 }
 
 /* Todo align right on input */
@@ -205,4 +211,9 @@ p {
     left: 0;
     cursor: default;
     display: none;
+}
+
+.DataRow.CellType--cellgroup {
+    background-color: red;
+    margin-top: 100px !important;
 }

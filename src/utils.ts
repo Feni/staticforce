@@ -10,8 +10,7 @@ export function castNumber(value: string) {
     try {
         return Big(value)
     } catch(err){
-        console.log("Cast error " + value);
-        console.log(err);
+        // Kinda expected error since we're doing trial-and-failure typing.
         return undefined;
         // Error: [big.js] Invalid number
     }
