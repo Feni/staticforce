@@ -10,14 +10,15 @@ export function castNumber(value: string) {
     try {
         return Big(value)
     } catch(err){
-        console.log("Cast error");
+        console.log("Cast error " + value);
         console.log(err);
+        return undefined;
         // Error: [big.js] Invalid number
     }
 }
 
 export function castBoolean(value: string) {
-    let cleaned = value.trim().toUpperCase();
+    let cleaned = value.toString().trim().toUpperCase();
     if(value === 'TRUE') return true;
     else if(value === 'FALSE') return false;
     return undefined;   // TODO
@@ -38,7 +39,7 @@ export function isBoolean(value: string){
         return true;
     }
 
-    let u = value.toString().toUpperCase();
+    let u = value.toString().trim().toUpperCase();
     if(u === 'TRUE' || u === 'FALSE'){
         return true;
     }
@@ -56,14 +57,25 @@ export function isFalse(value: string){
 
 export function castLiteral(value: string){
     if(value != null && value != undefined){
-        let cleaned = value.toString().trim().toUpperCase();
-        if(cleaned == "TRUE"){
-            return true;
-        } else if(cleaned == "FALSE"){
-            return false;
-        } else {
-            return castNumber(value);
+        let bool = castBoolean(value);
+        if(bool !== undefined){
+            return bool
+        }
+        let num = castNumber(value);
+        if(num !== undefined){
+            return num;
         }
     }
+    // Return raw string value
     return value;
+}
+
+export function isFormula(value: string){
+    //  todo; value is implicitly a string.
+    if(value !== null && value !== undefined && value.length > 0){
+        if(value[0] == "="){
+            return true;
+        }
+    }
+    return false;
 }

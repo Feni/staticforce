@@ -1,6 +1,7 @@
 import * as util from './utils';
 import { escape } from 'querystring';
 import { Big } from 'big.js';
+import { isFormula, isBoolean, castLiteral } from './utils';
 
 var jsep = require("jsep")
 // var Big = require('big.js');
@@ -33,57 +34,36 @@ export class Cell {
         other.used_by.push(this)
     }
 
-    recomputeDependencies(){
-        
-    }
-
-    parse() {
-        // Return a parsed version of the current expression.
-    }
-
     rename(newName: string){
         console.log("Renaming " + this.name + " to " + newName);
         this.env.rename(this.name, newName)
         this.name = newName;
     }
 
-    isFormula(){
-        if(this.value !== null && this.value !== undefined){
-            if(this.value[0] == "="){
-                return true;
-            }
-        }
-    }
 
     evaluate() {
-        if(this.type == "formula") {
+        if(isFormula(this.value)) {
             // Evaluate formula. Value = jsep(expression). 
             // or value = String
-            return _do_eval(jsep(this.value), this.env);
-        } else if(this.type == "call") {
-            // Call function. Reset cache? 
-            // TODO: There's gotta be a better way to do this.
-            let func: FunctionCell = this.value["function"]
-            let args = this.value["args"]
-            return function.invoke(args)
-        }
-
-        if(this.value !== null && this.value !== undefined){
-            //if(this.value[0] == "="){
-                try {
-                    let result = _do_eval(jsep(this.value), this.env);
-                    return result
-                } catch (err) {
-                    console.log("Evaluation failed for " + this.value);
-                    console.log(err)
-                }
-            //}
-        }
+            try {
+                let expr = this.value.substring(1);
+                console.log(expr)
+                let result = _do_eval(jsep(expr), this.env);
+                return result
+            } catch (err) {
+                console.log("Evaluation failed for " + this.value);
+                console.log(err)
+            }
+        } 
+        return castLiteral(this.value)
         
-        /* if(this.value && this.value[0] == "="){
-            return _do_eval(jsep(this.value.substring(1)), this.env);
-        } */
-        return this.value;
+        // } else if(this.type == "call") {
+        //     // Call function. Reset cache? 
+        //     // TODO: There's gotta be a better way to do this.
+        //     let func: FunctionCell = this.value["function"]
+        //     let args = this.value["args"]
+        //     return function.invoke(args)
+        // }
     }
 }
 

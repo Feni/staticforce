@@ -15,9 +15,9 @@ import selectable from 'vue-selectable';
 let long_text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
 let ENGINE = new Engine();
-ENGINE.rootEnv.createCell("expression", "2 + 2", "Hello")
+ENGINE.rootEnv.createCell("expression", "=2 + 2", "Hello")
 ENGINE.rootEnv.createCell("text", long_text, "Exposition")
-ENGINE.rootEnv.createCell("expression", "true or false", "three")
+ENGINE.rootEnv.createCell("expression", "=true or false", "three")
 ENGINE.rootEnv.createCell("expression", "true", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
 ENGINE.rootEnv.createCell("text", "Hello world", "greeting")
@@ -48,8 +48,14 @@ const store = new Vuex.Store({
         getValue: (state, getters) => (id: string) => {
             var cell = getters.getById(id);
             var result = cell.evaluate();
-            if(result !== undefined && result.constructor.name == "Big"){
-                return result.toString().replace('"', "")
+            if(result !== undefined){
+                console.log("result is " + result);
+                if(result.constructor.name == "Big"){
+                    return result.toString().replace('"', "")
+                } else if(result === true || result === false) {
+                    
+                    return result.toString().toUpperCase()
+                }
             }
             return result
         }
@@ -131,6 +137,10 @@ window.dashform = new Vue({
         },
         addRef() {
             return store.dispatch('newRef')
+        },
+        addGroup() {
+            console.log("Adding grouping around " + store.selected);
+            
         },
         selectedGetter() { return store.selected; },
         selectedSetter(v) { store.commit('select', v); },
