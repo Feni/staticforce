@@ -37,12 +37,14 @@
         </div>
     </header>
 
+    <div class="selection"></div>
 
     <div class="BodyWrapper HeaderOffset">
         <div class="DataContainer DashForm">
         <div class="main ui container">
             <Statement v-for="statement, index in engine.rootEnv.getAllCells()" :key="statement.id"
                        v-bind:cell="statement"
+                       v-bind:index="index"
                        v-bind:selected="selected"
                        :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
                        class="DataRow ui flexible grid selectable"

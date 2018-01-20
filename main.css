@@ -41,7 +41,7 @@ html, body {
 
 .ui.grid.DataRow {
     padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: .5rem;
     border-bottom: 1px solid #bdc3c7;
 }
 
@@ -186,13 +186,23 @@ p {
 }
 
 .selectable {
-    background-color: yellow;
+    /* background-color: yellow; */
+    border: 2px solid transparent;
 }
 
 .selecting {
-    background-color: lightgreen;
+    border-color: #4EADFE !important;
+}
+.selected {
+    background-color: #D3E6F7;
 }
 
-.selected {
-    background-color: green;
+.selection {
+    position: absolute;
+    border: 1px dotted #000;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    cursor: default;
+    display: none;
 }

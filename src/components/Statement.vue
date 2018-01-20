@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="classObject" >    
+    <div v-bind:class="classObject" @mousedown="select">    
         <template v-if="isEdit">
             <span class="DataLabel">
                 <input v-model="name"/>
@@ -38,7 +38,7 @@ import Vue from "vue";
 
 export default Vue.extend({
     name: 'Statement',
-    props: ['cell', 'selected'],
+    props: ['cell', 'selected', 'index'],
     data: function() {
         return {
             edit: false
@@ -96,7 +96,9 @@ export default Vue.extend({
             return this.cell.value.length > 50;
         },
         isEdit: function(){
-            return this.selected.indexOf(this.cell.id) !== -1;
+            // Not in edit mode when multiple items are selected.
+            // Micro optimization - terminate early without all count.
+            return this.selected[this.index] == true && this.selected.filter(t => t == true).length == 1
         },
         classObject: function() {
             var typeClass = "DataType--" + this.cell.type;
@@ -109,6 +111,13 @@ export default Vue.extend({
     },
     methods: {
         select: function(event: Event) {
+            console.log("Statement select")
+            if(this.isEdit){
+                console.log(event);
+                event.stopPropagation();
+            }
+            
+
             // this.$store.commit('select', this.cell);
 
             /*

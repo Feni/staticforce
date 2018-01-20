@@ -65,8 +65,8 @@ const store = new Vuex.Store({
             console.log('adding ereference ' + payload);
         },
         select(state, payload){
-            console.log("Store select");
-            console.log(payload);
+            // console.log("Store select");
+            // console.log(payload);
             // Based on mode, may need to clear state.
             // state.selectedCells.push(payload); // Vue doesn't pick this up.
             // Ideally, state.selected = a set, not an array.
@@ -75,8 +75,8 @@ const store = new Vuex.Store({
             state.selected = payload // [payload.id]
         }, 
         selecting(state, payload){
-            console.log("Store selecting");
-            console.log(payload);
+            // console.log("Store selecting");
+            // console.log(payload);
             state.selecting = payload // [payload.id]
         }
     },
