@@ -20,7 +20,11 @@
     </nav>
     
     
-    <div id="app">
+    <div id="app" v-selectable="{ 
+        selectedGetter: selectedGetter, 
+        selectedSetter: selectedSetter, 
+        selectingSetter: selectingSetter
+        }">
     
     <header class="DashHeader">
         <div class="Navbar--toolbar ui menu">
@@ -37,10 +41,11 @@
     <div class="BodyWrapper HeaderOffset">
         <div class="DataContainer DashForm">
         <div class="main ui container">
-            <Statement v-for="statement in engine.rootEnv.getAllCells()" :key="statement.id"
+            <Statement v-for="statement, index in engine.rootEnv.getAllCells()" :key="statement.id"
                        v-bind:cell="statement"
                        v-bind:selected="selected"
-                       class="DataRow ui flexible grid"
+                       :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
+                       class="DataRow ui flexible grid selectable"
                        ></Statement>
         </div>
         </div>

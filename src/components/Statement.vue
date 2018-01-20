@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="classObject" v-on:click="select">    
+    <div v-bind:class="classObject" >    
         <template v-if="isEdit">
             <span class="DataLabel">
                 <input v-model="name"/>
@@ -109,7 +109,7 @@ export default Vue.extend({
     },
     methods: {
         select: function(event: Event) {
-            this.$store.commit('select', this.cell);
+            // this.$store.commit('select', this.cell);
 
             /*
             console.log("Clicked on row");

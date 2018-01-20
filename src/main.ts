@@ -27,7 +27,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         engine: ENGINE,
-        selected: []
+        selected: [],
+        selecting: []
     },
     getters: {
         namespace: (state) => {
@@ -64,13 +65,19 @@ const store = new Vuex.Store({
             console.log('adding ereference ' + payload);
         },
         select(state, payload){
-            console.log("Store selecting");
+            console.log("Store select");
+            console.log(payload);
             // Based on mode, may need to clear state.
             // state.selectedCells.push(payload); // Vue doesn't pick this up.
             // Ideally, state.selected = a set, not an array.
             // Vue.set(state.selected, state.selected.length, payload.id)
             // state.selected.push(payload.id);
-            state.selected = [payload.id]
+            state.selected = payload // [payload.id]
+        }, 
+        selecting(state, payload){
+            console.log("Store selecting");
+            console.log(payload);
+            state.selecting = payload // [payload.id]
         }
     },
     /* Asyncronous actions */
@@ -110,18 +117,23 @@ window.dashform = new Vue({
         ...mapState([
           // 'statements'
           'engine',
-          'selected'
+          'selected',
+          'selecting'
         ])
     },
     components: {
         Statement
     },
+    directives: { selectable },
     methods: {
         addValue () {
             return store.dispatch('newStatement')
         },
         addRef() {
             return store.dispatch('newRef')
-        }
+        },
+        selectedGetter() { return store.selected; },
+        selectedSetter(v) { store.commit('select', v); },
+        selectingSetter(v) { store.commit('selecting', v); }
     }
 });

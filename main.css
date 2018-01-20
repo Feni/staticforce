@@ -184,3 +184,15 @@ p {
 .border-bottom {
     border-bottom: 1px solid #bdc3c7;
 }
+
+.selectable {
+    background-color: yellow;
+}
+
+.selecting {
+    background-color: lightgreen;
+}
+
+.selected {
+    background-color: green;
+}
