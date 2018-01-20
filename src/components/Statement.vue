@@ -5,8 +5,13 @@
                 <input v-model="name"/>
             </span>
             <span class="DataValue">
-                <input type="text" v-model="expression" class="DataInput" autofocus/>
-                <p>{{ value }}</p>
+                <template v-if="isLargeItem">
+                    <textarea v-model="expression" class="DataInput"></textarea>
+                </template>
+                <template v-else>
+                    <input type="text" v-model="expression" class="DataInput" autofocus/>
+                    <p>{{ value }}</p>
+                </template>
             </span>
         </template>
         <template v-else>
@@ -87,7 +92,8 @@ export default Vue.extend({
             } else if(this.cell.type === "text" && this.cell.value.length > 100){
                 return true;
             }
-            return false;
+            // return false;
+            return this.cell.value.length > 50;
         },
         isEdit: function(){
             return this.selected.indexOf(this.cell.id) !== -1;

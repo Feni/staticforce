@@ -60,6 +60,8 @@ html, body {
     margin: 0 auto;
     background-color: #fff;
     padding: 15px;
+    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+    border-radius: 5px;
 }
 
 /* Todo align right on input */
@@ -161,7 +163,7 @@ p {
 
 
 .DashForm input {
-    border: 1px solid rgba(0, 0, 0, 0.3);;
+    border: 1px solid #e2ecf4;
     padding: 4px;
     max-height: 30.5px;
     max-width: 100%;
@@ -173,7 +175,7 @@ p {
 }
 
 .DataLabel input:hover, .DataLabel input:active, .DataLabel input:focus {
-    border-color: rgba(0, 0, 0, 0.3);    
+    border-color: #e2ecf4;
 } 
 
 .SubObject {
