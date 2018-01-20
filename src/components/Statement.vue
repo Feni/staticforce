@@ -111,7 +111,6 @@ export default Vue.extend({
         select: function(event: Event) {
             this.$store.commit('select', this.cell);
 
-
             /*
             console.log("Clicked on row");
             console.log(this.id)

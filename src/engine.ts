@@ -8,6 +8,85 @@ var jsep = require("jsep")
 // Rounding mode
 Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
 
+export class Cell {
+    id: string
+    type: string
+    value: object   // TODO: How to handle string, int, etc?
+    depends_on: Cell[]
+    used_by: Cell[]
+    env: Environment
+    name: string
+
+    // TODO: Need object wrappers around primitive types for int, string, etc.
+    constructor(type: string, value: object, env: Environment, name?: string){
+        this.value = value;
+        this.type = type;
+        this.env = env;
+        this.depends_on = []
+        this.used_by = []
+        this.id = util.generate_random_id()
+        this.name = name ? name : "";
+    }
+
+    addDependency(other: Cell){
+        this.depends_on.push(other)
+        other.used_by.push(this)
+    }
+
+    recomputeDependencies(){
+        
+    }
+
+    parse() {
+        // Return a parsed version of the current expression.
+    }
+
+    rename(newName: string){
+        console.log("Renaming " + this.name + " to " + newName);
+        this.env.rename(this.name, newName)
+        this.name = newName;
+    }
+
+    isFormula(){
+        if(this.value !== null && this.value !== undefined){
+            if(this.value[0] == "="){
+                return true;
+            }
+        }
+    }
+
+    evaluate() {
+        if(this.type == "formula") {
+            // Evaluate formula. Value = jsep(expression). 
+            // or value = String
+            return _do_eval(jsep(this.value), this.env);
+        } else if(this.type == "call") {
+            // Call function. Reset cache? 
+            // TODO: There's gotta be a better way to do this.
+            let func: FunctionCell = this.value["function"]
+            let args = this.value["args"]
+            return function.invoke(args)
+        }
+
+        if(this.value !== null && this.value !== undefined){
+            //if(this.value[0] == "="){
+                try {
+                    let result = _do_eval(jsep(this.value), this.env);
+                    return result
+                } catch (err) {
+                    console.log("Evaluation failed for " + this.value);
+                    console.log(err)
+                }
+            //}
+        }
+        
+        /* if(this.value && this.value[0] == "="){
+            return _do_eval(jsep(this.value.substring(1)), this.env);
+        } */
+        return this.value;
+    }
+}
+
 export class Environment {
 
     outer: Environment
@@ -333,85 +412,6 @@ export function getEvalOrder(cells: Cell[]){
         throw err
     } else {
         return eval_order;
-    }
-}
-
-export class Cell {
-    id: string
-    type: string
-    value: object   // TODO: How to handle string, int, etc?
-    depends_on: Cell[]
-    used_by: Cell[]
-    env: Environment
-    name: string
-
-    // TODO: Need object wrappers around primitive types for int, string, etc.
-    constructor(type: string, value: object, env: Environment, name?: string){
-        this.value = value;
-        this.type = type;
-        this.env = env;
-        this.depends_on = []
-        this.used_by = []
-        this.id = util.generate_random_id()
-        this.name = name ? name : "";
-    }
-
-    addDependency(other: Cell){
-        this.depends_on.push(other)
-        other.used_by.push(this)
-    }
-
-    recomputeDependencies(){
-        
-    }
-
-    parse() {
-        // Return a parsed version of the current expression.
-    }
-
-    rename(newName: string){
-        console.log("Renaming " + this.name + " to " + newName);
-        this.env.rename(this.name, newName)
-        this.name = newName;
-    }
-
-    isFormula(){
-        if(this.value !== null && this.value !== undefined){
-            if(this.value[0] == "="){
-                return true;
-            }
-        }
-    }
-
-    evaluate() {
-        if(this.type == "formula") {
-            // Evaluate formula. Value = jsep(expression). 
-            // or value = String
-            return _do_eval(jsep(this.value), this.env);
-        } else if(this.type == "call") {
-            // Call function. Reset cache? 
-            // TODO: There's gotta be a better way to do this.
-            let func: FunctionCell = this.value["function"]
-            let args = this.value["args"]
-            return function.invoke(args)
-        }
-
-        if(this.value !== null && this.value !== undefined){
-            //if(this.value[0] == "="){
-                try {
-                    let result = _do_eval(jsep(this.value), this.env);
-                    return result
-                } catch (err) {
-                    console.log("Evaluation failed for " + this.value);
-                    console.log(err)
-                }
-            //}
-        }
-        
-        /* if(this.value && this.value[0] == "="){
-            return _do_eval(jsep(this.value.substring(1)), this.env);
-        } */
-        return this.value;
     }
 }
 
