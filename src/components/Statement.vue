@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="classObject" @mousedown="select">    
+    <div v-bind:class="classObject" @mousedown="select">
         <template v-if="isEdit">
             <span class="DataLabel">
                 <input v-model="name"/>
@@ -124,7 +124,8 @@ export default Vue.extend({
                 // Hide this mousedown event from selector so our input boxes can be edited.
                 event.stopPropagation();
             }
-            
+            console.log("Select event in Statement ");
+            console.log(event);
         }
     }
 });

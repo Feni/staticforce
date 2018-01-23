@@ -6,11 +6,7 @@ import { mapState } from 'vuex'
 import {castNumber, castBoolean} from './utils'
 import {Engine} from './engine'
 
-var Gun = require('gun');
-
-var gun = Gun();
-
-import selectable from 'vue-selectable';
+var vueSelectable = require('vue-selectable');
 
 let long_text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
@@ -64,12 +60,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         addStatement(state, payload) {
-            // TODO
-            // state.statements.push(payload);
-            // state.selecting.push(false);
-            // state.selected.push(false);
             state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
-            
         },
         addRef(state, payload) {
             console.log('adding ereference ' + payload);
@@ -78,20 +69,10 @@ const store = new Vuex.Store({
             state.engine.rootEnv.createGroup();
         },
         select(state, payload){
-            console.log("Store select");
-            console.log(payload);
-            // Based on mode, may need to clear state.
-            // state.selectedCells.push(payload); // Vue doesn't pick this up.
-            // Ideally, state.selected = a set, not an array.
-            // Vue.set(state.selected, state.selected.length, payload.id)
-            // state.selected.push(payload.id);
-            
-            state.selected = payload // [payload.id]
-        }, 
+            state.selected = payload
+        },
         selecting(state, payload){
-            // console.log("Store selecting");
-            // console.log(payload);
-            state.selecting = payload // [payload.id]
+            state.selecting = payload
         }
     },
     /* Asyncronous actions */
@@ -137,7 +118,9 @@ window.dashform = new Vue({
     components: {
         Statement
     },
-    directives: { selectable },
+    directives: { 
+        selectable: vueSelectable.default
+    },
     methods: {
         addValue () {
             return store.dispatch('newStatement')
@@ -152,5 +135,14 @@ window.dashform = new Vue({
         selectedGetter() { return store.selected; },
         selectedSetter(v) { store.commit('select', v); },
         selectingSetter(v) { store.commit('selecting', v); }
+    },
+    watch: {
+        // 'engine.rootEnv.all_cells
+        'engine.rootEnv.all_cells.length': {
+            handler() {
+                this.$nextTick(() => vueSelectable.setSelectableItems(this.$refs.app));
+            },
+            deep: true
+        }
     }
 });
