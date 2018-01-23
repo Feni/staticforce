@@ -22,8 +22,10 @@
     "gun": "^0.9.7",
     "jasmine": "^2.8.0",
     "jsep": "^0.3.3",
-    "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867",
+    "vue": "^2.5.13",
+    "vue-loader": "^13.7.0",
     "vue-selectable": "^0.4.3",
+    "vue-template-compiler": "^2.5.13",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -37,8 +39,6 @@
     "ts-jest": "^22.0.0",
     "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
-    "vue-loader": "^13.5.0",
-    "vue-template-compiler": "^2.2.1",
     "webpack": "^3.8.1"
   },
   "jest": {

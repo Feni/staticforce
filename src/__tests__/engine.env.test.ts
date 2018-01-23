@@ -8,11 +8,15 @@ import {} from 'jest';
 test('find variable in direct environment', () => {
   let engine = new Engine()
   let env = engine.rootEnv;
+  // @ts-ignore:
   let c = env.createCell("number", 42, "a")
   expect(env.findEnv("a")).toBe(env);  // Get correct env
+  // @ts-ignore:
   expect(env.findEnv("a").findValue("a")).toBe(c); // get correct cell
+  // @ts-ignore:
   expect(env.findEnv("a").lookup("a")).toBe(c); // Verify direct access
   expect(env.findValue("a")).toBe(c); // find + get
+  // @ts-ignore:
   expect(env.findEnv("a").findValue("a").value).toBe(42);  // Verify value
 });
 
@@ -21,17 +25,20 @@ test('find variable in parent environment', () => {
   let engine = new Engine();
   let parentEnv = engine.rootEnv;
   let childEnv = parentEnv.createChildEnv();
-  
+  // @ts-ignore:
   let c = parentEnv.createCell("number", 42, "a");
 
   expect(childEnv.findEnv("a")).toBe(parentEnv);  // Get correct env
   expect(parentEnv.findEnv("a")).toBe(parentEnv);  // Get correct env
 
+  // @ts-ignore:
   expect(childEnv.findEnv("a").findValue("a")).toBe(c); // get correct cell
+  // @ts-ignore:
   expect(parentEnv.findEnv("a").findValue("a")).toBe(c); // get correct cell
 
   expect(childEnv.findValue("a")).toBe(c); // find + get
 
+  // @ts-ignore:
   expect(childEnv.findEnv("a").findValue("a").value).toBe(42);  // Verify value
 
 });
@@ -45,6 +52,7 @@ test('find variable in deep environment', () => {
   let e4 = e3.createChildEnv()
   let e5 = e4.createChildEnv()
   let e6 = e5.createChildEnv()
+  // @ts-ignore:
   let c = e2.createCell("number", 42, "a");
 
   expect(e5.findEnv("a")).toBe(e2);  // Get correct env
@@ -57,6 +65,7 @@ test('find variable in deep environment', () => {
 test('find variable not found', () => {
   let engine = new Engine()
   let e = engine.rootEnv;
+  // @ts-ignore:
   let c = e.createCell("number", 42, "a");
 
   expect(e.findEnv("b")).toBe(undefined);
@@ -83,7 +92,9 @@ test('find variable in multiple scopes', () => {
   let e5 = e4.createChildEnv()
   let e6 = e5.createChildEnv()
   
+  // @ts-ignore:
   let c1 = e2.createCell("number", 42, "a");
+  // @ts-ignore:
   let c2 = e4.createCell("number", 32, "a");
 
 

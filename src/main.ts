@@ -66,8 +66,8 @@ const store = new Vuex.Store({
         addStatement(state, payload) {
             // TODO
             // state.statements.push(payload);
-            state.selecting.push(false);
-            state.selected.push(false);
+            // state.selecting.push(false);
+            // state.selected.push(false);
             state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
             
         },

@@ -1,119 +1,164 @@
-            <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Average of fields</label>
-                </div>
-                <div class="eight wide column">
-                    <input type="text" value="hello" class="DataInput"/>
-                </div>
+/* Engine js */
 
+import * as util from './utils';
+import { Big } from 'big.js';
+import { isFormula, isBoolean, castLiteral } from './utils';
 
-            </div>
+Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
 
-            <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Grooveshark</label>
-                </div>
-                <div class="eight wide column">
-                    <input type="text" value="23158" class="DataInput"/>
-                </div>
-            </div>
+export class Language {
+    constructor() {
+        this.env = new Environment()
+    }
+}
 
-            <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Sub Table</label>
-                </div>
-                <div class="eight wide column">
-                    <span class="DataValue">
-                        <table class="ui celled table">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Status</th>
-                              <th>Notes</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td><input/></td>
-                                  <td><input/></td>
-                                  <td><input/></td>
-                              </tr>
-                            <tr class="disabled">
-                              <td>Jamie</td>
-                              <td>Approved</td>
-                              <td>Requires call</td>
-                            </tr>
-                            <tr>
-                              <td>John</td>
-                              <td>Selected</td>
-                              <td>None</td>
-                            </tr>
-                            <tr>
-                              <td>Jamie</td>
-                              <td>Approved</td>
-                              <td>Requires call</td>
-                            </tr>
-                            <tr>
-                              <td class="disabled">Jill</td>
-                              <td>Approved</td>
-                              <td>None</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                    </span>
-                </div>
-            </div>
+class Namespace {
+    constructor() {
+        // Name -> [List of cells with that name]
+        this.name_cell_map = {}
+        
+        // Cell ID -> Cell Map
+        this.id_cell_map = {}
+        
+        // List of all cells in environment (even without names). 
+        // Maintains order of appearance in view.
+        this.all_cells = []
+    }
 
+    bind(name, cell){
+        if(name in this.name_cell_map){
+            this.name_cell_map[name].push(cell)
+        } else {
+            this.name_cell_map[name] = [cell]
+        }
+    }
 
-            <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Simple list</label>
-                </div>
-                <div class="eight wide column">
-                    <span class="DataValue">
-                        <div class="ui celled list">
-                          <div class="item">
-                              An excellent companion
-                          </div>
-                          <div class="item">
-                            A poodle, its pretty basic
-                          </div>
-                          <div class="item">
-                              He's also a dog
-                          </div>
-                        </div>
-                    </span>
-                </div>
-            </div>
+    rename(name, newName){
+        let cell = this.name_cell_map[name];
+        delete this.name_cell_map[name]
+        this.name_cell_map[newName] = cell;
+    }
 
+    // TODO: Should these operate on names or ids?
+    lookup(name){
+        if(name in this.name_cell_map){
+            return this.name_cell_map[name]
+        } else {
+            let err = new EnvError("Name lookup failure " + escape(name));
+            err.env = this;
+            throw err
+        }
+    }
 
+    create(expression, name) {
+        if(!isValidName(name)){
+            name = "";
+        }
 
-             <div class="row DataRow">
-                <div class="four wide column">
-                    <label class="DataLabel">Dictionary</label>
-                </div>
-                <div class="eight wide column">
-                    <span class="DataValue DataValue--dictionary">
-                        <div class="ui celled list">
-                          <div class="item">
-                            <div class="content">
-                              <div class="key">Snickerdoodle</div>
-                              <span class="value">An excellent companion</span>
-                            </div>
-                          </div>
-                          <div class="item">
-                            <div class="content">
-                                <div class="key">Poodle</div>
-                                <span class="value">A poodle, its pretty basic</span>
-                            </div>
-                          </div>
-                          <div class="item">
-                            <div class="content">
-                              <div class="key">Paulo</div>
-                              <span class="value">He's also a dog</span>
-                            </div>
-                          </div>
-                        </div>
-                    </span>
-                </div>
-            </div>
+        let expr = new Expression(expression, this, name);
+        if(name !== ""){
+            this.bind(name, c);
+        }
+        this.id_cell_map[c.id] = c;
+        this.all_cells.push(c)
+        return c;
+    }    
+
+    /*
+    createGroup() {
+        let c = new CellGroup("group", [], this, "");
+        this.id_cell_map[c.id] = c;
+        this.all_cells.push(c)
+        return c;
+    }*/
+
+}
+
+class Expression {
+    constructor(expr, env, name){
+        this.env = env;
+        this.name = name ? name : "";
+        
+        
+        this.class_name = "entity"
+        this.depends_on = []
+        this.used_by = []
+        this.id = util.generate_random_id()
+        
+        this.expr = ""
+        this._parsed = null;
+        this._result = null;
+        this._exec_stale = true;
+        this.setExpr(expr);
+    }
+
+    addDependency(other){
+        // Add if not already in set
+        if(this.depends_on.indexOf(other) == -1){
+            this.depends_on.push(other)
+            other.used_by.push(this)
+        }
+    }
+
+    updateDependencies(newDeps) {
+        // Find dependencies present currently not present in future.
+        let removed = this.depends_on.filter(dep => newDeps.indexOf(dep) == -1)
+        let added = newDeps.filter(dep => this.depends_on.indexOf(dep) == -1)
+
+        // Microopt: Remove before add to minimize used_by length.
+        removed.forEach((dep) => {
+            // Remove us as a dependent on their list if present
+            let dependentIndex = currentDep.used_by.indexOf(this);
+            if(dependentIndex != -1){
+                currentDep.used_by.splice(dependentIndex, 1);
+            }
+        });
+
+        // Add all new dependencies
+        added.forEach((dep) => {
+            this.addDependency(dep);
+        })
+
+        // Do nothing for existing deps
+    }
+
+    rename(newName){
+        console.log("Renaming " + this.name + " to " + newName);
+        this.env.rename(this, newName)
+        this.name = newName;
+    }
+
+    setExpr(newExpr){
+        if(newExpr === this.expr){
+            return false;
+        }
+        this.expr = newExpr;
+        if(util.isFormula(this.expr)){
+            this._parsed = parseExpr(this.expr)
+            this.updateDependencies(getDependencies(this._parsed, this.env))
+        } 
+        this._exec_stale = true;
+    }
+
+    evaluate() {
+        // Re-compute stale values
+        if(this._exec_stale) {
+            if(util.isFormula(this.expr)) {
+                // Evaluate formula. Value = jsep(expression). 
+                // or value = String
+                this._result = evaluateExpr(this._parsed, this.env);
+            }  else {
+                this._result = castLiteral(this.expr);
+            }
+            this._exec_stale = false;
+        }
+        return this._result;
+    }
+
+}
+
+/*
+export class CellGroup extends Cell {
+    class_name = "cellgroup"
+} 
+*/

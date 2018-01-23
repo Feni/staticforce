@@ -1,5 +1,6 @@
-import {getEvalOrder, Engine, CellError} from '../engine'
+import {Engine} from '../engine'
 import {} from 'jest';
+import { getEvalOrder } from '../evaluation';
 
 // Test variable not found.
 test('dependency order maintained', () => {

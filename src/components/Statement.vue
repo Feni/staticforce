@@ -34,10 +34,15 @@
 
 <script lang="ts">
 import Vue from "vue";
+import {Cell} from "../engine";
 
 export default Vue.extend({
     name: 'Statement',
-    props: ['cell', 'selected', 'index'],
+    props: {
+        'cell': {type: Cell}, 
+        'selected': {type: Array}, 
+        'index': {type: Number}
+    },
     data: function() {
         return {
             edit: false
@@ -69,22 +74,22 @@ export default Vue.extend({
                 
                 return this.cell.value
             },
-            set: function(newValue) {
+            set: function(newValue: string) {
                 this.cell.value = newValue;
             }
         },
         name: {
-            get: function() {
+            get: function() : string {
                 return this.cell.name
             }, 
             set: function(newName: string) {
                 this.cell.rename(newName);
             }
         },
-        value: function() {
+        value: function() : string {
             return this.$store.getters.getValue(this.cell.id);
         },
-        isLargeItem: function() {
+        isLargeItem: function() : boolean {
             // TODO: Check if text is long or not
             if(this.cell.type === "object"){
                 return true;
@@ -94,15 +99,15 @@ export default Vue.extend({
             // return false;
             return this.cell.value.toString().length > 50;
         },
-        isEdit: function(){
+        isEdit: function() : boolean {
             // Not in edit mode when multiple items are selected.
             // Micro optimization - terminate early without all count.
             return this.selected[this.index] == true && this.selected.filter(t => t == true).length == 1
         },
-        classObject: function() {
+        classObject: function() : object {
             var typeClass = "DataType--" + this.cell.type;
             var cellClass = "CellType--" + this.cell.class_name;
-            let classes = {
+            let classes: {[index: string]: any} =  {
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit
             }
@@ -114,28 +119,12 @@ export default Vue.extend({
     methods: {
         select: function(event: Event) {
             // console.log("Statement select")
+            // @ts-ignore:
             if(this.isEdit) {
                 // Hide this mousedown event from selector so our input boxes can be edited.
                 event.stopPropagation();
             }
             
-            // this.$store.commit('select', this.cell);
-            /*
-            console.log("Clicked on row");
-            console.log(this.id)
-            console.log(this.edit);
-            this.edit = true;
-            window.dashform.$emit('clear-row-edit');
-            let row = this;
-            let clearCallback = function(e){
-                console.log("Clearing row");
-                console.log(e);
-                row.edit = false;
-                // Remove this handler
-                window.dashform.removeEventListener('clear-row-edit', clearCallback);
-            }
-            window.dashform.$on('clear-row-edit', clearCallback)
-            */
         }
     }
 });

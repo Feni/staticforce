@@ -2,11 +2,6 @@
 import { Big } from 'big.js';
 
 export function castNumber(value: string) {
-    // TODO: Make this more strict for cases like "20 ducks"
-    // isNaN(+a) ? a : +a;
-    // var num = Number(value);
-    // if(num === NaN) {return value}
-    // return num;
     try {
         return Big(value)
     } catch(err){
@@ -16,10 +11,14 @@ export function castNumber(value: string) {
     }
 }
 
+export function cleanBoolStr(value: string) {
+    return value.toString().trim().toUpperCase()
+}
+
 export function castBoolean(value: string) {
-    let cleaned = value.toString().trim().toUpperCase();
-    if(value === 'TRUE') return true;
-    else if(value === 'FALSE') return false;
+    let cleaned = cleanBoolStr(value);
+    if(cleaned === "TRUE") return true;
+    else if(cleaned === "FALSE") return false;
     return undefined;   // TODO
 }
 
@@ -34,24 +33,28 @@ export function generate_random_id(){
 
 export function isBoolean(value: string){
     // Raw boolean values
+    // @ts-ignore: Allow booleans
     if(u === true || u === false){
         return true;
     }
 
-    let u = value.toString().trim().toUpperCase();
+    let u = cleanBoolStr(value);
     if(u === 'TRUE' || u === 'FALSE'){
         return true;
     }
     return false;
 }
 
+
 export function isTrue(value: string) {
     // Checks is true or 
-    return value === true ||  value.toString().trim().toUpperCase() === "TRUE";
+    // @ts-ignore: Allow booleans
+    return value === true ||  cleanBoolStr(value) === "TRUE";
 }
 
 export function isFalse(value: string){
-    return value === false ||  value.toString().trim().toUpperCase() === "FALSE";
+    // @ts-ignore: Allow booleans
+    return value === false ||  cleanBoolStr(value) === "FALSE";
 }
 
 export function castLiteral(value: string){
@@ -70,11 +73,50 @@ export function castLiteral(value: string){
 }
 
 export function isFormula(value: string){
-    //  todo; value is implicitly a string.
-    if(value !== null && value !== undefined && value.length > 0){
-        if(value[0] == "="){
-            return true;
-        }
+    if(value !== null && value !== undefined){
+        let valStr = value.toString();
+        return valStr.length > 0 && valStr[0] == "=";
     }
     return false;
+}
+
+// @ts-ignore: Allow undefined type since we're detecting type
+export function isBigNum(value) {
+    if(value !== undefined && value !== null && value.constructor !== undefined){
+        return value.constructor.name == "Big"
+    }
+    return false;
+}
+
+
+let ZERO = Big(0);
+let ONE = Big(1);
+
+
+export function fudge(result: Big) {
+    // If the difference in decimal places and the max is less than the precision we care about, fudge it.
+    // Fudge the result of a computation for rounding errors
+    // i.e (1/3) * 3 = 1
+    // 0.33333333333333333333 = 20 decimals
+    let decimal = result.mod(ONE);
+    let p = ".00000000000000000001"
+    let precision = Big(p)   // 20 decimals
+
+    let max = ONE.minus(precision);
+    if(decimal.gt(ZERO)){
+        // 0.99999999... - 0.99999 < 0.000001
+        // 0.00000001 - 0.000001 < precision
+        let upper = decimal.minus(max);
+        let lower = decimal.minus(precision);
+        if( (lower.gte(ZERO) && lower.lte(precision)) || (upper.gte(ZERO) && upper.lte(precision)) ){
+            return result.round()            
+        }            
+    }
+    return result;
+}
+
+
+export function isValidName(name?: string){
+    // TODO: Valid character set
+    return name !== null && name !== undefined && name != "" && name.length < 20
 }
