@@ -129,7 +129,7 @@ window.dashform = new Vue({
             return store.dispatch('newRef')
         },
         addGroup() {
-            console.log("Adding grouping around " + store.selected);
+            console.log("Adding grouping around " + store.getters.selected);
             store.commit('addGroup');
         },
         selectedGetter() { return store.selected; },

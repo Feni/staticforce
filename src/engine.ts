@@ -143,13 +143,11 @@ export class Environment {
     }
 
     createGroup() {
-        /* 
         let c = new CellGroup("group", [], this, "");
         this.id_cell_map[c.id] = c;
         this.all_cells.push(c)
+        console.log("created group ");
         return c;
-        */
-
     }
 
     generateName(){
