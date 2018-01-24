@@ -17,8 +17,7 @@ ENGINE.rootEnv.createCell("expression", "=true or false", "three")
 ENGINE.rootEnv.createCell("expression", "true", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
 ENGINE.rootEnv.createCell("text", "Hello world", "")
-
-// ENGINE.rootEnv.createGroup()
+ENGINE.rootEnv.createGroup()
 
 Vue.use(Vuex)
 
@@ -103,6 +102,8 @@ const store = new Vuex.Store({
 
 
 import Statement from "./components/Statement.vue";
+import Group from "./components/Group.vue";
+import CellList from "./components/CellList.vue";
 
 window.dashform = new Vue({
     el: "#app",
@@ -116,13 +117,16 @@ window.dashform = new Vue({
         ])
     },
     components: {
-        Statement
+        Statement, 
+        Group,
+        CellList
     },
     directives: { 
         selectable: vueSelectable.default
     },
     methods: {
         addValue () {
+            console.log("Adding value");
             return store.dispatch('newStatement')
         },
         addRef() {

@@ -15,7 +15,6 @@
             </span>
         </template>
         <template v-else>
-
             <label class="DataLabel">{{ cell.name }}&nbsp;</label>
 
             <span class="DataValue">
@@ -36,17 +35,12 @@
 import Vue from "vue";
 import {Cell} from "../engine";
 
-export default Vue.extend({
+export default Vue.component('Statement', {
     name: 'Statement',
     props: {
         'cell': {type: Cell}, 
         'selected': {type: Array}, 
         'index': {type: Number}
-    },
-    data: function() {
-        return {
-            edit: false
-        }
     },
     computed: {
         expression: {
@@ -109,7 +103,8 @@ export default Vue.extend({
             var cellClass = "CellType--" + this.cell.class_name;
             let classes: {[index: string]: any} =  {
                 "DataRow--large": this.isLargeItem,
-                "edit": this.isEdit
+                "edit": this.isEdit,
+                "list-group-item": true
             }
             classes[typeClass] = true;
             classes[cellClass] = true;

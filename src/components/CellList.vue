@@ -1,0 +1,61 @@
+<template>
+    <ul class="list-group">
+        <template v-for="statement, index in cells">
+            <template v-if="statement.class_name == 'cellgroup'">
+                <Group :key="statement.id"
+                v-bind:cellgroup="statement"
+                v-bind:index="index"
+                v-bind:selected="selected"
+                :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
+                class="selectable"
+                ></Group>
+            </template>
+            <template v-else>
+                <Statement 
+                    :key="statement.id"
+                    v-bind:cell="statement"
+                    v-bind:index="index"
+                    v-bind:selected="selected"
+                    v-bind:selecting="selecting"
+                    :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
+                    class="DataRow ui flexible grid selectable"
+                ></Statement>
+                
+            </template>
+        </template>
+
+        <a href="#" class="list-group-item list-group-item-action list-group-item-success" @click="addNewCell()">Add Item</a>
+    </ul>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import Statement from "./components/Statement.vue";
+import Group from "./components/Group.vue";
+
+
+// import {CellGroup} from "../engine";
+
+export default Vue.component('Cell-List', {
+    name: 'Cell-List',
+    props: {
+        'cells': {type: Array}, 
+        'onadd': {type: Function},
+        'selected': {type: Array},
+        'selecting': {type: Array},
+    },
+    computed: {
+
+    },
+    methods: {
+        addNewCell: function(event: Event) {
+            console.log("Adding cell")
+            console.log(this.onadd);
+            this.onadd();
+        }
+    }
+});
+</script>
+
+<style>
+</style>

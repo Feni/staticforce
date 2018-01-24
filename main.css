@@ -49,10 +49,6 @@ html, body {
     background-color: white;
 }
 
-.ui.grid.DataRow:last-child {
-    border-bottom: none;
-}
-
 .DataRow--large {
 
 }
@@ -76,7 +72,8 @@ html, body {
 }
 
 .DataValue {
-    min-width: 80%;
+    min-width: 78%;
+    display: inline-block;
 }
 
 
@@ -193,11 +190,10 @@ p {
 
 .selectable {
     /* background-color: yellow; */
-    border: 2px solid transparent;
 }
 
 .selecting {
-    border-color: #4EADFE !important;
+    background-color: #D3E6F7;
 }
 .selected {
     background-color: #D3E6F7;

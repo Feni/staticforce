@@ -143,6 +143,8 @@ export class Environment {
     }
 
     createGroup() {
+        // TODO: We need to differentiate between all cells and cells that belong to a group
+        // maybe cell should point to the group it belongs to and you can use that to distinguish
         let c = new CellGroup("group", [], this, "");
         this.id_cell_map[c.id] = c;
         this.all_cells.push(c)
