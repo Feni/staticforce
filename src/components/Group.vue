@@ -1,29 +1,12 @@
 <template>
     <li class="list-group-item">
         <h5 class="mb-1">Group {{ cellgroup.name }}</h5>
-        
 
-        <ul class="list-group">
-        <li class="list-group-item justify-content-between selectable">
-            Cras justo odio
-            <span class="badge badge-default badge-pill ">14</span>
-        </li>
-        <li class="list-group-item justify-content-between selectable">
-            Dapibus ac facilisis in
-            <span class="badge badge-default badge-pill">2</span>
-        </li>
-        <li class="list-group-item justify-content-between selectable">
-            Morbi leo risus
-            <span class="badge badge-default badge-pill">1</span>
-        </li>
-
-          <a href="#" class="list-group-item list-group-item-action list-group-item-success">Add Item</a>
-        </ul>
-        
         <Cell-List v-bind:cells="cellgroup.value"
             v-bind:onadd="addCell"
             v-bind:selected="selected"
             v-bind:selecting="selecting"
+            v-bind:parent="cellgroup"
             ></Cell-List>
 
 
@@ -32,7 +15,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {CellGroup} from "../engine";
+import {CellGroup, Cell} from "../engine";
 
 export default Vue.component('Group', {
     name: 'Group',
@@ -47,6 +30,11 @@ export default Vue.component('Group', {
     },
     methods: {
         addCell: function(event: Event) {
+            // todo: Vuex this
+            // let c = new Cell("", "test", this.cellgroup.env, "hello");
+            let c = this.cellgroup.env.createCell("", "test", "hello")
+            c.parent_group = this.cellgroup;
+            this.cellgroup.value.push(c);
 
         }
     }

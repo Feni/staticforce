@@ -13,7 +13,8 @@ export class Cell {
     used_by: Cell[]
     env: Environment
     name: string
-
+    
+    parent_group = null
     class_name = "cell"
 
     // TODO: Need object wrappers around primitive types for int, string, etc.

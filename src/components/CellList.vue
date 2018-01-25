@@ -1,26 +1,26 @@
 <template>
     <ul class="list-group">
         <template v-for="statement, index in cells">
-            <template v-if="statement.class_name == 'cellgroup'">
-                <Group :key="statement.id"
-                v-bind:cellgroup="statement"
-                v-bind:index="index"
-                v-bind:selected="selected"
-                :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
-                class="selectable"
-                ></Group>
-            </template>
-            <template v-else>
-                <Statement 
-                    :key="statement.id"
-                    v-bind:cell="statement"
+            <template v-if="statement.parent_group == parent">
+                <template v-if="statement.class_name == 'cellgroup'">
+                    <Group :key="statement.id"
+                    v-bind:cellgroup="statement"
                     v-bind:index="index"
                     v-bind:selected="selected"
-                    v-bind:selecting="selecting"
-                    :class="{ selected: !!selected[index], selecting: !!selecting[index] }"
-                    class="DataRow ui flexible grid selectable"
-                ></Statement>
-                
+                    ></Group>
+                </template>
+                <template v-else>
+                    <Statement 
+                        :key="statement.id"
+                        v-bind:cell="statement"
+                        v-bind:index="index"
+                        v-bind:selected="selected"
+                        v-bind:selecting="selecting"
+                        
+                        class="DataRow ui flexible grid"
+                    ></Statement>
+                    
+                </template>
             </template>
         </template>
 
@@ -43,6 +43,7 @@ export default Vue.component('Cell-List', {
         'onadd': {type: Function},
         'selected': {type: Array},
         'selecting': {type: Array},
+        'parent': {type: Object}
     },
     computed: {
 
