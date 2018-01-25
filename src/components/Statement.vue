@@ -102,13 +102,15 @@ export default Vue.component('Statement', {
         classObject: function() : object {
             var typeClass = "DataType--" + this.cell.type;
             var cellClass = "CellType--" + this.cell.class_name;
+            // this.index is relative within a group.
+            let realIndex = this.cell.env.all_cells.indexOf(this.cell);
             let classes: {[index: string]: any} =  {
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit,
                 "list-group-item": true,
                 'selectable': true,
-                "selected": this.selected[this.index],
-                "selecting": this.selecting[this.index]
+                "selected": this.selected[realIndex],
+                "selecting": this.selecting[realIndex]
             }
             classes[typeClass] = true;
             classes[cellClass] = true;

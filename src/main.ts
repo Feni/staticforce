@@ -14,10 +14,11 @@ let ENGINE = new Engine();
 ENGINE.rootEnv.createCell("expression", "=2 + 2", "Hello")
 ENGINE.rootEnv.createCell("text", long_text, "Exposition")
 ENGINE.rootEnv.createCell("expression", "=true or false", "three")
+ENGINE.rootEnv.createGroup()
 ENGINE.rootEnv.createCell("expression", "true", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
 ENGINE.rootEnv.createCell("text", "Hello world", "")
-ENGINE.rootEnv.createGroup()
+
 
 Vue.use(Vuex)
 
@@ -144,6 +145,7 @@ window.dashform = new Vue({
         // 'engine.rootEnv.all_cells
         'engine.rootEnv.all_cells.length': {
             handler() {
+                console.log("Refreshing selectable");
                 this.$nextTick(() => vueSelectable.setSelectableItems(this.$refs.app));
             },
             deep: true

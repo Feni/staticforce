@@ -1,5 +1,5 @@
 <template>
-    <li class="list-group-item">
+    <li v-bind:class="classObject">
         <h5 class="mb-1">Group {{ cellgroup.name }}</h5>
 
         <Cell-List v-bind:cells="cellgroup.value"
@@ -26,7 +26,17 @@ export default Vue.component('Group', {
         'index': {type: Number}
     },
     computed: {
-
+        classObject: function() : object {
+            let realIndex = this.cellgroup.env.all_cells.indexOf(this.cellgroup);
+            let classes: {[index: string]: any} =  {
+                "list-group-item": true,
+                'selectable': true,
+                "selected": this.selected[realIndex],
+                "selecting": this.selecting[realIndex]
+            }
+            console.log("grou pclass")
+            return classes;
+        }
     },
     methods: {
         addCell: function(event: Event) {
