@@ -46,15 +46,6 @@ const store = new Vuex.Store({
         getValue: (state, getters) => (id: string) => {
             var cell = getters.getById(id);
             var result = cell.evaluate();
-            if(result !== undefined){
-                // console.log("result is " + result);
-                if(result.constructor.name == "Big"){
-                    return result.toString().replace('"', "")
-                } else if(result === true || result === false) {
-                    
-                    return result.toString().toUpperCase()
-                }
-            }
             return result
         }
     },

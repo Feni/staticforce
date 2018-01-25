@@ -10,7 +10,7 @@
                 </template>
                 <template v-else>
                     <input type="text" v-model="expression" class="DataInput" autofocus/>
-                    <p>{{ value }}</p>
+                    <p>{{ formattedValue }}</p>
                 </template>
             </span>
         </template>
@@ -24,7 +24,7 @@
                 </template>
                 <div v-else>
                     <!-- Auto-reflow to next line due to div -->
-                    {{ value }} &nbsp;
+                    {{ formattedValue }} &nbsp;
                 </div>
             </span>
         </template>
@@ -34,6 +34,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Cell} from "../engine";
+import { isBoolean, isBigNum, isFormula } from "../utils";
 
 export default Vue.component('Statement', {
     name: 'Statement',
@@ -100,7 +101,8 @@ export default Vue.component('Statement', {
             return this.selected[this.index] == true && this.selected.filter(t => t == true).length == 1
         },
         classObject: function() : object {
-            var typeClass = "DataType--" + this.cell.type;
+            // var typeClass = "DataType--" + this.cell.type;
+            var typeClass = "DataType--" + this.valueType
             var cellClass = "CellType--" + this.cell.class_name;
             // this.index is relative within a group.
             let realIndex = this.cell.env.all_cells.indexOf(this.cell);
@@ -115,6 +117,34 @@ export default Vue.component('Statement', {
             classes[typeClass] = true;
             classes[cellClass] = true;
             return classes;
+        },
+        formattedValue: function() {
+            let val = this.value
+            if(val !== undefined){
+                // console.log("result is " + result);
+                if(val.constructor.name == "Big"){
+                    return val.toString().replace('"', "")
+                } else if(isBoolean(val)) {
+                    return this.value.toString().toUpperCase()
+                }
+            }
+            return val;
+        },
+        valueType: function(){
+            let val = this.value;
+            if(val != undefined) {
+                if(isBoolean(val)){
+                    return "boolean"
+                }
+                if(isBigNum(val)){
+                    return "bignum"
+                }
+
+            }
+            return "undefined"
+        },
+        rawIsFormula: function() : boolean {
+            return isFormula(this.cell.value)
         }
     },
     methods: {
