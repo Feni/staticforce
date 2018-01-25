@@ -7,6 +7,7 @@
                     v-bind:cellgroup="statement"
                     v-bind:index="index"
                     v-bind:selected="selected"
+                    v-bind:selecting="selecting"
                     ></Group>
                 </template>
                 <template v-else>
@@ -16,8 +17,6 @@
                         v-bind:index="index"
                         v-bind:selected="selected"
                         v-bind:selecting="selecting"
-                        
-                        class="DataRow ui flexible grid"
                     ></Statement>
                     
                 </template>

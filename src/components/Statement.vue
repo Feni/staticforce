@@ -2,7 +2,7 @@
     <div v-bind:class="classObject" @mousedown="select">
         <template v-if="isEdit">
             <span class="DataLabel">
-                <input v-model="name"/>
+                <input v-model="name" placeholder="Name..."/>
             </span>
             <span class="DataValue">
                 <template v-if="isLargeItem">
@@ -40,6 +40,7 @@ export default Vue.component('Statement', {
     props: {
         'cell': {type: Cell}, 
         'selected': {type: Array}, 
+        'selecting': {type: Array}, 
         'index': {type: Number}
     },
     computed: {
@@ -104,7 +105,10 @@ export default Vue.component('Statement', {
             let classes: {[index: string]: any} =  {
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit,
-                "list-group-item": true
+                "list-group-item": true,
+                'selectable': true,
+                "selected": this.selected[this.index],
+                "selecting": this.selecting[this.index]
             }
             classes[typeClass] = true;
             classes[cellClass] = true;

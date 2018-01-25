@@ -173,6 +173,8 @@ p {
 
 .DataLabel input {
     border-color: transparent;
+    background: transparent;
+    font-weight: bold;
 }
 
 .DataLabel input:hover, .DataLabel input:active, .DataLabel input:focus {
