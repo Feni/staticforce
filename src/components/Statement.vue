@@ -98,21 +98,23 @@ export default Vue.component('Statement', {
         isEdit: function() : boolean {
             // Not in edit mode when multiple items are selected.
             // Micro optimization - terminate early without all count.
-            return this.selected[this.index] == true && this.selected.filter(t => t == true).length == 1
+            return this.selected[this.orderIndex] == true && this.selected.filter(t => t == true).length == 1
+        },
+        orderIndex: function() : number {
+            return this.cell.env.all_cells.indexOf(this.cell);
         },
         classObject: function() : object {
             // var typeClass = "DataType--" + this.cell.type;
             var typeClass = "DataType--" + this.valueType
             var cellClass = "CellType--" + this.cell.class_name;
             // this.index is relative within a group.
-            let realIndex = this.cell.env.all_cells.indexOf(this.cell);
             let classes: {[index: string]: any} =  {
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit,
                 "list-group-item": true,
                 'selectable': true,
-                "selected": this.selected[realIndex],
-                "selecting": this.selecting[realIndex]
+                "selected": this.selected[this.orderIndex],
+                "selecting": this.selecting[this.orderIndex]
             }
             classes[typeClass] = true;
             classes[cellClass] = true;

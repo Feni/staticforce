@@ -133,3 +133,28 @@ Array.prototype.move = function (old_index, new_index) {
     this.splice(new_index, 0, this.splice(old_index, 1)[0]);
     return this; // for testing purposes
 };
+
+export function groupSelectionPolicy(selection: Boolean[], cells: Cell[]){
+    // Enforce the following rule:
+    // If a group item is selected, either 'all' or 'none' or it's children must be selected
+    // else the group shouldn't be selected.
+    // This enforces absolute click on group rather than bubbled clicks.
+    for(let i = 0; i < selection.length; i++){
+        if(selection[i] === true && cells[i].is_group === true){
+            let group = cells[i];
+            let firstChildValue = undefined;
+            // Offset by one to account for next position in cells array.
+            for(let childIndex = 1; childIndex < group.value.length + 1; childIndex++){
+                if(childIndex == 1){
+                    // Initialize to the first child's value to see if all else match (all true vs all false)
+                    firstChildValue = selection[i + childIndex]
+                } else {
+                    if(selection[i + childIndex] !== firstChildValue){
+                        selection[i] = false;
+                    }
+                }
+            }
+        }
+    }
+    return selection;
+}

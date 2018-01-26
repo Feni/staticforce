@@ -48,6 +48,8 @@ export class Cell {
             try{
                 return evaluateExpr(parseFormula(this.value), this.env)
             } catch (err) {
+                // TODO: Propagate this error to other dependent cells - 
+                // Else their value could be messed up as well... 
                 this.error = err;
                 console.error("Caught evaluation error - " + err)
                 return this.value;
@@ -56,10 +58,23 @@ export class Cell {
         } 
         return castLiteral(this.value)
     }
+
+    isGroup() {return false;}
 }
 
 export class CellGroup extends Cell {
     class_name = "cellgroup"
+    is_group = true;
+
+    addChild(child: Cell){
+        child.parent_group = this;
+        let order = this.env.all_cells;
+        // Add it right after group - for selection indexing to work out.
+        order.move(order.indexOf(child), order.indexOf(this) + this.value.length + 1);
+        this.value.push(child);
+    }
+
+    
 } 
 
 export class Environment {

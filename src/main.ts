@@ -3,7 +3,7 @@
 import Vue from "vue";
 import Vuex from 'vuex'
 import { mapState } from 'vuex'
-import {castNumber, castBoolean} from './utils'
+import {groupSelectionPolicy} from './utils'
 import {Engine} from './engine'
 
 var vueSelectable = require('vue-selectable');
@@ -14,10 +14,11 @@ let ENGINE = new Engine();
 ENGINE.rootEnv.createCell("expression", "=2 + 2", "Hello")
 ENGINE.rootEnv.createCell("text", long_text, "Exposition")
 ENGINE.rootEnv.createCell("expression", "=true or false", "three")
-ENGINE.rootEnv.createGroup()
+let g = ENGINE.rootEnv.createGroup();
 ENGINE.rootEnv.createCell("expression", "true", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
-ENGINE.rootEnv.createCell("text", "Hello world", "")
+g.addChild(ENGINE.rootEnv.createCell("text", "Hello world", ""))
+g.addChild(ENGINE.rootEnv.createCell("text", "23", ""))
 
 
 Vue.use(Vuex)
@@ -60,10 +61,12 @@ const store = new Vuex.Store({
             state.engine.rootEnv.createGroup();
         },
         select(state, payload){
-            state.selected = payload
+            // state.selected = payload
+            state.selected = groupSelectionPolicy(payload, state.engine.rootEnv.all_cells);
         },
         selecting(state, payload){
-            state.selecting = payload
+            // state.selecting = payload
+            state.selecting = groupSelectionPolicy(payload, state.engine.rootEnv.all_cells);
         }
     },
     /* Asyncronous actions */
