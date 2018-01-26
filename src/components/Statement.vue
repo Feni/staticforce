@@ -34,7 +34,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Cell} from "../engine";
-import { isBoolean, isBigNum, isFormula } from "../utils";
+import { isBoolean, isBigNum, isFormula, isEditMode } from "../utils";
 
 export default Vue.component('Statement', {
     name: 'Statement',
@@ -96,9 +96,7 @@ export default Vue.component('Statement', {
             return this.cell.value.toString().length > 50;
         },
         isEdit: function() : boolean {
-            // Not in edit mode when multiple items are selected.
-            // Micro optimization - terminate early without all count.
-            return this.selected[this.orderIndex] == true && this.selected.filter(t => t == true).length == 1
+            return isEditMode(this.selected, this.orderIndex)
         },
         orderIndex: function() : number {
             return this.cell.env.all_cells.indexOf(this.cell);
@@ -160,6 +158,18 @@ export default Vue.component('Statement', {
             console.log("Select event in Statement ");
             console.log(event);
         }
+    },
+    watch: {
+        isEdit: function (val) {
+            if(val) {
+                let el = this.$el;
+                // Wait till after element is added.
+                setTimeout(function() {
+                    el.querySelector('.DataValue .DataInput').focus();
+                }, 100);
+                
+            }
+       }
     }
 });
 </script>

@@ -1,21 +1,25 @@
 <template>
     <li v-bind:class="classObject">
-        <h5 class="mb-1">Group {{ cellgroup.name }}</h5>
+
+        <template v-if="isEdit">
+            <input class="mb-1" v-model="cellgroup.name" placeholder="Name..."/>
+        </template>
+        <template v-else>
+            <h5 class="mb-1">{{ cellgroup.name }}</h5>
+        </template>
 
         <Cell-List v-bind:cells="cellgroup.value"
             v-bind:onadd="addCell"
             v-bind:selected="selected"
             v-bind:selecting="selecting"
-            v-bind:parent="cellgroup"
-            ></Cell-List>
-
-
+            v-bind:parent="cellgroup"></Cell-List>
     </li>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import {CellGroup, Cell} from "../engine";
+import {isEditMode } from "../utils";
 
 export default Vue.component('Group', {
     name: 'Group',
@@ -36,6 +40,12 @@ export default Vue.component('Group', {
             }
             console.log("group class")
             return classes;
+        }, 
+        isEdit: function() : boolean {
+            return isEditMode(this.selected, this.orderIndex)
+        },
+        orderIndex: function() : number {
+            return this.cellgroup.env.all_cells.indexOf(this.cellgroup);
         }
     },
     methods: {
@@ -45,7 +55,19 @@ export default Vue.component('Group', {
             let c = this.cellgroup.env.createCell("", "", "")
             this.cellgroup.addChild(c);
         }
-    }
+    },
+    watch: {
+      isEdit: function (val) {
+         if(val) {
+             let el = this.$el;
+             // Wait till after element is added.
+             setTimeout(function() {
+                el.querySelector('input').focus();
+             }, 100);
+             
+         }
+       }
+    }   
 });
 </script>
 

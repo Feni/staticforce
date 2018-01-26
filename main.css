@@ -224,6 +224,10 @@ p {
     text-align: right;
 }
 
-.DataRow--large .DataLabel {
+.DataRow--large .DataLabel, .DataRow--large .DataValue  {
     width: 100%;
+}
+
+.DataRow--large .DataValue textarea {
+    min-height: 150px;
 }

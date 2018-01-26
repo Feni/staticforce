@@ -139,10 +139,17 @@ export function groupSelectionPolicy(selection: Boolean[], cells: Cell[]){
     // If a group item is selected, either 'all' or 'none' or it's children must be selected
     // else the group shouldn't be selected.
     // This enforces absolute click on group rather than bubbled clicks.
+
     for(let i = 0; i < selection.length; i++){
         if(selection[i] === true && cells[i].is_group === true){
             let group = cells[i];
             let firstChildValue = undefined;
+
+            // Special case to not select group if the list only has a single item 
+            // lest that item becomes uneditable.
+            if(group.value.length == 1 && selection[i + 1] == true){
+                selection[i] = false;
+            }
             // Offset by one to account for next position in cells array.
             for(let childIndex = 1; childIndex < group.value.length + 1; childIndex++){
                 if(childIndex == 1){
@@ -157,4 +164,11 @@ export function groupSelectionPolicy(selection: Boolean[], cells: Cell[]){
         }
     }
     return selection;
+}
+
+export function isEditMode(selected: Boolean[], index: number) {
+    // Check if item at index is the only true value.
+    // Not in edit mode when multiple items are selected.
+    // TODO; Micro optimization - terminate early without all count.
+    return selected[index] == true && selected.filter(t => t == true).length == 1
 }
