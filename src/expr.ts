@@ -80,6 +80,7 @@ export function _do_eval(node, env: Environment) {
         let idEnv = env.findEnv(node.name);
         // Found the name in an environment
         if(idEnv !== null && idEnv !== undefined){
+            console.log("looking up " + node.name);
             return idEnv.lookup(node.name).evaluate()
         }
         // TODO: Return as string literal in this case?

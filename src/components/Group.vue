@@ -2,10 +2,10 @@
     <li v-bind:class="classObject">
 
         <template v-if="isEdit">
-            <input class="mb-1" v-model="cellgroup.name" placeholder="Name..."/>
+            <input class="mb-1" v-model="name" placeholder="Name..."/>
         </template>
         <template v-else>
-            <h5 class="mb-1">{{ cellgroup.name }}</h5>
+            <h5 class="mb-1">{{ name }}</h5>
         </template>
 
         <Cell-List v-bind:cells="cellgroup.value"
@@ -30,6 +30,14 @@ export default Vue.component('Group', {
         'index': {type: Number}
     },
     computed: {
+        name: {
+            get: function() : string {
+                return this.cellgroup.name
+            }, 
+            set: function(newName: string) {
+                this.cellgroup.rename(newName);
+            }
+        },
         classObject: function() : object {
             let realIndex = this.cellgroup.env.all_cells.indexOf(this.cellgroup);
             let classes: {[index: string]: any} =  {

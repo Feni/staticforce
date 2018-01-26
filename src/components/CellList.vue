@@ -22,8 +22,9 @@
                 </template>
             </template>
         </template>
-
-        <a href="#" class="list-group-item list-group-item-action list-group-item-success" @click="addNewCell()">Add Item</a>
+        <template v-if="onadd !== undefined">
+            <a href="#" class="list-group-item list-group-item-action list-group-item-success" @click="addNewCell()">Add Item</a>
+        </template>
     </ul>
 </template>
 

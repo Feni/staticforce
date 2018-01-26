@@ -17,6 +17,7 @@ export class Cell {
     
     parent_group = null
     class_name = "cell"
+    is_group = false;
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(type: string, value: string, env: Environment, name?: string){
@@ -36,12 +37,17 @@ export class Cell {
 
     rename(newName: string){
         console.log("Renaming " + this.name + " to " + newName);
-        this.env.rename(this.name, newName)
+        this.env.rename(this, newName)
         this.name = newName;
     }
 
     // @ts-ignore - return type any.
     evaluate() {
+        console.log("evaluating " + this.id + " value " + this.value)
+        console.log("group " + this.is_group);
+        if(this.is_group){
+            return this.value
+        }
         if(isFormula(this.value)) {
             // Evaluate formula. Value = jsep(expression). 
             // or value = String
@@ -58,8 +64,6 @@ export class Cell {
         } 
         return castLiteral(this.value)
     }
-
-    isGroup() {return false;}
 }
 
 export class CellGroup extends Cell {
@@ -117,10 +121,15 @@ export class Environment {
         this.name_cell_map[name] = value
     }
 
-    rename(name: string, newName: string){
-        let cell = this.name_cell_map[name];
-        delete this.name_cell_map[name]
-        this.name_cell_map[newName] = cell;
+    rename(cell: Cell, newName: string){
+        // TODO; validate names at some stage.
+        // todo support multiple things with same name.
+        if(cell.name != ""){
+            delete this.name_cell_map[cell.name]
+        }
+        if(newName != ""){
+            this.name_cell_map[newName] = cell;
+        }
     }
 
     // TODO: Should these operate on names or ids?

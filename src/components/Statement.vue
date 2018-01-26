@@ -24,7 +24,17 @@
                 </template>
                 <div v-else>
                     <!-- Auto-reflow to next line due to div -->
-                    {{ formattedValue }} &nbsp;
+                    <template v-if="valIsGroup">
+                        <Cell-List v-bind:cells="this.value"
+                            v-bind:selected="selected"
+                            v-bind:selecting="selecting"
+                            v-bind:parent="this.value[0].parent_group"></Cell-List>
+
+                    </template>
+                    <template v-else>
+                        {{ formattedValue }} &nbsp;
+                    </template>
+                    
                 </div>
             </span>
         </template>
@@ -119,6 +129,8 @@ export default Vue.component('Statement', {
             return classes;
         },
         formattedValue: function() {
+            console.log("Value is ")
+            console.log(this.value)
             let val = this.value
             if(val !== undefined){
                 // console.log("result is " + result);
@@ -139,9 +151,14 @@ export default Vue.component('Statement', {
                 if(isBigNum(val)){
                     return "bignum"
                 }
-
+                if(Array.isArray(val)){
+                    return "array"
+                }
             }
             return "undefined"
+        },
+        valIsGroup: function() {
+            return this.value != undefined && Array.isArray(this.value);
         },
         rawIsFormula: function() : boolean {
             return isFormula(this.cell.value)
