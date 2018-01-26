@@ -13,6 +13,7 @@ export class Cell {
     used_by: Cell[]
     env: Environment
     name: string
+    error: Error
     
     parent_group = null
     class_name = "cell"
@@ -44,7 +45,14 @@ export class Cell {
         if(isFormula(this.value)) {
             // Evaluate formula. Value = jsep(expression). 
             // or value = String
-            return evaluateExpr(parseFormula(this.value), this.env)
+            try{
+                return evaluateExpr(parseFormula(this.value), this.env)
+            } catch (err) {
+                this.error = err;
+                console.error("Caught evaluation error - " + err)
+                return this.value;
+            }
+            
         } 
         return castLiteral(this.value)
     }
