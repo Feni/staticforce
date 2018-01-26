@@ -29,7 +29,7 @@ html, body {
     display: inline-block;
     font-weight: bold;
     color: #333;
-    width: 20%;
+    width: 25%;
     text-align: left;
     padding-right: 5px;
     vertical-align: top;
@@ -72,7 +72,7 @@ html, body {
 }
 
 .DataValue {
-    min-width: 78%;
+    min-width: 73%;
     display: inline-block;
 }
 
@@ -216,10 +216,14 @@ p {
     margin-top: 100px !important;
 }
 
-.DataType--boolean {
+.DataType--boolean .DataValue {
     font-style: italic;
 }
 
-.DataType--bignum {
+.DataType--bignum .DataValue {
     text-align: right;
+}
+
+.DataRow--large .DataLabel {
+    width: 100%;
 }

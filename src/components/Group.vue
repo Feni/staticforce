@@ -42,7 +42,7 @@ export default Vue.component('Group', {
         addCell: function(event: Event) {
             // todo: Vuex this
             // let c = new Cell("", "test", this.cellgroup.env, "hello");
-            let c = this.cellgroup.env.createCell("", "test", "hello")
+            let c = this.cellgroup.env.createCell("", "", "")
             this.cellgroup.addChild(c);
         }
     }
