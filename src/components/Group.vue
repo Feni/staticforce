@@ -44,8 +44,10 @@ export default Vue.component('Group', {
             // let c = new Cell("", "test", this.cellgroup.env, "hello");
             let c = this.cellgroup.env.createCell("", "test", "hello")
             c.parent_group = this.cellgroup;
+            let order = this.cellgroup.env.all_cells;
+            // Add it right after group - for selection indexing to work out.
+            order.move(order.indexOf(c), order.indexOf(this.cellgroup) + this.cellgroup.value.length + 1);
             this.cellgroup.value.push(c);
-
         }
     }
 });

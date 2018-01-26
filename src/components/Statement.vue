@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="classObject" @mousedown="select">
+    <div v-bind:class="classObject" @mousedown="select" data-id="cell.id">
         <template v-if="isEdit">
             <span class="DataLabel">
                 <input v-model="name" placeholder="Name..."/>
