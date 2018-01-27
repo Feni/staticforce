@@ -1,7 +1,7 @@
 /* Expression evaluation module */
 import { Big } from 'big.js';
 import * as util from './utils';
-import { castBoolean } from './utils';
+import { castBoolean, isCell } from './utils';
 import { Cell, Environment } from './engine';
 
 var jsep = require("jsep")
@@ -155,6 +155,11 @@ export function _do_eval(node, env: Environment) {
         node.body.forEach(subnode => {
             // compound.concat(subarray)
             let subresult = _do_eval(subnode, env);
+            if(!Array.isArray(subresult) && !isCell(subresult)) {
+                // Then wrap it in a cell
+                subresult = new Cell("", subresult, env, "");
+                console.log("Wrapping");
+            }
             console.log("Sub result")
             console.log(subresult)
             compound = compound.concat(subresult);

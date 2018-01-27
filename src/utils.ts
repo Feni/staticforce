@@ -82,10 +82,18 @@ export function isFormula(value: string){
 
 // @ts-ignore: Allow undefined type since we're detecting type
 export function isBigNum(value) {
+    return isInstanceOf(value, "Big")
+}
+
+export function isInstanceOf(value, classname) {
     if(value !== undefined && value !== null && value.constructor !== undefined){
-        return value.constructor.name == "Big"
+        return value.constructor.name == classname
     }
-    return false;
+    return false
+}
+
+export function isCell(value) {
+    return isInstanceOf(value, "Cell")
 }
 
 
