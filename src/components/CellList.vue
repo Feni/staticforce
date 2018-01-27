@@ -1,7 +1,7 @@
 <template>
     <ul class="list-group">
         <template v-for="statement, index in cells">
-            <template v-if="statement != null && statement.parent_group == parent">
+            <template v-if="(isroot == true && statement.parent_group == undefined) || (isroot !== true)">
                 <template v-if="statement.class_name == 'cellgroup'">
                     <Group :key="statement.id"
                     v-bind:cellgroup="statement"
@@ -43,7 +43,7 @@ export default Vue.component('Cell-List', {
         'onadd': {type: Function},
         'selected': {type: Array},
         'selecting': {type: Array},
-        'parent': {type: Object}
+        'isroot': {type: Boolean}
     },
     computed: {
 

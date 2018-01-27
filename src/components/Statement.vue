@@ -13,7 +13,8 @@
                     
                     <template v-if="valIsGroup">
                         <Cell-List v-bind:cells="this.value"
-                            v-bind:parent="this.value[0].parent_group"></Cell-List>
+                            ></Cell-List>
+                            <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
                         <p>{{ formattedValue }}</p> &nbsp;
@@ -34,8 +35,8 @@
                     <!-- Auto-reflow to next line due to div -->
                     <template v-if="valIsGroup">
                         <Cell-List v-bind:cells="this.value"
-                            v-bind:parent="this.value[0].parent_group"></Cell-List>
-
+                            ></Cell-List>
+        <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
                         {{ formattedValue }} &nbsp;

@@ -12,7 +12,7 @@
             v-bind:onadd="addCell"
             v-bind:selected="selected"
             v-bind:selecting="selecting"
-            v-bind:parent="cellgroup"></Cell-List>
+            v-bind:isroot="false"></Cell-List>
     </li>
 </template>
 
