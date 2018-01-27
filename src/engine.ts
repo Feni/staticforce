@@ -46,6 +46,7 @@ export class Cell {
         console.log("evaluating " + this.id + " value " + this.value)
         console.log("group " + this.is_group);
         if(this.is_group){
+            // TODO: Should this return the raw value or the evaluated value?
             return this.value
         }
         if(isFormula(this.value)) {
@@ -60,7 +61,6 @@ export class Cell {
                 console.error("Caught evaluation error - " + err)
                 return this.value;
             }
-            
         } 
         return castLiteral(this.value)
     }
@@ -207,5 +207,6 @@ export class Engine {
     
     constructor() {
         this.rootEnv = new Environment()
+        window.rootEnv = this.rootEnv;
     }
 }

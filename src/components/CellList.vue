@@ -1,7 +1,7 @@
 <template>
     <ul class="list-group">
         <template v-for="statement, index in cells">
-            <template v-if="statement.parent_group == parent">
+            <template v-if="statement != null && statement.parent_group == parent">
                 <template v-if="statement.class_name == 'cellgroup'">
                     <Group :key="statement.id"
                     v-bind:cellgroup="statement"

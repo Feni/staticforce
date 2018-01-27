@@ -18,7 +18,7 @@ let g = ENGINE.rootEnv.createGroup();
 g.rename("grp")
 ENGINE.rootEnv.createCell("expression", "=grp", "boolean")
 ENGINE.rootEnv.createCell("expression", "false", "boolean")
-g.addChild(ENGINE.rootEnv.createCell("text", "Hello world", ""))
+g.addChild(ENGINE.rootEnv.createCell("text", "42", ""))
 g.addChild(ENGINE.rootEnv.createCell("text", "23", ""))
 
 

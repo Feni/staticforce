@@ -70,20 +70,6 @@ export default Vue.component('Statement', {
                 // \[[^\]]*\] - any char except closing bracket
                 let re = /\[[^\]]*\]/g;
                 var match;
-                // window.test_re = re;
-                // window.test_raw = raw; 
-                // console.log(window.test_result);
-                // console.log("m1 " + re.exec(raw));
-                // console.log("m2 " + re.exec(raw));
-                /*
-                do {
-                    match = re.exec(raw);
-                    if (match) {
-                        console.log(match)
-                        console.log(match[1], match[2]);
-                    }
-                 } while (match); */
-                
                 return this.cell.value
             },
             set: function(newValue: string) {
@@ -99,7 +85,9 @@ export default Vue.component('Statement', {
             }
         },
         value: function() : string {
-            return this.$store.getters.getValue(this.cell.id);
+            console.log("Statement get value " + this.cell);
+            // return this.$store.getters.getValue(this.cell.id);
+            return this.cell.evaluate()
         },
         isLargeItem: function() : boolean {
             // TODO: Check if text is long or not

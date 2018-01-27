@@ -2,10 +2,10 @@
     <li v-bind:class="classObject">
 
         <template v-if="isEdit">
-            <input class="mb-1" v-model="name" placeholder="Name..."/>
+            <input class="DataLabel" v-model="name" placeholder="Name..."/>
         </template>
         <template v-else>
-            <h5 class="mb-1">{{ name }}</h5>
+            <label class="DataLabel">&nbsp; {{ name }} </label>
         </template>
 
         <Cell-List v-bind:cells="cellgroup.value"
