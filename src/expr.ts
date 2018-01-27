@@ -7,49 +7,44 @@ import { Cell, Environment } from './engine';
 var jsep = require("jsep")
 Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
 
-
-function evaluateArray(arr) {
-    console.log(arr);
-    let values = arr.map(a => a.evaluate()); // evaluate()
-    console.log("evaluated values ")
-    console.log(values);
-    // TODO: This returns an array of raw values, but we render cells.
-    return values;
-}
-
+// Create new cells as result, but don't bind or store in all cells list.
+// TODO: What about names bound to this later?
 function itemwiseApply(a, b, func) {
-    if(Array.isArray(a)){
-        if(Array.isArray(b)){
-            // Create new cells as result, but don't bind or store in all cells list.
-            // TODO: What about names bound to this later?
-            //         let c = new Cell(type, value, this, name);
-            let bVals = evaluateArray(b);
-            // ASSERT BOTH ARE SAME LENGTH
-            /*
-            a.map(function(ai, i) {
-                return ai[func](b[i]);
-            });
-            */
-            return a;
-        } else {
-            
-            let result = a.map((ai) => {
-                let aVal = ai.evaluate();   // TODO: What if this is wrong type?
-                let aResult = new Cell(ai.type, aVal[func](b), ai.env, ai.name);
-                aResult.parent_group = aVal.parent_group;
-                return aResult;
-            })
-            console.log("Array operation result");
-            console.log(result);
-            return result;
-            // return a;
 
-            // return a[0][func](b)
-        }
-        return a
-    } else if (Array.isArray(b)) {
-        return b
-    } else {
+    if(Array.isArray(a) && Array.isArray(b)){
+        console.log("Both array")
+        // ASSERT BOTH ARE SAME LENGTH
+        let resultList = a.map(function(ai, i) {
+            let aVal = ai.evaluate();
+            let bVal = b[i].evaluate();
+            let result = aVal[func](bVal)
+            let resultCell = new Cell(ai.type, result, ai.env, ai.name);
+            resultCell.parent_group = aVal.parent_group;
+            return resultCell
+        });
+        return resultList;
+    }
+    else if(Array.isArray(a)) {
+        let resultList = a.map((ai) => {
+            let aVal = ai.evaluate();   // TODO: What if this is wrong type?
+            let result = aVal[func](b);
+            let resultCell = new Cell(ai.type, result, ai.env, ai.name);
+            resultCell.parent_group = aVal.parent_group;
+            return resultCell;
+        })
+        return resultList;
+
+    } else if(Array.isArray(b)) {
+        let resultList = b.map((bi) => {
+            let bVal = bi.evaluate();   // TODO: What if this is wrong type?
+            let result = a[func](bVal);
+            let resultCell = new Cell(bi.type, result, bi.env, bi.name);
+            resultCell.parent_group = bVal.parent_group;
+            return resultCell;
+        })
+        return resultList;        
+        
+    } else {    // both are scalar values
         return a[func](b);
     }
 }

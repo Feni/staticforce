@@ -21,6 +21,13 @@ ENGINE.rootEnv.createCell("expression", "false", "boolean")
 g.addChild(ENGINE.rootEnv.createCell("text", "42", ""))
 g.addChild(ENGINE.rootEnv.createCell("text", "23", ""))
 
+let other = ENGINE.rootEnv.createGroup();
+other.rename("other")
+other.addChild(ENGINE.rootEnv.createCell("text", "1", ""))
+other.addChild(ENGINE.rootEnv.createCell("text", "2", ""))
+
+
+
 
 Vue.use(Vuex)
 
