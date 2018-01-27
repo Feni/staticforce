@@ -170,5 +170,8 @@ export function isEditMode(selected: Boolean[], index: number) {
     // Check if item at index is the only true value.
     // Not in edit mode when multiple items are selected.
     // TODO; Micro optimization - terminate early without all count.
+    if(selected == undefined) {
+        return false;
+    }
     return selected[index] == true && selected.filter(t => t == true).length == 1
 }

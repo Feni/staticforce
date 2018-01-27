@@ -42,9 +42,9 @@ export default Vue.component('Group', {
             let realIndex = this.cellgroup.env.all_cells.indexOf(this.cellgroup);
             let classes: {[index: string]: any} =  {
                 "list-group-item": true,
-                'selectable': true,
-                "selected": this.selected[realIndex],
-                "selecting": this.selecting[realIndex]
+                'selectable': this.selected !== undefined && this.selecting !== undefined,
+                "selected": this.selected ? this.selected[realIndex] : false,
+                "selecting": this.selecting ? this.selecting[realIndex] : false
             }
             console.log("group class")
             return classes;
@@ -70,7 +70,10 @@ export default Vue.component('Group', {
              let el = this.$el;
              // Wait till after element is added.
              setTimeout(function() {
-                el.querySelector('input').focus();
+                let input = el.querySelector('input');
+                if(input != undefined && input != null){
+                    input.focus();
+                }
              }, 100);
              
          }

@@ -10,7 +10,15 @@
                 </template>
                 <template v-else>
                     <input type="text" v-model="expression" class="DataInput" autofocus/>
-                    <p>{{ formattedValue }}</p>
+                    
+                    <template v-if="valIsGroup">
+                        <Cell-List v-bind:cells="this.value"
+                            v-bind:parent="this.value[0].parent_group"></Cell-List>
+                    </template>
+                    <template v-else>
+                        <p>{{ formattedValue }}</p> &nbsp;
+                    </template>
+                        
                 </template>
             </span>
         </template>
@@ -26,8 +34,6 @@
                     <!-- Auto-reflow to next line due to div -->
                     <template v-if="valIsGroup">
                         <Cell-List v-bind:cells="this.value"
-                            v-bind:selected="selected"
-                            v-bind:selecting="selecting"
                             v-bind:parent="this.value[0].parent_group"></Cell-List>
 
                     </template>
@@ -120,9 +126,9 @@ export default Vue.component('Statement', {
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit,
                 "list-group-item": true,
-                'selectable': true,
-                "selected": this.selected[this.orderIndex],
-                "selecting": this.selecting[this.orderIndex]
+                'selectable': this.selected !== undefined && this.selecting !== undefined,
+                "selected": this.selected != undefined ? this.selected[this.orderIndex] : false,
+                "selecting": this.selecting != undefined ? this.selecting[this.orderIndex] : false
             }
             classes[typeClass] = true;
             classes[cellClass] = true;
@@ -140,6 +146,7 @@ export default Vue.component('Statement', {
                     return this.value.toString().toUpperCase()
                 }
             }
+            console.log("default case")
             return val;
         },
         valueType: function(){
