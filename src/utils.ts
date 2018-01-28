@@ -196,7 +196,17 @@ export function formatValue(value) {
             return value.toString().replace('"', "")
         } else if(isBoolean(value)) {
             return value.toString().toUpperCase()
+        } else if (isCell(value)) {
+            return value.evaluate()
+        }
+
+        if(Array.isArray(value)) {
+            console.log("Cormatting array")
+            return value.map((v) => {
+                return formatValue(v)
+            }).join(", ")
         }
     }
+
     return value;
 }
