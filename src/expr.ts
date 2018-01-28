@@ -12,7 +12,6 @@ Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
 function itemwiseApply(a, b, func, doFudge=false) {
 
     if(Array.isArray(a) && Array.isArray(b)){
-        console.log("Both array")
         // ASSERT BOTH ARE SAME LENGTH
         let resultList = a.map(function(ai, i) {
             let aVal = ai.evaluate();
@@ -155,18 +154,12 @@ export function _do_eval(node, env: Environment) {
         node.body.forEach(subnode => {
             // compound.concat(subarray)
             let subresult = _do_eval(subnode, env);
+            // Wrap scalar constants in a cell so it can be rendered in CellList
             if(!Array.isArray(subresult) && !isCell(subresult)) {
-                // Then wrap it in a cell
                 subresult = new Cell("", subresult, env, "");
-                console.log("Wrapping");
             }
-            console.log("Sub result")
-            console.log(subresult)
             compound = compound.concat(subresult);
-            console.log("compound is " + compound);
         })
-        console.log("result is " + compound);
-        console.log(compound);
         return compound;
     }
      else {
