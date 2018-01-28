@@ -17,14 +17,14 @@
                             <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
-                        <p>{{ formattedValue }}</p> &nbsp;
+                        <p>{{ formattedValue }}</p>
                     </template>
                         
                 </template>
             </span>
         </template>
         <template v-else>
-            <label class="DataLabel">{{ cell.name }}&nbsp;</label>
+            <label class="DataLabel">{{ cell.name }}</label>
 
             <span class="DataValue">
                 <template v-if="cell.type == 'object'" class="ui stackable grid SubObject">
@@ -39,7 +39,7 @@
         <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
-                        {{ formattedValue }} &nbsp;
+                        {{ formattedValue }}
                     </template>
                     
                 </div>

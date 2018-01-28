@@ -1,11 +1,10 @@
 <template>
     <li v-bind:class="classObject">
-
         <template v-if="isEdit">
             <input class="DataLabel" v-model="name" placeholder="Name..."/>
         </template>
         <template v-else>
-            <label class="DataLabel">&nbsp; {{ name }} </label>
+            <label class="DataLabel">{{ name }}&nbsp;</label>
         </template>
 
         <Cell-List v-bind:cells="cellgroup.value"
@@ -42,9 +41,10 @@ export default Vue.component('Group', {
             let realIndex = this.cellgroup.env.all_cells.indexOf(this.cellgroup);
             let classes: {[index: string]: any} =  {
                 "list-group-item": true,
-                'selectable': this.selected !== undefined && this.selecting !== undefined,
+                "selectable": this.selected !== undefined && this.selecting !== undefined,
                 "selected": this.selected ? this.selected[realIndex] : false,
-                "selecting": this.selecting ? this.selecting[realIndex] : false
+                "selecting": this.selecting ? this.selecting[realIndex] : false,
+                "DataGroup": true
             }
             return classes;
         }, 

@@ -228,6 +228,18 @@ p {
     width: 100%;
 }
 
+.DataRow--large .DataLabel, .DataGroup .DataLabel {
+    margin-bottom: 0.25rem;
+}
+
 .DataRow--large .DataValue textarea {
     min-height: 150px;
+}
+
+.DashForm .list-group-item {
+    padding: 0.5rem 1rem;
+}
+
+.DataLabel {
+    margin-bottom: 0;
 }

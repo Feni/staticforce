@@ -63,12 +63,15 @@ export class Cell {
                 return this.value;
             }
         }
+        let literal = castLiteral(this.value);
+        if(literal !== undefined) {
+            return literal;
+        }
         if(isString(this.value)) {
             // Replace variable references.
             return evaluateStr(this.value, this.env)
         }
-
-        return castLiteral(this.value)
+        return this.value
     }
 }
 
