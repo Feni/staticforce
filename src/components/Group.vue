@@ -46,7 +46,6 @@ export default Vue.component('Group', {
                 "selected": this.selected ? this.selected[realIndex] : false,
                 "selecting": this.selecting ? this.selecting[realIndex] : false
             }
-            console.log("group class")
             return classes;
         }, 
         isEdit: function() : boolean {

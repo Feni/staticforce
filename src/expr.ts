@@ -1,7 +1,7 @@
 /* Expression evaluation module */
 import { Big } from 'big.js';
 import * as util from './utils';
-import { castBoolean, isCell } from './utils';
+import { castBoolean, isCell, formatValue } from './utils';
 import { Cell, Environment } from './engine';
 
 var jsep = require("jsep")
@@ -149,7 +149,6 @@ export function _do_eval(node, env: Environment) {
         // Probably not - should be lookup error
         return node.name
     } else if (node.type === "Compound") { // a, b
-        console.log(node);
         let compound = [];
         node.body.forEach(subnode => {
             // compound.concat(subarray)
@@ -215,9 +214,38 @@ export function evaluateExpr(parsed, env: Environment) {
     }
 }
 
+
+
 export function parseFormula(expr: string){
     // Assert is formula
     // Return jsep expression
     let parsed = jsep(expr.substring(1));
     return parsed;
+}
+
+// TODO: Factor this into dependency calculations
+export function evaluateStr(strExpr: string, env: Environment) {
+    let pattern = /{{([^}]+)}}/g;
+    let match = pattern.exec(strExpr);
+
+    let strResult = strExpr;
+    let startIndex = 0;
+    while (match != null) {
+        // TODO: Could be done using the index
+        // matched text: match[0]
+        // match start: match.index
+        // capturing group n: match[n]
+        // let ref = env.lookup(match[1].trim());
+        let name = match[1].trim();
+        
+        if(env.findEnv(name) !== undefined) {
+            let ref = env.lookup(name);
+            let refEval = ref.evaluate();
+            let value = formatValue(refEval);
+            strResult = strResult.replace(new RegExp(match[0], "g"), value)
+        }
+
+        match = pattern.exec(strExpr);
+    }
+    return strResult;
 }

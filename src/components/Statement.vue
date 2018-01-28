@@ -51,7 +51,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Cell} from "../engine";
-import { isBoolean, isBigNum, isFormula, isEditMode } from "../utils";
+import { isBoolean, isBigNum, isFormula, isEditMode, formatValue } from "../utils";
 
 export default Vue.component('Statement', {
     name: 'Statement',
@@ -86,7 +86,6 @@ export default Vue.component('Statement', {
             }
         },
         value: function() : string {
-            console.log("Statement get value " + this.cell);
             // return this.$store.getters.getValue(this.cell.id);
             return this.cell.evaluate()
         },
@@ -124,19 +123,7 @@ export default Vue.component('Statement', {
             return classes;
         },
         formattedValue: function() {
-            console.log("Value is ")
-            console.log(this.value)
-            let val = this.value
-            if(val !== undefined){
-                // console.log("result is " + result);
-                if(val.constructor.name == "Big"){
-                    return val.toString().replace('"', "")
-                } else if(isBoolean(val)) {
-                    return this.value.toString().toUpperCase()
-                }
-            }
-            console.log("default case")
-            return val;
+            return formatValue(this.value)
         },
         valueType: function(){
             let val = this.value;
@@ -162,14 +149,11 @@ export default Vue.component('Statement', {
     },
     methods: {
         select: function(event: Event) {
-            // console.log("Statement select")
             // @ts-ignore:
             if(this.isEdit) {
                 // Hide this mousedown event from selector so our input boxes can be edited.
                 event.stopPropagation();
             }
-            console.log("Select event in Statement ");
-            console.log(event);
         }
     },
     watch: {

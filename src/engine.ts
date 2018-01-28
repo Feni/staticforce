@@ -1,8 +1,8 @@
 import * as util from './utils';
 import { escape } from 'querystring';
 import { Big } from 'big.js';
-import { isFormula, castLiteral } from './utils';
-import { evaluateExpr, parseFormula } from './expr';
+import { isFormula, castLiteral, isString } from './utils';
+import { evaluateExpr, parseFormula, evaluateStr } from './expr';
 import { EnvError } from './errors';
 
 export class Cell {
@@ -43,8 +43,9 @@ export class Cell {
 
     // @ts-ignore - return type any.
     evaluate() {
-        console.log("evaluating " + this.id + " value " + this.value)
-        console.log("group " + this.is_group);
+        if(this.value == undefined || this.value == null) {
+            return undefined;
+        }
         if(this.is_group){
             // TODO: Should this return the raw value or the evaluated value?
             return this.value
@@ -61,7 +62,12 @@ export class Cell {
                 console.error("Caught evaluation error - " + err)
                 return this.value;
             }
-        } 
+        }
+        if(isString(this.value)) {
+            // Replace variable references.
+            return evaluateStr(this.value, this.env)
+        }
+
         return castLiteral(this.value)
     }
 }

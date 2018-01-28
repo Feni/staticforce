@@ -57,6 +57,10 @@ export function isFalse(value: string){
     return value === false ||  cleanBoolStr(value) === "FALSE";
 }
 
+export function isString(value: string) {
+    return typeof value === 'string' || value instanceof String;
+}
+
 export function castLiteral(value: string){
     if(value != null && value != undefined){
         let bool = castBoolean(value);
@@ -67,6 +71,7 @@ export function castLiteral(value: string){
         if(num !== undefined){
             return num;
         }
+
     }
     // Return raw string value
     return value;
@@ -182,4 +187,16 @@ export function isEditMode(selected: Boolean[], index: number) {
         return false;
     }
     return selected[index] == true && selected.filter(t => t == true).length == 1
+}
+
+export function formatValue(value) {
+    if(value !== undefined){
+        // console.log("result is " + result);
+        if(value.constructor.name == "Big"){
+            return value.toString().replace('"', "")
+        } else if(isBoolean(value)) {
+            return value.toString().toUpperCase()
+        }
+    }
+    return value;
 }
