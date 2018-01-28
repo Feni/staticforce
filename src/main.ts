@@ -31,6 +31,8 @@ other.addChild(ENGINE.rootEnv.createCell("text", "2", ""))
 
 Vue.use(Vuex)
 
+window.evalDepth = 0;
+
 const store = new Vuex.Store({
     state: {
         engine: ENGINE,

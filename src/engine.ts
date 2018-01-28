@@ -43,6 +43,14 @@ export class Cell {
 
     // @ts-ignore - return type any.
     evaluate() {
+        window.evalDepth += 1;
+
+        if(window.evalDepth > 200) {
+            // The app doesn't work after this, but atleast it doesn't kill the tab.
+            alert("Error: Self-referencing cells.");
+            return undefined;
+        }
+
         if(this.value == undefined || this.value == null) {
             return undefined;
         }
@@ -70,6 +78,8 @@ export class Cell {
         } else {
             return literal;
         }
+
+        window.evalDepth -= 1;
     }
 }
 
