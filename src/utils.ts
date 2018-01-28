@@ -130,7 +130,15 @@ export function fudge(result: Big) {
 
 export function isValidName(name?: string){
     // TODO: Valid character set
-    return name !== null && name !== undefined && name != "" && name.length < 20
+    // TODO: name == ""
+    if(name === null || name === undefined || name === "") {
+        return false;
+    }
+    if(name.length > 20) {
+        return false;
+    }
+    let uname = name.toUpperCase()
+    return /^[A-Z]\w*$/.test(uname)
 }
 
 

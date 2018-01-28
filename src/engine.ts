@@ -1,9 +1,9 @@
 import * as util from './utils';
 import { escape } from 'querystring';
 import { Big } from 'big.js';
-import { isFormula, castLiteral, isString } from './utils';
+import { isFormula, castLiteral, isString, isValidName } from './utils';
 import { evaluateExpr, parseFormula, evaluateStr } from './expr';
-import { EnvError } from './errors';
+import { EnvError, CellError } from './errors';
 
 export class Cell {
     id: string
@@ -13,7 +13,7 @@ export class Cell {
     used_by: Cell[]
     env: Environment
     name: string
-    error: Error
+    errors: Error[]
     
     parent_group = null
     class_name = "cell"
@@ -45,9 +45,14 @@ export class Cell {
     evaluate() {
         window.evalDepth += 1;
 
-        if(window.evalDepth > 200) {
+        if(window.evalDepth > 2000) {
             // The app doesn't work after this, but atleast it doesn't kill the tab.
-            alert("Error: Self-referencing cells.");
+            console.log("Error: Self-referencing cells....");
+            this.value = "";    // TODO: This is deleting data!
+            let err: CellError = new CellError("Cycle detected");
+            err.cells = [this];
+            throw err
+             
             return undefined;
         }
 
@@ -94,8 +99,6 @@ export class CellGroup extends Cell {
         order.move(order.indexOf(child), order.indexOf(this) + this.value.length + 1);
         this.value.push(child);
     }
-
-    
 } 
 
 export class Environment {
@@ -124,8 +127,9 @@ export class Environment {
 
     findEnv(name: string) {
         var layer: Environment = this;
+        let uname = name.toUpperCase()
         while(layer !== undefined){
-            if(name in layer.name_cell_map){
+            if(uname in layer.name_cell_map){
                 return layer
             } else {
                 layer = layer.outer;
@@ -135,24 +139,38 @@ export class Environment {
     }
 
     bind(name: string, value: Cell){
-        this.name_cell_map[name] = value
+        // Add to list if exists.
+        let uname = name.toUpperCase();
+        if(isValidName(uname)) {
+            if(uname in this.name_cell_map) {
+                // todo - raise error
+            } else {
+                this.name_cell_map[uname] = value
+            }
+        } else {
+            console.log("Invalid name")
+            // TODO raise an error
+        }
     }
 
     rename(cell: Cell, newName: string){
         // TODO; validate names at some stage.
         // todo support multiple things with same name.
         if(cell.name != ""){
-            delete this.name_cell_map[cell.name]
+            let uname = cell.name.toUpperCase()
+            delete this.name_cell_map[uname]
         }
         if(newName != ""){
-            this.name_cell_map[newName] = cell;
+            let unewName = newName.toUpperCase()
+            this.name_cell_map[unewName] = cell;
         }
     }
 
     // TODO: Should these operate on names or ids?
     lookup(name: string){
-        if(name in this.name_cell_map){
-            return this.name_cell_map[name]
+        let uname = name.toUpperCase()
+        if(uname in this.name_cell_map){
+            return this.name_cell_map[uname]
         } else {
             let err: EnvError = new EnvError("Name lookup failure " + escape(name));
             err.env = this;

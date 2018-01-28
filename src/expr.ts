@@ -3,6 +3,7 @@ import { Big } from 'big.js';
 import * as util from './utils';
 import { castBoolean, isCell, formatValue } from './utils';
 import { Cell, Environment } from './engine';
+import { CellError } from './errors';
 
 var jsep = require("jsep")
 Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
@@ -153,7 +154,18 @@ export function _do_eval(node, env: Environment) {
         let compound = [];
         node.body.forEach(subnode => {
             // compound.concat(subarray)
+            window.evalDepth += 1;
+
+            if(window.evalDepth > 2000) {
+                // The app doesn't work after this, but atleast it doesn't kill the tab.
+                console.log("Error: Self-referencing cells.");
+                let err: CellError = new CellError("Cycle detected");
+                err.cells = [this];
+                throw err
+            }
+    
             let subresult = _do_eval(subnode, env);
+            window.evalDepth -= 1;
             // Wrap scalar constants in a cell so it can be rendered in CellList
             if(!Array.isArray(subresult) && !isCell(subresult)) {
                 subresult = new Cell("", subresult, env, "");
@@ -213,13 +225,13 @@ function getDependencies(node, env: Environment) : Cell[] {
 
 // @ts-ignore
 export function evaluateExpr(parsed, env: Environment) {
-    try {
-        return _do_eval(parsed, env)
-    } catch (err) {
-        console.log("Evaluation failed for " + parsed);
-        console.log(err)
-        // TODO - propagate
-    }
+    // try {
+    return _do_eval(parsed, env)
+    // } catch (err) {
+    //     console.log("Evaluation failed for " + parsed);
+    //     console.log(err)
+    //     // TODO - propagate
+    // }
 }
 
 
