@@ -109,6 +109,7 @@ var BINARY_OPS = {
 
 
 jsep.addBinaryOp("=", 6);
+// TODO: Make these case insensitive as well
 jsep.addBinaryOp("or", 1);
 jsep.addBinaryOp("and", 2);
 jsep.addUnaryOp("not"); //  TODO - guess
@@ -160,8 +161,15 @@ export function _do_eval(node, env: Environment) {
             compound = compound.concat(subresult);
         })
         return compound;
-    }
-     else {
+    } else if (node.type === "ThisExpression") {
+        console.log(node);
+        // Treat "this" as a non-keyword
+        return "this"
+    } else if (node.type === "MemberExpression") {
+        // TODO
+        // This.world
+        return node
+    } else {
         console.log("UNHANDLED eval CASE")
         console.log(node);
 

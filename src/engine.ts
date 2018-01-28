@@ -64,14 +64,12 @@ export class Cell {
             }
         }
         let literal = castLiteral(this.value);
-        if(literal !== undefined) {
-            return literal;
-        }
-        if(isString(this.value)) {
+        if(isString(literal)) {
             // Replace variable references.
             return evaluateStr(this.value, this.env)
+        } else {
+            return literal;
         }
-        return this.value
     }
 }
 

@@ -71,10 +71,9 @@ export function castLiteral(value: string){
         if(num !== undefined){
             return num;
         }
-
     }
     // Return raw string value
-    return undefined;
+    return value;
 }
 
 export function isFormula(value: string){
