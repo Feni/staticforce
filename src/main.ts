@@ -60,7 +60,8 @@ const store = new Vuex.Store({
     },
     mutations: {
         addStatement(state, payload) {
-            state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
+            let c = state.engine.rootEnv.createCell(payload["type"], payload["value"], payload["name"])
+            window.lastAddedIndex = state.engine.rootEnv.all_cells.indexOf(c);
         },
         addRef(state, payload) {
             console.log('adding ereference ' + payload);
@@ -147,8 +148,15 @@ window.dashform = new Vue({
         // 'engine.rootEnv.all_cells
         'engine.rootEnv.all_cells.length': {
             handler() {
-                console.log("Refreshing selectable");
-                this.$nextTick(() => vueSelectable.setSelectableItems(this.$refs.app));
+                // console.log("Refreshing selectable");
+                this.$nextTick(() => {
+                    vueSelectable.setSelectableItems(this.$refs.app)
+                    // .querySelector('.DataValue .DataInput').focus();
+                    if(window.lastAddedIndex != undefined) {
+                        window.dashform.selected[window.lastAddedIndex] = true;
+                    }
+                    
+                });
             },
             deep: true
         }

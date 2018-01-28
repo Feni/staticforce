@@ -61,6 +61,7 @@ export default Vue.component('Group', {
             // let c = new Cell("", "test", this.cellgroup.env, "hello");
             let c = this.cellgroup.env.createCell("", "", "")
             this.cellgroup.addChild(c);
+            window.lastAddedIndex = this.cellgroup.env.all_cells.indexOf(c);
         }
     },
     watch: {
