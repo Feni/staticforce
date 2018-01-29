@@ -48,9 +48,7 @@ export class Cell {
 
     // @ts-ignore - return type any.
     evaluate() {
-        if(this.errors.length > 0) {
-            this.errors = []
-        }
+        let newErrors = [];
 
         window.evalDepth += 1;
 
@@ -58,7 +56,7 @@ export class Cell {
             // The app doesn't work after this, but atleast it doesn't kill the tab.
             console.log("Self-referencing cells...");
             this.value = "";    // TODO: This is deleting data!
-            this.errors.push("Self-referencing cells...")
+            this.addError("Self-referencing cells...")
 
             let err: CellError = new CellError("Cycle detected");
             err.cells = [this];
@@ -67,7 +65,7 @@ export class Cell {
         }
 
         if(this.value == undefined || this.value == null) {
-            return undefined;
+            return undefined; 
         }
         if(this.is_group){
             // TODO: Should this return the raw value or the evaluated value?
@@ -77,15 +75,22 @@ export class Cell {
             // Evaluate formula. Value = jsep(expression). 
             // or value = String
             try{
-                return evaluateExpr(parseFormula(this.value), this.env)
+                let result = evaluateExpr(parseFormula(this.value), this.env)
+                if(this.errors.length > 0) {
+                    this.errors = []
+                }
+                return result;
             } catch (err) {
                 // TODO: Propagate this error to other dependent cells - 
                 // Else their value could be messed up as well... 
                 // this.error = err;
                 // console.error("Caught evaluation error - " + err)
-                this.errors.push("Evaluation error: " + err.message.replace("[big.js]", ""))
+                this.addError("Evaluation error: " + err.message.replace("[big.js]", ""))
                 return this.value;
             }
+        }
+        if(this.errors.length > 0) {
+            this.errors = []
         }
         let literal = castLiteral(this.value);
         if(isString(literal)) {
@@ -96,6 +101,18 @@ export class Cell {
         }
 
         window.evalDepth -= 1;
+    }
+
+    addError(message: string) {
+        // Ignore if same message exists
+        if(this.errors.indexOf(message) == -1) {
+            // If a SIMILAR message exists, remove it and replace.
+            // TODO; this is hacky
+            let substr = message.substr(0, message.length / 2)
+            this.errors = this.errors.filter((err) => !err.startsWith(substr))
+            this.errors.push(message)
+        }
+        // TODO; Hack
     }
 
     destruct() {
