@@ -192,9 +192,6 @@ export function _do_eval(node, env: Environment) {
         // This.world
         return node
     } else if (node.type == "CallExpression") {​
-        arguments: Array [ {…} ]
-        callee: Object { type: "Identifier", name: "foo" }
-
         let func = _do_eval(node.callee, env);
 
         let args = [];

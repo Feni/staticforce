@@ -72,7 +72,7 @@ html, body {
 }
 
 .DataValue {
-    min-width: 73%;
+    min-width: 63%;
     display: inline-block;
 }
 
@@ -242,4 +242,10 @@ p {
 
 .DataLabel {
     margin-bottom: 0;
+}
+
+.DataRow .close, .DataGroup .close {
+    position: absolute;
+    right: 20px;
+    z-index: 100;
 }

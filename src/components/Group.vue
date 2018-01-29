@@ -1,6 +1,11 @@
 <template>
-    <li v-bind:class="classObject">
+    <li v-bind:class="classObject" @mousedown="select" >
         <template v-if="isEdit">
+            <button type="button" class="close" aria-label="Close" v-on:click="destruct">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+
             <input class="DataLabel" v-model="name" placeholder="Name..."/>
         </template>
         <template v-else>
@@ -56,12 +61,22 @@ export default Vue.component('Group', {
         }
     },
     methods: {
+        select: function(event: Event) {
+            // @ts-ignore:
+            if(this.isEdit) {
+                // Hide this mousedown event from selector so our input boxes can be edited.
+                event.stopPropagation();
+            }
+        },
         addCell: function(event: Event) {
             // todo: Vuex this
             // let c = new Cell("", "test", this.cellgroup.env, "hello");
             let c = this.cellgroup.env.createCell("", "", "")
             this.cellgroup.addChild(c);
             window.lastAddedIndex = this.cellgroup.env.all_cells.indexOf(c);
+        },
+        destruct: function() {
+            this.cellgroup.destruct();
         }
     },
     watch: {

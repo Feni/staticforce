@@ -88,8 +88,8 @@ const store = new Vuex.Store({
             console.log("next name " + field_name);
             let new_field = {
                 type: 'auto',
-                name: field_name,
-                value: "test"
+                name: "",
+                value: ""
             }
             context.commit('addStatement', new_field);
         }, 

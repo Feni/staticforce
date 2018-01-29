@@ -15,9 +15,9 @@ export class Cell {
     name: string
     errors: Error[]
     
-    parent_group = null
+    parent_group: CellGroup? = null;
     class_name = "cell"
-    is_group = false;
+    is_group: boolean = false;
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(type: string, value: string, env: Environment, name?: string){
@@ -36,7 +36,6 @@ export class Cell {
     }
 
     rename(newName: string){
-        console.log("Renaming " + this.name + " to " + newName);
         this.env.rename(this, newName)
         this.name = newName;
     }
@@ -86,6 +85,24 @@ export class Cell {
 
         window.evalDepth -= 1;
     }
+
+    destruct() {
+        if(this.parent_group != undefined) {
+            // Remove from parent
+            this.parent_group.removeChild(this);            
+        }
+        // If it's a group, remove it's children.
+        if(this.is_group) {
+            // Loop through and remove all children.
+            // Should terminate as long as there are no cycles.
+            while(this.value.length > 0) {
+                this.value[0].destruct();
+            }
+        }
+        // Remove from environment
+        this.env.deleteCell(this);
+        // RIP
+    }
 }
 
 export class CellGroup extends Cell {
@@ -98,6 +115,10 @@ export class CellGroup extends Cell {
         // Add it right after group - for selection indexing to work out.
         order.move(order.indexOf(child), order.indexOf(this) + this.value.length + 1);
         this.value.push(child);
+    }
+
+    removeChild(child: Cell) {
+        this.value.splice(this.value.indexOf(child), 1);
     }
 } 
 
@@ -156,13 +177,17 @@ export class Environment {
     rename(cell: Cell, newName: string){
         // TODO; validate names at some stage.
         // todo support multiple things with same name.
-        if(cell.name != ""){
-            let uname = cell.name.toUpperCase()
-            delete this.name_cell_map[uname]
-        }
+        this.unbind(cell)
         if(newName != ""){
             let unewName = newName.toUpperCase()
             this.name_cell_map[unewName] = cell;
+        }
+    }
+
+    unbind(cell: Cell) {
+        let uname = cell.name.toUpperCase()
+        if(uname != "" && this.name_cell_map[uname] == cell) {
+            delete this.name_cell_map[uname]
         }
     }
 
@@ -210,6 +235,16 @@ export class Environment {
         return c;
     }
 
+    deleteCell(cell: Cell) {
+        this.unbind(cell)
+        if(this.all_cells.indexOf(cell) != -1) {
+            this.all_cells.splice(this.all_cells.indexOf(cell), 1);
+        }
+        if(cell.id in this.id_cell_map) {
+            delete this.id_cell_map[cell.id]
+        }
+    }
+
     createGroup() {
         // TODO: We need to differentiate between all cells and cells that belong to a group
         // maybe cell should point to the group it belongs to and you can use that to distinguish
@@ -217,7 +252,6 @@ export class Environment {
         this.id_cell_map[c.id] = c;
         // todo: NAME
         this.all_cells.push(c)
-        console.log("created group ");
         return c;
     }
 

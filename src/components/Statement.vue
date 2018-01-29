@@ -1,6 +1,10 @@
 <template>
     <div v-bind:class="classObject" @mousedown="select" data-id="cell.id">
         <template v-if="isEdit">
+            <button type="button" class="close" aria-label="Close" @click="destruct">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
             <span class="DataLabel">
                 <input v-model="name" placeholder="Name..."/>
             </span>
@@ -111,6 +115,7 @@ export default Vue.component('Statement', {
             var cellClass = "CellType--" + this.cell.class_name;
             // this.index is relative within a group.
             let classes: {[index: string]: any} =  {
+                "DataRow": true,
                 "DataRow--large": this.isLargeItem,
                 "edit": this.isEdit,
                 "list-group-item": true,
@@ -154,6 +159,10 @@ export default Vue.component('Statement', {
                 // Hide this mousedown event from selector so our input boxes can be edited.
                 event.stopPropagation();
             }
+        },
+        destruct: function() {
+            console.log("Click destruct");
+            this.cell.destruct();
         }
     },
     watch: {
@@ -164,7 +173,6 @@ export default Vue.component('Statement', {
                 setTimeout(function() {
                     el.querySelector('.DataValue .DataInput').focus();
                 }, 100);
-                
             }
        }
     }
