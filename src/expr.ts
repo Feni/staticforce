@@ -122,6 +122,11 @@ var UNARY_OPS = {
     // "+" : function(a: number) { return -a; }
 };
 
+var BUILTIN_FUN = {
+    'ROUND': Math.round,
+    'SQRT': Math.sqrt
+}
+
 
 // TODO: Test cases to verify operator precedence
 // @ts-ignore
@@ -141,11 +146,16 @@ export function _do_eval(node, env: Environment) {
         if(bool != undefined){
             return bool;
         }
+
+        let uname = node.name.toUpperCase();
+        if(uname in BUILTIN_FUN) {
+            return BUILTIN_FUN[uname];
+        }
         
-        let idEnv = env.findEnv(node.name);
+        let idEnv = env.findEnv(uname);
         // Found the name in an environment
         if(idEnv !== null && idEnv !== undefined){
-            return idEnv.lookup(node.name).evaluate()
+            return idEnv.lookup(uname).evaluate()
         }
         // TODO: Return as string literal in this case?
         // Probably not - should be lookup error
@@ -181,6 +191,37 @@ export function _do_eval(node, env: Environment) {
         // TODO
         // This.world
         return node
+    } else if (node.type == "CallExpression") {​
+        arguments: Array [ {…} ]
+        callee: Object { type: "Identifier", name: "foo" }
+
+        let func = _do_eval(node.callee, env);
+
+        let args = [];
+        node.arguments.forEach(subnode => {
+            // compound.concat(subarray)
+            window.evalDepth += 1;
+
+            if(window.evalDepth > 2000) {
+                // The app doesn't work after this, but atleast it doesn't kill the tab.
+                console.log("Error: Self-referencing cells.");
+                let err: CellError = new CellError("Cycle detected");
+                throw err
+            }
+    
+            let subresult = _do_eval(subnode, env);
+            window.evalDepth -= 1;
+            // Wrap scalar constants in a cell so it can be rendered in CellList
+            // if(!Array.isArray(subresult) && !isCell(subresult)) {
+            //     subresult = new Cell("", subresult, env, "");
+            // }
+            args = args.concat(subresult);
+        });
+
+        let result = func.apply(null, args);
+        console.log("Func result");
+        console.log(result);
+        return result;
     } else {
         console.log("UNHANDLED eval CASE")
         console.log(node);
