@@ -6,7 +6,7 @@
             </button>
 
             <span class="DataLabel">
-                <input v-model="name" placeholder="Name..."/>
+                <input maxlength="20" v-model="name" placeholder="Name..."/>
             </span>
             <span class="DataValue">
                 <template v-if="isLargeItem">
@@ -49,6 +49,12 @@
                 </div>
             </span>
         </template>
+
+
+        <div class="alert alert-danger CellError" role="alert" v-for="error in cell.errors">
+              <i class="fas fa-exclamation-triangle"></i> &nbsp; {{error}}
+        </div>
+
     </div>
 </template>
 

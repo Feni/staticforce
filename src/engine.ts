@@ -13,7 +13,7 @@ export class Cell {
     used_by: Cell[]
     env: Environment
     name: string
-    errors: Error[]
+    errors: string[] = []
     
     parent_group: CellGroup? = null;
     class_name = "cell"
@@ -36,22 +36,33 @@ export class Cell {
     }
 
     rename(newName: string){
-        this.env.rename(this, newName)
-        this.name = newName;
+        if(newName == "" || isValidName(newName)) {
+            this.env.rename(this, newName)
+            this.name = newName;
+            this.errors = []
+        } else {
+            this.errors.push("Variable names should start with a letter and can only contain letters, numbers, _ and -")
+        }
+
     }
 
     // @ts-ignore - return type any.
     evaluate() {
+        if(this.errors.length > 0) {
+            this.errors = []
+        }
+
         window.evalDepth += 1;
 
         if(window.evalDepth > 2000) {
             // The app doesn't work after this, but atleast it doesn't kill the tab.
-            console.log("Error: Self-referencing cells....");
+            console.log("Self-referencing cells...");
             this.value = "";    // TODO: This is deleting data!
+            this.errors.push("Self-referencing cells...")
+
             let err: CellError = new CellError("Cycle detected");
             err.cells = [this];
             throw err
-             
             return undefined;
         }
 
@@ -70,8 +81,9 @@ export class Cell {
             } catch (err) {
                 // TODO: Propagate this error to other dependent cells - 
                 // Else their value could be messed up as well... 
-                this.error = err;
-                console.error("Caught evaluation error - " + err)
+                // this.error = err;
+                // console.error("Caught evaluation error - " + err)
+                this.errors.push("Evaluation error: " + err.message.replace("[big.js]", ""))
                 return this.value;
             }
         }
@@ -139,6 +151,8 @@ export class Environment {
     // List of all cells in environment (even without names). 
     // Maintains order of appearance in view.
     all_cells: Cell[] = []
+
+    errors: Error[] = []
 
     constructor(outer?: Environment) {
         if(outer){

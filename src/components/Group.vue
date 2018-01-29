@@ -6,7 +6,7 @@
             </button>
 
 
-            <input class="DataLabel" v-model="name" placeholder="Name..."/>
+            <input maxlength="20" class="DataLabel" v-model="name" placeholder="Name..."/>
         </template>
         <template v-else>
             <label class="DataLabel">{{ name }}&nbsp;</label>
@@ -17,6 +17,12 @@
             v-bind:selected="selected"
             v-bind:selecting="selecting"
             v-bind:isroot="false"></Cell-List>
+
+
+        <div class="alert alert-danger CellError" role="alert" v-for="error in cellgroup.errors">
+              <i class="fas fa-exclamation-triangle"></i> &nbsp; {{error}}
+        </div>
+
     </li>
 </template>
 
