@@ -72,11 +72,11 @@ var BINARY_OPS = {
     "%" : (a: Big, b: Big) => { return itemwiseApply(a, b, "mod"); },
 
     //  TODO: itemwise support?
-    "=" : (a: Big, b: Big) => { return a.eq(b);},//
-    ">" : (a: Big, b: Big) => { return a.gt(b); },
-    ">=" : (a: Big, b: Big) => { return a.gte(b); },    // TODO
-    "<" : (a: Big, b: Big) => { return a.lt(b); },
-    "<=" : (a: Big, b: Big) => { return a.lte(b); },
+    "=" : (a: Big, b: Big) => { return itemwiseApply(a, b, "eq");},//
+    ">" : (a: Big, b: Big) => { return itemwiseApply(a, b, "gt"); },
+    ">=" : (a: Big, b: Big) => { return itemwiseApply(a, b, "gte"); },    // TODO
+    "<" : (a: Big, b: Big) => { return itemwiseApply(a, b, "lt"); },
+    "<=" : (a: Big, b: Big) => { return itemwiseApply(a, b, "lte"); },
 
     // "," : (a: Array, b: Array) => { 
     //     console.log("Concatenating");
@@ -88,6 +88,7 @@ var BINARY_OPS = {
     // },
   
     // TODO: Case insensitive AND, OR, NOT
+    // TODO: Array operations on these.
     "and" : (a: string, b: string) => { 
         if(util.isFalse(a) || util.isFalse(b)){
             // Return true regardless of type is one is known to be false.
@@ -106,6 +107,9 @@ var BINARY_OPS = {
         }
         return undefined;
     },
+    "where": (a: Array, b: Array) => {
+        return a.filter((aItem, aIndex) => b[aIndex].evaluate() == true)
+    }
 };
 
 
@@ -113,6 +117,8 @@ jsep.addBinaryOp("=", 6);
 // TODO: Make these case insensitive as well
 jsep.addBinaryOp("or", 1);
 jsep.addBinaryOp("and", 2);
+jsep.addBinaryOp("where", 6);   // Guess
+
 jsep.addUnaryOp("not"); //  TODO - guess
 
 

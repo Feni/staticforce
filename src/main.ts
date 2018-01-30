@@ -16,8 +16,8 @@ ENGINE.rootEnv.createCell("text", long_text, "Exposition")
 ENGINE.rootEnv.createCell("expression", "=true or false", "three")
 let g = ENGINE.rootEnv.createGroup();
 g.rename("grp")
-ENGINE.rootEnv.createCell("expression", "=grp", "boolean")
-ENGINE.rootEnv.createCell("expression", "false", "boolean")
+ENGINE.rootEnv.createCell("expression", "=grp > 25", "boolean")
+ENGINE.rootEnv.createCell("expression", "false", "main")
 g.addChild(ENGINE.rootEnv.createCell("text", "42", ""))
 g.addChild(ENGINE.rootEnv.createCell("text", "23", ""))
 
@@ -132,7 +132,7 @@ window.dashform = new Vue({
     },
     methods: {
         addValue () {
-            console.log("Adding value");
+            console.log("Adding value method");
             return store.dispatch('newStatement')
         },
         addRef() {

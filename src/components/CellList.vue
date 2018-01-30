@@ -23,7 +23,7 @@
             </template>
         </template>
         <template v-if="onadd !== undefined">
-            <a class="list-group-item list-group-item-action list-group-item-success" @click="addNewCell()">Add Item</a>
+            <a class="list-group-item list-group-item-action list-group-item-success" @mousedown="addNewCell">Add Item</a>
         </template>
     </ul>
 </template>
@@ -50,8 +50,7 @@ export default Vue.component('Cell-List', {
     },
     methods: {
         addNewCell: function(event: Event) {
-            console.log("Adding cell")
-            console.log(this.onadd);
+            console.log("Adding cell in cellist")
             this.onadd();
         }
     }
