@@ -143,6 +143,9 @@ var BINARY_OPS = {
         return itemwiseApply(a, b, "", false, boolOr);
     },
     "where": (a: Array, b: Array) => {
+        console.log("Where ")
+        console.log(a)
+        console.log(b)
         return a.filter((aItem, aIndex) => b[aIndex].evaluate() == true)
     }
 };
@@ -152,7 +155,7 @@ jsep.addBinaryOp("=", 6);
 // TODO: Make these case insensitive as well
 jsep.addBinaryOp("or", 1);
 jsep.addBinaryOp("and", 2);
-jsep.addBinaryOp("where", 6);   // Guess
+jsep.addBinaryOp("where", 0); // Should be evaluated after "=" and other conditionals. So < 6.
 
 jsep.addUnaryOp("not"); //  TODO - guess
 
