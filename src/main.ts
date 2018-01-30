@@ -26,6 +26,7 @@ other.rename("other")
 other.addChild(ENGINE.rootEnv.createCell("text", "1", ""))
 other.addChild(ENGINE.rootEnv.createCell("text", "2", ""))
 
+let f = ENGINE.rootEnv.createFunction();
 
 
 
@@ -110,6 +111,12 @@ const store = new Vuex.Store({
 import Statement from "./components/Statement.vue";
 import Group from "./components/Group.vue";
 import CellList from "./components/CellList.vue";
+import CellFunc from "./components/CellFunc.vue";
+
+
+import vSelect from 'vue-select'
+Vue.component('v-select', vSelect)
+
 
 window.dashform = new Vue({
     el: "#app",
@@ -125,7 +132,8 @@ window.dashform = new Vue({
     components: {
         Statement, 
         Group,
-        CellList
+        CellList,
+        CellFunc
     },
     directives: { 
         selectable: vueSelectable.default

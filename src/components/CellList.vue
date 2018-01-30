@@ -10,6 +10,14 @@
                     v-bind:selecting="selecting"
                     ></Group>
                 </template>
+                <template v-else-if="statement.class_name == 'cellfunction'">
+                    <CellFunc :key="statement.id"
+                    v-bind:cellfunc="statement"
+                    v-bind:index="index"
+                    v-bind:selected="selected"
+                    v-bind:selecting="selecting"
+                    ></CellFunc>
+                </template>
                 <template v-else>
                     <Statement 
                         :key="statement.id"
@@ -25,6 +33,8 @@
         <template v-if="onadd !== undefined">
             <a class="list-group-item list-group-item-action list-group-item-success" @mousedown="addNewCell">Add Item</a>
         </template>
+
+
     </ul>
 </template>
 

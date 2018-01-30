@@ -18,6 +18,7 @@ export class Cell {
     parent_group: CellGroup? = null;
     class_name = "cell"
     is_group: boolean = false;
+    is_function: boolean = false;
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(type: string, value: string, env: Environment, name?: string){
@@ -151,6 +152,13 @@ export class CellGroup extends Cell {
     }
 } 
 
+export class CellFunction extends Cell {
+    class_name = "cellfunction"
+    is_function = true;
+    func: string    // Name of function in BUILTIN_FUN
+    // Value = list of arg bound cells.
+}
+
 export class Environment {
 
     outer: Environment
@@ -282,6 +290,13 @@ export class Environment {
         let c = new CellGroup("group", [], this, "");
         this.id_cell_map[c.id] = c;
         // todo: NAME
+        this.all_cells.push(c)
+        return c;
+    }
+
+    createFunction() {
+        let c = new CellFunction("cellfunction", [], this, "");
+        this.id_cell_map[c.id] = c;
         this.all_cells.push(c)
         return c;
     }

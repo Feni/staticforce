@@ -143,9 +143,6 @@ var BINARY_OPS = {
         return itemwiseApply(a, b, "", false, boolOr);
     },
     "where": (a: Array, b: Array) => {
-        console.log("Where ")
-        console.log(a)
-        console.log(b)
         return a.filter((aItem, aIndex) => b[aIndex].evaluate() == true)
     }
 };
@@ -173,9 +170,32 @@ var UNARY_OPS = {
     // "+" : function(a: number) { return -a; }
 };
 
-var BUILTIN_FUN = {
-    'ROUND': Math.round,
-    'SQRT': Math.sqrt
+export var BUILTIN_FUN = {
+    'ROUND': {
+        "name": "Round",
+        "description": "Round a number",
+        "func": Math.round,
+        "args": [
+            {
+                "name": "Number",
+                "description": "Number to round",
+                "default": ""
+            }
+        ]
+    },
+    'SQRT': {
+        "name": "Square Root",
+        "description": "Find the square root of a number",
+        "func": Math.sqrt,
+        "args": [
+            {
+                "name": "Number",
+                "description": "Number to sqrt",
+                "default": ""
+            }
+        ]
+    }
+    
 }
 
 
