@@ -10,14 +10,20 @@ Big.RM = 2 // ROUND_HALF_EVEN - banker's roll
 
 // Create new cells as result, but don't bind or store in all cells list.
 // TODO: What about names bound to this later?
-function itemwiseApply(a, b, func, doFudge=false) {
+function itemwiseApply(a, b, funcName, doFudge=false, func=undefined) {
 
-    if(Array.isArray(a) && Array.isArray(b)){
+    if(Array.isArray(a) && Array.isArray(b)){   // [a] * [b]
         // ASSERT BOTH ARE SAME LENGTH
         let resultList = a.map(function(ai, i) {
             let aVal = ai.evaluate();
             let bVal = b[i].evaluate();
-            let result = aVal[func](bVal)
+
+            var result;
+            if(func !== undefined){
+                result = func(aVal, bVal)
+            } else {
+                result = aVal[funcName](bVal)
+            }
             if(doFudge){
                 result = util.fudge(result);
             }
@@ -27,10 +33,17 @@ function itemwiseApply(a, b, func, doFudge=false) {
         });
         return resultList;
     }
-    else if(Array.isArray(a)) {
+    else if(Array.isArray(a)) { // [a] * 2
         let resultList = a.map((ai) => {
             let aVal = ai.evaluate();   // TODO: What if this is wrong type?
-            let result = aVal[func](b);
+
+            var result;
+            if(func !== undefined){
+                result = func(aVal, b)
+            } else {
+                result = aVal[funcName](b)
+            }
+
             if(doFudge){
                 result = util.fudge(result);
             }
@@ -40,10 +53,18 @@ function itemwiseApply(a, b, func, doFudge=false) {
         })
         return resultList;
 
-    } else if(Array.isArray(b)) {
+    } else if(Array.isArray(b)) {   // 2 * [a]
         let resultList = b.map((bi) => {
             let bVal = bi.evaluate();   // TODO: What if this is wrong type?
-            let result = a[func](bVal);
+
+            var result;
+            if(func !== undefined){
+                result = func(a, bVal)
+            } else {
+                result = a[funcName](bVal)
+            }
+
+
             if(doFudge){
                 result = util.fudge(result);
             }
@@ -53,13 +74,39 @@ function itemwiseApply(a, b, func, doFudge=false) {
         })
         return resultList;        
         
-    } else {    // both are scalar values
-        let result = a[func](b);
+    } else {    // 1 + 2 : both are scalar values
+        var result;
+        if(func !== undefined){
+            result = func(a, b)
+        } else {
+            result = a[funcName](b)
+        }
+
         if(doFudge){
             result = util.fudge(result);
         }
         return result;
     }
+}
+
+function boolAnd(a: string, b: string) {
+    if(util.isFalse(a) || util.isFalse(b)){
+        // Return true regardless of type is one is known to be false.
+        return false;
+    } else if(util.isBoolean(a) && util.isBoolean(b)){
+        // Else only evaluate in case of valid boolean values.
+        return a && b; 
+    } 
+    return undefined;   // TODO: Undefined or null?
+}
+
+function boolOr(a: string, b: string) {
+    if(util.isTrue(a) || util.isTrue(b)){
+        return true;
+    } else if(util.isBoolean(a) && util.isBoolean(b)){
+        return a || b; 
+    }
+    return undefined;
 }
 
 // Evaluate expression
@@ -90,22 +137,10 @@ var BINARY_OPS = {
     // TODO: Case insensitive AND, OR, NOT
     // TODO: Array operations on these.
     "and" : (a: string, b: string) => { 
-        if(util.isFalse(a) || util.isFalse(b)){
-            // Return true regardless of type is one is known to be false.
-            return false;
-        } else if(util.isBoolean(a) && util.isBoolean(b)){
-            // Else only evaluate in case of valid boolean values.
-            return a && b; 
-        } 
-        return undefined;   // TODO: Undefined or null?
+        return itemwiseApply(a, b, "", false, boolAnd);
     },
     "or" : (a: string, b: string) => { 
-        if(util.isTrue(a) || util.isTrue(b)){
-            return true;
-        } else if(util.isBoolean(a) && util.isBoolean(b)){
-            return a || b; 
-        }
-        return undefined;
+        return itemwiseApply(a, b, "", false, boolOr);
     },
     "where": (a: Array, b: Array) => {
         return a.filter((aItem, aIndex) => b[aIndex].evaluate() == true)
@@ -124,7 +159,14 @@ jsep.addUnaryOp("not"); //  TODO - guess
 
 var UNARY_OPS = {
     "-" : function(a: Big) { return a.times(-1); },
-    "not" : function(a: boolean) { return !a; },    // Verify is boolean, else typos lead to true.
+    "not" : function(a: boolean) { 
+        if(Array.isArray(a)) {
+            return a.map((aItem) => {
+                return new Cell(aItem.type, !aItem.evaluate(), aItem.env, aItem.name);
+            })
+        }
+        return !a; 
+    },    // Verify is boolean, else typos lead to true.
     // "+" : function(a: number) { return -a; }
 };
 
