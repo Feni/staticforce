@@ -101,32 +101,6 @@ p {
     color: black;
 }
 
-.Navbar {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    background-color: white;
-    z-index: 10;
-}
-
-.ui.menu.Navbar--primary {
-    height: 50px;
-    background-color: white;
-    border-bottom: 1px solid black;
-    border-radius: 0;
-    width: 100%; 
-    margin: 0px !important;
-}
-
-.Navbar--toolbar.ui.menu {
-    height: 30px;
-    background-color: white;
-    width: 100%;
-    margin: 0px !important;
-    font-size: 14px;
-}
-
 .HeaderOffset {
     padding-top: 150px;
 }
@@ -256,4 +230,8 @@ p {
     margin-bottom: .5rem;
     border-radius: 3px;
     font-size: .9rem;
+}
+
+.navbar {
+    border-bottom: 1px solid #efefef;
 }

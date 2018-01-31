@@ -154,6 +154,11 @@ Array.prototype.move = function (old_index, new_index) {
     return this; // for testing purposes
 };
 
+String.prototype.add = function(other) {
+    console.log("Adding")
+    return this + other;
+}
+
 export function groupSelectionPolicy(selection: Boolean[], cells: Cell[]){
     // Enforce the following rule:
     // If a group item is selected, either 'all' or 'none' or it's children must be selected

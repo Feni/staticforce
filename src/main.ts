@@ -8,25 +8,62 @@ import {Engine} from './engine'
 
 var vueSelectable = require('vue-selectable');
 
-let long_text = 'Hey {{ Hello }}, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+let long_text = 'Hello {{ First_Name }} {{ Last_Name }}, this is the as-yet-unnamed prototype programming language.\n\nThe goal is to create a modern programming language that is easy to learn for anyone. By running in the browser, we reduce the barrier to entry and increase adoption, creating a network effect that can leapfrog traditional languages.'
 
 let ENGINE = new Engine();
-ENGINE.rootEnv.createCell("expression", "=2 + 2", "Hello")
-ENGINE.rootEnv.createCell("text", long_text, "Exposition")
-ENGINE.rootEnv.createCell("expression", "=true or false", "three")
-let g = ENGINE.rootEnv.createGroup();
-g.rename("grp")
-ENGINE.rootEnv.createCell("expression", "=grp > 25", "boolean")
-ENGINE.rootEnv.createCell("expression", "false", "main")
-g.addChild(ENGINE.rootEnv.createCell("text", "42", ""))
-g.addChild(ENGINE.rootEnv.createCell("text", "23", ""))
+ENGINE.rootEnv.createCell("expression", "Richard", "First_Name")
+ENGINE.rootEnv.createCell("expression", "Latimer", "Last_Name")
+ENGINE.rootEnv.createCell("text", long_text, "Introduction")
 
-let other = ENGINE.rootEnv.createGroup();
-other.rename("other")
-other.addChild(ENGINE.rootEnv.createCell("text", "1", ""))
-other.addChild(ENGINE.rootEnv.createCell("text", "2", ""))
+ENGINE.rootEnv.createCell("text", "You can program like you would Excel. Start a cell with = to evaluate it.", "Basics")
+ENGINE.rootEnv.createCell("", "= (1 + 1) * 2.5 ", "Arithmetic")
 
-let f = ENGINE.rootEnv.createFunction();
+ENGINE.rootEnv.createCell("text", "Math operations are arbritrary precision without floating point errors (js or python would normally return 1.5000000000000002 rather than {{ PRECISE_MATH }}) .", "Precise")
+ENGINE.rootEnv.createCell("", "= (0.1 + 0.2) * Arithmetic ", "Precise_Math")
+ENGINE.rootEnv.createCell("expression", "=true or false", "Boolean_Ops")
+
+ENGINE.rootEnv.createCell("text", "You can also operate directly on arrays. Suppose we have an array of pricing tiers.", "")
+
+let prices = ENGINE.rootEnv.createGroup();
+prices.rename("prices")
+prices.addChild(ENGINE.rootEnv.createCell("text", "0", "Free"))
+prices.addChild(ENGINE.rootEnv.createCell("text", "30", "Basic"))
+prices.addChild(ENGINE.rootEnv.createCell("text", "99", "Professional"))
+prices.addChild(ENGINE.rootEnv.createCell("text", "450", "Small_Business"))
+ENGINE.rootEnv.createCell("expression", "=prices * 1.05", "With_Taxes")
+
+ENGINE.rootEnv.createCell("expression", "=1000, 100, 10, 1", "customers")
+
+ENGINE.rootEnv.createCell("expression", "=With_Taxes * customers * 12", "Yearly_Revenue")
+ENGINE.rootEnv.createCell("text", "Which array cells have more than 10k in yearly revenue", "")
+ENGINE.rootEnv.createCell("expression", "=Yearly_Revenue > 10000", "Revenue_check")
+ENGINE.rootEnv.createCell("expression", "=With_Taxes < 100", "Price_check")
+ENGINE.rootEnv.createCell("text", "You can also filter by that", "")
+ENGINE.rootEnv.createCell("expression", "=YEARLY_REVENUE where REVENUE_CHECK and PRICE_CHECK", "Best_Tier")
+
+
+
+
+
+// g.addChild(ENGINE.rootEnv.createCell("text", "Aravor", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Arrety", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Protopus", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Senety", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Statary", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Topiate", ""))
+// g.addChild(ENGINE.rootEnv.createCell("text", "Topiicon", ""))
+
+
+// ENGINE.rootEnv.createCell("text", "You can also operate directly on arrays. Consider the following generated names for this language.", "")
+// ENGINE.rootEnv.createCell("expression", "=grp > 25", "boolean")
+// ENGINE.rootEnv.createCell("expression", "false", "main")
+
+// let other = ENGINE.rootEnv.createGroup();
+// other.rename("other")
+// other.addChild(ENGINE.rootEnv.createCell("text", "1", ""))
+// other.addChild(ENGINE.rootEnv.createCell("text", "2", ""))
+
+// let f = ENGINE.rootEnv.createFunction();
 
 
 
