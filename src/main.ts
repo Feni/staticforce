@@ -18,7 +18,7 @@ ENGINE.rootEnv.createCell("text", long_text, "Introduction")
 ENGINE.rootEnv.createCell("text", "You can program like you would Excel. Start a cell with = to evaluate it.", "Basics")
 ENGINE.rootEnv.createCell("", "= (1 + 1) * 2.5 ", "Arithmetic")
 
-ENGINE.rootEnv.createCell("text", "Math operations are arbritrary precision without floating point errors (js or python would normally return 1.5000000000000002 rather than {{ PRECISE_MATH }}) .", "Precise")
+ENGINE.rootEnv.createCell("text", "Math operations are arbitrary precision without floating point errors (js or python would normally return 1.5000000000000002 rather than {{ PRECISE_MATH }}) .", "Precise")
 ENGINE.rootEnv.createCell("", "= (0.1 + 0.2) * Arithmetic ", "Precise_Math")
 ENGINE.rootEnv.createCell("expression", "=true or false", "Boolean_Ops")
 
@@ -44,14 +44,31 @@ ENGINE.rootEnv.createCell("expression", "=YEARLY_REVENUE where REVENUE_CHECK and
 
 
 
+let names = ENGINE.rootEnv.createGroup();
+names.rename("names")
+names.addChild(ENGINE.rootEnv.createCell("text", "Aravor", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Arrety", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Protopus", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Senety", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Statary", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Topiate", ""))
+names.addChild(ENGINE.rootEnv.createCell("text", "Topiicon", ""))
 
-// g.addChild(ENGINE.rootEnv.createCell("text", "Aravor", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Arrety", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Protopus", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Senety", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Statary", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Topiate", ""))
-// g.addChild(ENGINE.rootEnv.createCell("text", "Topiicon", ""))
+ENGINE.rootEnv.createCell("expression", "Some potential names for this: {{ names }}. ", "Generated_names")
+
+
+let todo = ENGINE.rootEnv.createGroup();
+todo.rename("TODO")
+todo.addChild(ENGINE.rootEnv.createCell("text", "Common Functions", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Pattern matching system for conditionals", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Tables & queries", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Declarative UI Componenets", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Import/Export", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Ability to call APIs", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "Entire backend", ""))
+todo.addChild(ENGINE.rootEnv.createCell("text", "So much more!", ""))
+
+
 
 
 // ENGINE.rootEnv.createCell("text", "You can also operate directly on arrays. Consider the following generated names for this language.", "")

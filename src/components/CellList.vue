@@ -31,7 +31,10 @@
             </template>
         </template>
         <template v-if="onadd !== undefined">
-            <a class="list-group-item list-group-item-action list-group-item-success" @mousedown="addNewCell">Add Item</a>
+            <a class="list-group-item list-group-item-action AddItem" @mousedown="addNewCell">
+                <i class="fas fa-plus"></i>
+                Add Item
+                </a>
         </template>
 
 
