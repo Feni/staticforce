@@ -8,11 +8,11 @@ import {Engine} from './engine'
 
 var vueSelectable = require('vue-selectable');
 
-let long_text = 'Hello {{ First_Name }} {{ Last_Name }}, this is the as-yet-unnamed prototype programming language.\n\nThe goal is to create a modern programming language that is easy to learn for anyone. By running in the browser, we reduce the barrier to entry and increase adoption, creating a network effect that can leapfrog traditional languages.'
+let long_text = 'Hello {{ First_Name }} {{ Last_Name }}, this is Arevel, a modern programming language for the web. By running in the browser, we reduce the barrier to entry and increase adoption, creating a network effect that can leapfrog traditional languages.'
 
 let ENGINE = new Engine();
-ENGINE.rootEnv.createCell("expression", "Richard", "First_Name")
-ENGINE.rootEnv.createCell("expression", "Latimer", "Last_Name")
+ENGINE.rootEnv.createCell("expression", "Feni", "First_Name")
+ENGINE.rootEnv.createCell("expression", "Varughese", "Last_Name")
 ENGINE.rootEnv.createCell("text", long_text, "Introduction")
 
 ENGINE.rootEnv.createCell("text", "You can program like you would Excel. Start a cell with = to evaluate it.", "Basics")

@@ -73,7 +73,8 @@ html, body {
 }
 
 .DataValue {
-    min-width: 63%;
+    min-width: 43%;
+    margin-left: 25%;
     display: inline-block;
 }
 
@@ -147,8 +148,8 @@ p {
 }
 
 .DataLabel input {
-    border-color: transparent;
-    background: transparent;
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.5);
     font-weight: bold;
 }
 
@@ -200,6 +201,7 @@ p {
 
 .DataRow--large .DataLabel, .DataRow--large .DataValue  {
     width: 100%;
+    margin: 0;
 }
 
 .DataRow--large .DataLabel, .DataGroup .DataLabel {

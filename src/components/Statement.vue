@@ -13,7 +13,7 @@
                     <textarea v-model="expression" class="DataInput"></textarea>
                 </template>
                 <template v-else>
-                    <input type="text" v-model="expression" class="DataInput" autofocus/>
+                    <input type="text" placeholder="Value" v-model="expression" class="DataInput" autofocus/>
                     
                     <template v-if="valIsGroup">
                         <Cell-List v-bind:cells="this.value"
