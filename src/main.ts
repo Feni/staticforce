@@ -24,8 +24,8 @@ tier.addChild(ENGINE.rootEnv.createCell("", "Medium", "medium"))
 t.addChild(tier)
 
 let expense = ENGINE.rootEnv.createGroup("Expense");
-expense.addChild(ENGINE.rootEnv.createCell("", "5", "basic"))
-expense.addChild(ENGINE.rootEnv.createCell("", "10", "basic"))
+expense.addChild(ENGINE.rootEnv.createCell("", "5", ""))
+expense.addChild(ENGINE.rootEnv.createCell("", "10", ""))
 t.addChild(expense)
 t.addChild(ENGINE.rootEnv.createCell("Income", "=expense * 2", "income"))
 t.addChild(ENGINE.rootEnv.createGroup("Profit"))
