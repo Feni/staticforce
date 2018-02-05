@@ -21,7 +21,7 @@
                             <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
-                        <p>{{ formattedValue }}</p>
+                        <p>{{ cell.formattedValue() }}</p>
                     </template>
                         
                 </template>
@@ -43,7 +43,7 @@
         <!-- v-bind:parent="this.value[0].parent_group" -->
                     </template>
                     <template v-else>
-                        {{ formattedValue }}
+                        {{ cell.formattedValue() }}
                     </template>
                     
                 </div>
@@ -132,9 +132,6 @@ export default Vue.component('Statement', {
             classes[typeClass] = true;
             classes[cellClass] = true;
             return classes;
-        },
-        formattedValue: function() {
-            return formatValue(this.value)
         },
         valueType: function(){
             let val = this.value;

@@ -1,7 +1,7 @@
 import * as util from './utils';
 import { escape } from 'querystring';
 import { Big } from 'big.js';
-import { isFormula, castLiteral, isString, isValidName } from './utils';
+import { isFormula, castLiteral, isString, isValidName, formatValue } from './utils';
 import { evaluateExpr, parseFormula, evaluateStr } from './expr';
 import { EnvError, CellError } from './errors';
 
@@ -133,6 +133,10 @@ export class Cell {
         // Remove from environment
         this.env.deleteCell(this);
         // RIP
+    }
+
+    formattedValue() {
+        return formatValue(this.value);
     }
 }
 

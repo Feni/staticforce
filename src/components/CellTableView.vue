@@ -31,7 +31,7 @@
                         &nbsp;
                     </template>
                     <template v-else>
-                        {{ rowcell.value }}
+                        {{ rowcell.formattedValue() }}
                     </template>
                 </td>
             </tr>
