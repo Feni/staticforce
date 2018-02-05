@@ -8,7 +8,7 @@ import { EnvError, CellError } from './errors';
 export class Cell {
     id: string
     type: string
-    value: string   // TODO: How to handle string, int, etc?
+    value: string | string[] | Cell[]  // TODO: How to handle string, int, etc?
     depends_on: Cell[]
     used_by: Cell[]
     env: Environment
@@ -19,6 +19,7 @@ export class Cell {
     class_name = "cell"
     is_group: boolean = false;
     is_function: boolean = false;
+    is_table: boolean = false;
 
     // TODO: Need object wrappers around primitive types for int, string, etc.
     constructor(type: string, value: string, env: Environment, name?: string){
@@ -150,7 +151,42 @@ export class CellGroup extends Cell {
     removeChild(child: Cell) {
         this.value.splice(this.value.indexOf(child), 1);
     }
-} 
+}
+
+export class CellTable extends CellGroup {
+    class_name = "celltable"
+    is_table = true;
+
+    getRows() {
+        let rows = [];
+        let rowExists = true;
+        let i = 0;
+
+        let columnValues = this.value.map((col) => col.evaluate());
+
+        while(rowExists === true) {
+            // Reset flag. If atleast one value is found, continue, else, quit.
+            rowExists = false;
+
+            let row :Cell[] = [];
+            this.value.forEach( (column, colindex) => {
+                let colval = columnValues[colindex];
+                if(i < colval.length){
+                    rowExists = true;
+                    row.push(colval[i])
+                } else {
+                    row.push(undefined);
+                }
+            });
+            if(rowExists === true){
+                rows.push(row);
+            }
+            i++;
+        }
+        return rows;
+    }
+    
+}
 
 export class CellFunction extends Cell {
     class_name = "cellfunction"
@@ -284,17 +320,30 @@ export class Environment {
         }
     }
 
-    createGroup() {
+    createGroup(name?: string | undefined) {
         // TODO: We need to differentiate between all cells and cells that belong to a group
         // maybe cell should point to the group it belongs to and you can use that to distinguish
+        // @ts-ignore: ignore array value
         let c = new CellGroup("group", [], this, "");
         this.id_cell_map[c.id] = c;
+        if(name !== undefined) {
+            c.rename(name)
+        }
         // todo: NAME
         this.all_cells.push(c)
         return c;
     }
 
+    createTable() {
+        // @ts-ignore: Ignore array value
+        let c = new CellTable("table", [], this, "");
+        this.id_cell_map[c.id] = c;
+        this.all_cells.push(c);
+        return c;
+    }
+
     createFunction() {
+        // @ts-ignore: ignore array value
         let c = new CellFunction("cellfunction", [], this, "");
         this.id_cell_map[c.id] = c;
         this.all_cells.push(c)

@@ -18,6 +18,14 @@
                     v-bind:selecting="selecting"
                     ></CellFunc>
                 </template>
+                <template v-else-if="statement.class_name == 'celltable'">
+                    <CellTableView :key="statement.id"
+                    v-bind:cell="statement"
+                    v-bind:index="index"
+                    v-bind:selected="selected"
+                    v-bind:selecting="selecting"
+                    ></CellTableView>
+                </template>                
                 <template v-else>
                     <Statement 
                         :key="statement.id"

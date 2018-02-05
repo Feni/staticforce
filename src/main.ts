@@ -15,6 +15,22 @@ ENGINE.rootEnv.createCell("expression", "Feni", "First_Name")
 ENGINE.rootEnv.createCell("expression", "Varughese", "Last_Name")
 ENGINE.rootEnv.createCell("text", long_text, "Introduction")
 
+
+let t = ENGINE.rootEnv.createTable()
+t.rename("Plan")
+let tier = ENGINE.rootEnv.createGroup("Tier")
+tier.addChild(ENGINE.rootEnv.createCell("", "Basic", "basic"))
+tier.addChild(ENGINE.rootEnv.createCell("", "Medium", "medium"))
+t.addChild(tier)
+
+let expense = ENGINE.rootEnv.createGroup("Expense");
+expense.addChild(ENGINE.rootEnv.createCell("", "5", "basic"))
+expense.addChild(ENGINE.rootEnv.createCell("", "10", "basic"))
+t.addChild(expense)
+t.addChild(ENGINE.rootEnv.createCell("Income", "=expense * 2", "income"))
+t.addChild(ENGINE.rootEnv.createGroup("Profit"))
+
+
 ENGINE.rootEnv.createCell("text", "You can program like you would Excel. Start a cell with = to evaluate it.", "Basics")
 ENGINE.rootEnv.createCell("", "= (1 + 1) * 2.5 ", "Arithmetic")
 
@@ -166,6 +182,7 @@ import Statement from "./components/Statement.vue";
 import Group from "./components/Group.vue";
 import CellList from "./components/CellList.vue";
 import CellFunc from "./components/CellFunc.vue";
+import CellTableView from "./components/CellTableView.vue";
 
 
 import vSelect from 'vue-select'
@@ -187,7 +204,8 @@ window.dashform = new Vue({
         Statement, 
         Group,
         CellList,
-        CellFunc
+        CellFunc,
+        CellTableView
     },
     directives: { 
         selectable: vueSelectable.default
